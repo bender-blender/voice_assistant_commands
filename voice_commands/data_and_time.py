@@ -4,7 +4,7 @@ from datetime import datetime
 
 manager = CommandsManager()
 
-@manager.new("(назови дату|сегодняшняя дата)?")
+@manager.new("(назови дату|сегодняшняя дата)")
 def get_the_day() -> Response:
     today = datetime.now()  
     day = today.day         
