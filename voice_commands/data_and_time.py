@@ -18,7 +18,7 @@ def get_the_day() -> Response:
     voice = f"Сегодня {day_words} число {month_words} месяц {year_words} года"
     return Response(voice=voice)
 
-@manager.new(r"^(подскажи|скажи)\s(время|который час)$")
+@manager.new("(подскажи|скажи) (время|который час)")
 def get_time() -> Response:
     time = datetime.now()
     hour = convert(time.hour)
