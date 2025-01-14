@@ -3,7 +3,10 @@ from stark import run
 from voice_commands import manager
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
-
+from config import (
+    SILERO_MODEL_URL,
+    VOSK_MODEL_URL
+)
 
 recognizer = VoskSpeechRecognizer(model_url=VOSK_MODEL_URL)
 synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
