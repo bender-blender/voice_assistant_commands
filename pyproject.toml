@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "commands"
+version = "0.1.0"
+description = ""
+authors = ["Maxim Osadchiy  <maksimgarsia709@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+stark-engine = {extras = ["sound"], version = "^4.0.7"}
+vosk = "^0.3.45"
+numpy = "^2.2.1"
+torch = "^2.5.1"
+num2words = "^0.5.14"
+black = "^24.10.0"
+pylama = "^8.4.1"
+isort = "^5.13.2"
+mypy = "^1.14.1"
+pyright = "^1.1.391"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
