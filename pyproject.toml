@@ -18,6 +18,7 @@ isort = "^5.13.2"
 mypy = "^1.14.1"
 pyright = "^1.1.391"
 pytest = "^8.3.4"
+pywhatkit = "^5.4"
 
 
 [build-system]
