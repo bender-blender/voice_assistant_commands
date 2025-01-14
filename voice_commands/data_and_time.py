@@ -1,5 +1,4 @@
 from dependencies.auxiliary_functions import convert
-from voice_commands.data_and_time import manager
 from stark import CommandsManager, Response
 from datetime import datetime
 
