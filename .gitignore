@@ -1,0 +1,7 @@
+.venv/
+downloads/
+/проблемы.txt
+.vscode/
+/__pycache__
+/voice_commands/__pycache__
+/dependencies/__pycache__
