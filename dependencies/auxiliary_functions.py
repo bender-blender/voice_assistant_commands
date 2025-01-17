@@ -1,8 +1,14 @@
 from num2words import num2words
+from translate import Translator
 def convert(number):  # Преобразовать число в строку
     word = num2words(number, lang="ru")
     return word
 
+def translate_city(city:str, to_lang="en", from_lang="ru"):
+    translator = Translator(to_lang=f"{to_lang}", from_lang=f"{from_lang}")
+    translated_city = translator.translate(city)
+    translated_city = translated_city.replace(" ", "_").title()
+    return translated_city
 
 class TimeInterval(object):
     """Интервал
