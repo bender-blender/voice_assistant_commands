@@ -1,1 +1,1 @@
-from .get_time import timer
+from .get_time import timer, set_timer

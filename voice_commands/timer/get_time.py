@@ -9,7 +9,7 @@ timer = CommandsManager()
 async def set_timer(countdown: String):
     
     timer = TimeInterval(countdown.value).text_to_number()
-    period = [i for i in timer]
+    print(timer)
     yield Response(voice=f"Таймер установлен на {countdown.value}")
-    await anyio.sleep(period[-1])
+    await anyio.sleep(timer)
     yield Response(voice=f"Таймер закончился")

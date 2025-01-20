@@ -1,8 +1,6 @@
 import anyio
-from stark import run
-from voice_commands.clock import manager, time_city
-from voice_commands.timer import timer
-from voice_commands.user_request import request_manager
+from stark import run 
+from voice_commands import manager,request_manager,timer,time_city
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
 SILERO_MODEL_URL = "https://models.silero.ai/models/tts/ru/v3_1_ru.pt"
