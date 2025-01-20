@@ -21,6 +21,8 @@ pytest = "^8.3.4"
 pywhatkit = "^5.4"
 translate = "^3.6.1"
 pytz = "^2024.2"
+geopy = "^2.4.1"
+timezonefinder = "^6.5.7"
 
 
 [build-system]
