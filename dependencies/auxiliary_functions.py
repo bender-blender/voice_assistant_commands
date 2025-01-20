@@ -62,7 +62,7 @@ class TimeInterval:
         for word in words:
             if word in self.word_to_number:
                 # Если слово - число, добавляем к текущей сумме чисел
-                partial_sum += self.word_to_number[word]
+                partial_sum = self.word_to_number[word]
             elif word in self.intervals_in_seconds:
                 # Если слово - единица измерения времени, умножаем накопленное число
                 total_seconds += partial_sum * self.intervals_in_seconds[word]
