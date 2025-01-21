@@ -1,5 +1,5 @@
 import pytest
-from dependencies.auxiliary_functions import TimeInterval
+from dependencies import TimeInterval
 
 
 @pytest.mark.parametrize("text, expected", [

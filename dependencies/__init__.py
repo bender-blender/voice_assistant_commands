@@ -1,1 +1,1 @@
-from .auxiliary_functions import num2words, TimeInterval
+from .auxiliary_functions import TimeInterval

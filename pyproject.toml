@@ -24,7 +24,12 @@ pytz = "^2024.2"
 geopy = "^2.4.1"
 timezonefinder = "^6.5.7"
 stark = "^0.1.1"
+pytest-asyncio = "^0.25.2"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+setuptools = "^75.8.0"
 
 [build-system]
 requires = ["poetry-core"]
