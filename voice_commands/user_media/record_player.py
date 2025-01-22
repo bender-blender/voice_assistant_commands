@@ -42,7 +42,7 @@ async def next_track():
     
 
 @media.new("(предыдущий трек|назад)")
-async def next_track():
+async def previous_track():
     player.Previous()
     player.Previous()
     await anyio.sleep(1)
