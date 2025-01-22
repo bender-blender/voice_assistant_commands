@@ -1,6 +1,6 @@
 import anyio
 from stark import run 
-from voice_commands import manager,request_manager,timer,time_city
+from voice_commands import manager,request_manager,timer,time_city,media
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
 SILERO_MODEL_URL = "https://models.silero.ai/models/tts/ru/v3_1_ru.pt"
@@ -11,6 +11,7 @@ synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
 manager.extend(request_manager)
 manager.extend(timer)
 manager.extend(time_city)
+manager.extend(media)
 async def main():
    await run(manager, recognizer, synthesizer)
 

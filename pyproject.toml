@@ -25,6 +25,9 @@ geopy = "^2.4.1"
 timezonefinder = "^6.5.7"
 stark = "^0.1.1"
 pytest-asyncio = "^0.25.2"
+pydbus = "^0.6.0"
+pygobject = "^3.50.0"
+word2number = "^1.1"
 
 
 [tool.poetry.group.dev.dependencies]
