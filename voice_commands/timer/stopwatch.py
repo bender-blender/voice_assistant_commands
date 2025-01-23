@@ -31,4 +31,3 @@ async def reset_timer() -> Response:
     running = False
     return Response(voice="Секундомер сброшен.")
 
-print(stopwatch.commands)
