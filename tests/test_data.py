@@ -1,19 +1,7 @@
 import pytest
 from datetime import datetime
-from voice_commands import Data  # Импортируйте ваш модуль, где находится класс Data
-from stark import CommandsManager, Response
-
-
-class MockRecognizer:
-    """Заглушка для распознавания речи."""
-    def recognize(self):
-        return "какое сегодня число?"  # Симулируем распознавание запроса
-
-
-class MockSynthesizer:
-    """Заглушка для синтезатора речи."""
-    def synthesize(self, text: str):
-        return f"Синтезированный голос: {text}"  # Симулируем синтез речи
+from voice_commands import Data, data_manager
+from dependencies import convert
 
 
 @pytest.fixture
@@ -23,36 +11,33 @@ def data_instance():
 
 
 @pytest.fixture
-def mock_recognizer():
-    """Фикстура для создания MockRecognizer"""
-    return MockRecognizer()
+def phrase_templates(): # Фикстура для шаблона фраз
+    patterns = [
+    p.lstrip("(").rstrip(")") 
+    for command in data_manager.commands 
+    for p in str(command.pattern).lstrip("<Pattern '").rstrip("'>").split("|")
+    ]
+    return patterns
 
+def test_voice_interaction(data_instance,phrase_templates):
 
-@pytest.fixture
-def mock_synthesizer():
-    """Фикстура для создания MockSynthesizer"""
-    return MockSynthesizer()
-
-
-def test_voice_interaction(data_instance, mock_recognizer, mock_synthesizer):
+    phrase = [
+            "какое сегодня число",
+            "какой сегодня день", "какая сегодня дата"]
+    
     # Получаем текущее время
-    now = datetime.now()
+    months = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+    ]
+    time = datetime.now()
+    day = time.day
+    month = time.month
+    year = time.year
 
-    # Симуляция распознавания голоса
-    recognized_text = mock_recognizer.recognize()
-    assert recognized_text == "какое сегодня число?"  # Проверяем, что запрос правильно распознан
+    for phrases in phrase:
+        
+        assert phrases in phrase_templates
+        data = data_instance.show_date()
+        assert data.voice == f"Сегодня {convert(day)} {months[month-1]} {convert(year)} года"
 
-    # Сгенерированный ответ
-    response_text = f"Сегодня {now.day} день {now.hour} час {now.minute} минута"
-    
-    # Симулируем работу синтезатора речи
-    response_voice = mock_synthesizer.synthesize(response_text)
-    
-    # Проверяем, что синтезированный голос соответствует ожидаемому ответу
-    assert response_voice == f"Синтезированный голос: {response_text}"
-
-    # Запускаем команду, которая должна вернуть правильный текст
-    response = data_instance.show_date()
-
-    # Проверяем, что результат синтезированного голоса от Data соответствует ожидаемому
-    assert response.voice == f"Сегодня {now.day} день {now.hour} час {now.minute} минута"
