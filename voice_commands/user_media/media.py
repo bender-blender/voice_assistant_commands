@@ -18,7 +18,7 @@ class MediaPlayer:
             r"(включи песню|включи музыку|включи трек|включи песню|включи песни|включи)")(self.play)
         media_manager.new(
             r"(выключи|выключи музыку|выключи трек|выключи песню|стоп)")(self.pause)
-        media_manager.new(r"(следующий трек|дальше|вперед|)")(self.next_track)
+        media_manager.new(r"(следующий трек|дальше|вперёд|)")(self.next_track)
         media_manager.new(r"(предыдущий трек|назад)")(self.previous_track)
         media_manager.new(r"сделай громкость на $vol:String")(self.set_volume)
         media_manager.new(r"(установи громкость на сто|поставь звук на полную мощность|громкость на полную|максимальный уровень звука|поставь звук на максимум|сделай громкость на полную|включи звук на максимум|звук на пределе|выставь максимальную громкость)")(self.maximum)
@@ -94,12 +94,12 @@ class MediaPlayer:
         print(f"Системная громкость установлена на {volume}%.")
 
     def minimum(self):
-        volume = 20  # Ограничение в пределах 0-100
+        volume = 20  
         subprocess.run(["amixer", "sset", "Master", f"{volume}%"])
         print(f"Системная громкость установлена на {volume}%.")
 
     def turn_off_the_sound(self):
-        volume = 0  # Ограничение в пределах 0-100
+        volume = 0 
         subprocess.run(["amixer", "sset", "Master", f"{volume}%"])
         print(f"Системная громкость установлена на {volume}%.")
 

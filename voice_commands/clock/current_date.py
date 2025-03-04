@@ -1,6 +1,6 @@
 from datetime import datetime
 from stark import CommandsManager, Response
-from dependencies.auxiliary_functions import convert
+from dependencies import convert
 
 data_manager = CommandsManager()
 
@@ -31,3 +31,4 @@ class Data:
         # print("Сгенерированный ответ с датой:", response_text)
 
         return Response(voice=response_text)
+
