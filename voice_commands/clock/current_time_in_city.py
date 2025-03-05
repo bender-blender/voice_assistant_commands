@@ -13,7 +13,7 @@ class CityTime:
     """current time in city X
     """
     def __init__(self):
-        time_city_manager.new(r"(узнать|узнай|определить|определи) время (в|для) (городе|города) $city:String")(
+        time_city_manager.new(r"(узнать|узнай|определить|определи|подскажи|уточни|сколько) время (в|для) (городе|города) $city:String")(
             self.get_time_in_city)
 
     def get_time_in_city(self, city: String):
