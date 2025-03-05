@@ -11,11 +11,11 @@ SILERO_MODEL_URL = "https://models.silero.ai/models/tts/ru/v3_1_ru.pt"
 recognizer = VoskSpeechRecognizer(model_url=VOSK_MODEL_URL)
 synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
 
-data_instance = Data()
+city = CityTime()
 time_instance = Time()
+data_instance = Data()
 media = MediaPlayer()
 request = Request()
-city = CityTime()
 
 
 data_manager.extend(time_manager)
