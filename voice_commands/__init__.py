@@ -1,4 +1,5 @@
-from .clock import (data_manager, Data, Time, time_manager, CityTime, time_city_manager)
+from .clock import (data_manager, Data, Time, time_manager, CityTime, time_city_manager,Stopwatch,stopwatch_manager)
 from .user_media import (MediaPlayer,media_manager)
 from .user_request import (Request,request_manager)
-from .timer import (Timer,State,timer_manager)
+from .timer import (Timer,timer_manager,State,validate_time_format)
+#from .notes import (Note,note_manager)
