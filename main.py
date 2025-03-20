@@ -13,7 +13,9 @@ from voice_commands import (
     time_city_manager, 
     Timer, 
     timer_manager,
-    State)
+    State,
+    Stopwatch,
+    stopwatch_manager)
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
 
@@ -29,14 +31,17 @@ data_instance = Data()
 city = CityTime()
 time_instance = Time()
 state = State()
+stopwatch = Stopwatch()
 media = MediaPlayer()
 request = Request()
 
 data_manager.extend(timer_manager)
 data_manager.extend(time_city_manager)
 data_manager.extend(time_manager)
+data_manager.extend(stopwatch_manager)
 data_manager.extend(media_manager)
 data_manager.extend(request_manager)
+
 
 async def main():
     await run(data_manager, recognizer, synthesizer)
