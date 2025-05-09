@@ -1,12 +1,9 @@
-from stark import CommandsManager, Response
+from stark import  Response
 from pydbus import SessionBus
 from stark.core.types import String
 from word2number import w2n
 from translate import Translator
 import subprocess
-
-media_manager = CommandsManager()
-
 
 class MediaPlayer:
     """
@@ -14,21 +11,6 @@ class MediaPlayer:
     """
 
     def __init__(self):
-        media_manager.new(
-            r"(включи песню|включи музыку|включи трек|включи песню|включи песни|включи)")(self.play)
-        media_manager.new(
-            r"(выключи|выключи музыку|выключи трек|выключи песню|стоп)")(self.pause)
-        media_manager.new(r"(следующий трек|дальше|вперёд|)")(self.next_track)
-        media_manager.new(r"(предыдущий трек|назад)")(self.previous_track)
-        media_manager.new(r"сделай громкость на $vol:String")(self.set_volume)
-        media_manager.new(r"(установи громкость на сто|поставь звук на полную мощность|громкость на полную|максимальный уровень звука|поставь звук на максимум|сделай громкость на полную|включи звук на максимум|звук на пределе|выставь максимальную громкость)")(self.maximum)
-        media_manager.new(
-            r"(уменьши громкость до минимума|поставь звук на минимум|выставь минимальный уровень громкости|поставь звук на самый низкий уровень)")(self.minimum)
-        media_manager.new(r"(звук на нуле|убавь громкость до конца|отключи звук|уменьши громкость до нуля)")(
-            self.turn_off_the_sound)
-        media_manager.new(
-            r"(про песню|про трек|что сейчас играет|информация)")(self.get_info)
-
         session_bus = SessionBus()
         dbus_service = session_bus.get(
             "org.freedesktop.DBus", "/org/freedesktop/DBus")

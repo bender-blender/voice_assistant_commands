@@ -1,1 +1,1 @@
-from .media import (MediaPlayer,media_manager)
+from .manager import media_manager
