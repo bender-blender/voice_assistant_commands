@@ -1,1 +1,1 @@
-from .notes import (Note,note_manager)
+from .manager import note_manager, note

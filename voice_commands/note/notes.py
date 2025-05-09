@@ -1,12 +1,10 @@
 from datetime import datetime
 from icalendar import Event, Calendar
-from stark import CommandsManager, Response
-from stark.core.types import Hours, Time, String, Year
+from stark import Response
+from stark.core.types import String, MyTime, MyHours, MyYear
 import dateparser
 import anyio
 
-
-note_manager = CommandsManager()
 
 class Note:
     """
@@ -29,17 +27,6 @@ class Note:
         self.event_summary = None
         self.events = []  # Список событий
 
-        note_manager.new(r"(создай|создать|добавь|добавить) (запись|заметку|напоминание)")(
-            self.create_a_note)
-        note_manager.new(r"(описание|суть|смысл) $content:String")(
-            self.add_summary)
-        note_manager.new(r"(дата начала|дата) $content:Time")(self.add_time)
-        note_manager.new(r"(года|год|годы) $content:Year")(self.add_year)
-        note_manager.new(r"время в $content:Hours")(self.start_date)
-        note_manager.new(r"(место|локация) $content:String")(self.add_location)
-        note_manager.new(r"(сохранить|завершить)")(self.save_event)
-
-
     def create_a_note(self):
         """Создать заметку"""
         if self.current_note is not None:
@@ -60,7 +47,7 @@ class Note:
         self.is_summary = True
         return Response(voice="Описание добавлено")
 
-    def add_time(self, content: Time):
+    def add_time(self, day: MyTime):
         """Добавить дату"""
         if self.current_note is None:
             return Response(voice="Для начала, создайте заметку")
@@ -68,11 +55,11 @@ class Note:
         if self.is_time:
             return Response(voice="Дата уже добавлена")
 
-        self.event_date = content.day  # Сохраняем дату
+        self.event_date = day.mytime_day  # Сохраняем дату
         self.is_time = True
         return Response(voice="Дата добавлена")
 
-    def start_date(self, content: Hours):
+    def start_date(self, hour: MyHours):
         """Добавить время"""
         if self.current_note is None:
             return Response(voice="Для начала, создайте заметку")
@@ -80,23 +67,26 @@ class Note:
         if self.is_start_date:
             return Response(voice="Время уже добавлено")
 
-        self.event_time = content.hour  # Сохраняем время
+        if not hour or not hour.myhours_hour:
+            return Response(voice="Время не распознано, пожалуйста повторите")
+
+        self.event_time = hour.myhours_hour.strip()
         self.is_start_date = True
-        return Response(voice="Время добавлено")
+        return Response(voice=f"Время {self.event_time} добавлено")
 
     def add_location(self, content: String):
         """Добавить место события"""
         if self.current_note is None:
             return Response(voice="Для начала, создайте заметку")
 
-        if self.is_year:
+        if self.is_location:
             return Response(voice="Локация уже добавлена")
 
         self.event_location = content.value  # Сохраняем место
         self.is_location = True
         return Response(voice="Локация добавлена")
 
-    def add_year(self, content: Year):
+    def add_year(self, year: MyYear):
         """Добавить год
         """
         if self.current_note is None:
@@ -105,7 +95,7 @@ class Note:
         if self.is_year:
             return Response(voice="Год уже добавлен")
 
-        self.event_year = content.year
+        self.event_year = year.myyear_year
         self.is_year = True
         return Response(voice="Год добавлен")
 
@@ -200,3 +190,6 @@ class Note:
                     yield Response(voice=f"Событие {event['summary']} наступило")
 
             await anyio.sleep(1)
+
+
+
