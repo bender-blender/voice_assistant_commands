@@ -1,19 +1,11 @@
-from stark import CommandsManager, Response
+from stark import Response
 from stark.core.types import String
 import datetime
 import dateparser
 import asyncio
 from dependencies import convert
 
-timer_manager = CommandsManager()
 
-def validate_time_format(interval_value: str):
-    """Проверяет, что введённый формат времени валиден."""
-    try:
-        parsed_time = dateparser.parse(f"через {interval_value}")
-        return parsed_time is not None
-    except Exception:
-        return False
 
 class State:
     """
@@ -21,10 +13,6 @@ class State:
     """
 
     def __init__(self):
-        timer_manager.new("покажи таймер")(self.show_timer)
-        timer_manager.new("проверить состояние таймера")(
-            self.check_timer_status)
-        timer_manager.new("(отмени|удали) (таймер|счётчик)")(self.cancel_timer)
         self.list_timer = []
 
     def show_timer(self):
@@ -56,19 +44,24 @@ class State:
 class Timer:
     """timer
     """
-    state = State()
-
-    def __init__(self):
-        timer_manager.new("(поставь|установи|запусти|заведи|включи|сделай|стартуй)? (таймер|счётчик)? (на|через)? $interval:String")(
-            self.set_a_timer)
+    def __init__(self,state:State):
+        self.state = state
+    
+    @classmethod
+    def validate_time_format(cls, interval_value: str):
+        """Проверяет, что введённый формат времени валиден."""
+        try:
+            parsed_time = dateparser.parse(f"через {interval_value}")
+            return parsed_time
+        except Exception:
+            return False
 
     async def set_a_timer(self, interval: String):
         """Устанавливает таймер"""
-        print(interval.value)
         start = datetime.datetime.now()
         end = dateparser.parse(f"{interval.value}", settings={'PREFER_DATES_FROM': 'future', 'RELATIVE_BASE': start})
         # Проверка валидности формата времени
-        if not validate_time_format(interval.value):
+        if not self.validate_time_format(interval.value):
             yield Response(voice="Ошибка! Неправильный формат времени.")
             return
 
