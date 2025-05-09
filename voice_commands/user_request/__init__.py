@@ -1,1 +1,1 @@
-from .request import (Request,request_manager)
+from .manager import request_manager

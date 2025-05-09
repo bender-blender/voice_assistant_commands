@@ -1,18 +1,15 @@
-from stark import CommandsManager,Response
+from stark import Response
 from pywhatkit.core.exceptions import InternetException
 from stark.core.types import String
 import pywhatkit
 import socket
 
-request_manager = CommandsManager()
+
 
 class Request:
     """
     browser request class
     """
-    def __init__(self):
-        request_manager.new(r"(у меня есть|ответь на)? (вопрос|запрос) $question:String")(self.find_the_answer)
-        
 
     @staticmethod
     def is_connect():
