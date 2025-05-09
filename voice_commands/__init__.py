@@ -1,5 +1,6 @@
-from .clock import (data_manager, Data, Time, time_manager, CityTime, time_city_manager,Stopwatch,stopwatch_manager)
-from .user_media import (MediaPlayer,media_manager)
-from .user_request import (Request,request_manager)
-from .timer import (Timer,timer_manager,State,validate_time_format)
-from .note import (Note,note_manager)
+from .clock import time_manager
+from .timer import timer_manager
+from .user_media import media_manager
+from .user_request import request_manager
+from .note import (note_manager,note)
+from .weather import weather_manager
