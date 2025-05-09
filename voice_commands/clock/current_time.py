@@ -8,15 +8,6 @@ time_manager = CommandsManager()
 class Time:
     """time class."""
     
-    def __init__(self):
-        patterns = [
-            r"(подскажи|скажи|сколько) (время|который час)",  
-            r"(какое|текущее) время",  
-            r"сколько сейчас (времени|часов)",
-        ]
-        
-        for pattern in patterns:
-            time_manager.new(pattern)(self.show_time)
     
     def show_time(self):
         current_time = datetime.now()

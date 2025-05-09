@@ -1,17 +1,15 @@
-from stark import CommandsManager, Response
+from stark import  Response
 import anyio
 from dependencies.auxiliary_functions import convert
 
 
-stopwatch_manager = CommandsManager()
+
 
 class Stopwatch:
+    
     def __init__(self):
         self.seconds = 0
         self.running = False
-        stopwatch_manager.new(r"(включи|запусти) секундомер")(self.start)
-        stopwatch_manager.new(r"(останови|выключи) секундомер")(self.stop)
-        stopwatch_manager.new(r"сбросить секундомер")(self.reset)
 
     async def start(self):
         """Запускает секундомер"""
