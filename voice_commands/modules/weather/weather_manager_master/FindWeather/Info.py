@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from uuid import UUID
 from typing import Optional
 
-class Info(ABC, BaseModel):
+class Info(ABC, BaseModel): # Model
     weather_type: WeatherType
     cloud: float
     humidity: float

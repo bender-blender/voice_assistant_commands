@@ -12,7 +12,7 @@ from .Day import Day
 from .Hour import Hour
 
 
-class WeatherManager:
+class WeatherManager: # Provider
     api_key: str
     place_code: str
     days_count: int

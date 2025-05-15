@@ -24,9 +24,11 @@ def call_next():
 def call_previous():
     return media.previous_track()
 
-@media_manager.new(r"сделай громкость на $vol:String")
-def call_set_volume(vol:String):
-    return media.set_volume(vol)
+@media_manager.new(r"сделай громкость на $volume:Int")
+def call_set_volume(volume: Int): 
+    if not 0 <= volume.int_value <= 100:
+        return Response(voice="Громкость должна быть от 0 до 100")
+    return media.set_volume(volume.int_value) # TODO: 0...100
 
 
 @media_manager.new(r"(установи громкость на сто|поставь звук на полную мощность|громкость на полную|максимальный уровень звука|поставь звук на максимум|сделай громкость на полную|включи звук на максимум|звук на пределе|выставь максимальную громкость)")

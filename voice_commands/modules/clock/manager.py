@@ -1,20 +1,35 @@
+from datetime import datetime
 from stark import CommandsManager
 from .current_time import Time
-from .current_date import Data
-from .current_time_in_city import CityTime
+from .models.current_date import Data
+from .providers.current_time_in_city import CityTime
 from .stopwatch import Stopwatch
 from stark.core.types import String
 
 time_manager = CommandsManager()
 
-data = Data()
+data = Data() # данные
+date = Date() # дата-время
 time = Time()
 city_time = CityTime()
 stopwatch = Stopwatch()
 
 @time_manager.new(r"(узнать|узнай|определить|определи|подскажи|уточни|сколько) время (в|для) (городе|города) $city:String")
-def call_time_city(city:String):
-    return city_time.get_time_in_city(city=city)
+def call_time_city(city: String):
+    geocode_or_loocation = LocationProvider().find(location_str)
+    
+    datetime_at_location: datetime = CurrentTimeProvider().get_time_at(city)
+    
+    stark_date = STDate(datetime_at_location)
+    
+    response_text: str
+    
+    if datetime_at_location.day == datetime.now().day:
+        response_text = f'Current time in {city} is {stark_date.formatted_time}'
+    else:
+        response_text = f'Current time in {city} is {stark_date.formatted_day} {stark_date.formatted_time}'
+    
+    return Response(text=response_text)
 
 @time_manager.new("какое сегодня число|какая сегодня дата|какой сегодня день")
 def call_data():

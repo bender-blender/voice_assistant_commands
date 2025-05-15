@@ -17,7 +17,7 @@ def call_show_the_timer():
 
 @timer_manager.new("проверить состояние таймера")
 def call_check_state_timer():
-    return state_timer.check_timer_status()
+    return state_timer.check_timer_status() # TODO: seconds to pretty time
 
 @timer_manager.new("(отмени|удали) (таймер|счётчик)")
 def call_cancel_timer():

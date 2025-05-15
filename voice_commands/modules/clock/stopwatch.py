@@ -1,6 +1,6 @@
 from stark import  Response
 import anyio
-from dependencies.auxiliary_functions import convert
+from dependencies.helpers import convert
 
 
 
@@ -14,8 +14,7 @@ class Stopwatch:
     async def start(self):
         """Запускает секундомер"""
         if self.running:
-            yield Response(voice="Секундомер уже работает!")
-            return
+            return Response(voice="Секундомер уже работает!")
         
         self.running = True
         yield Response(voice="Секундомер запущен...")
@@ -28,16 +27,17 @@ class Stopwatch:
     async def stop(self):
         """Останавливает секундомер"""
         if not self.running:
-            yield Response(voice="Секундомер уже остановлен!")
-            return
+            return Response(voice="Секундомер уже остановлен!")
+            
         
         self.running = False
-        yield Response(voice=f"\nСекундомер остановлен на {convert(self.seconds)}ой секунде")
-
-    async def reset(self):
-        """Сбрасывает секундомер"""
-        if self.running:
-            async for response in self.stop():
-                yield response
         self.seconds = 0
-        yield Response(voice="\nСекундомер сброшен.")
+        return Response(voice=f"\nСекундомер остановлен на {convert(self.seconds)}ой секунде")
+
+    # async def reset(self):
+    #     """Сбрасывает секундомер"""
+    #     if self.running:
+    #         async for response in self.stop():
+    #             yield response
+    #     self.seconds = 0
+    #     yield Response(voice="\nСекундомер сброшен.")

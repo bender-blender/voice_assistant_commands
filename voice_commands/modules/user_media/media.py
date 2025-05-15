@@ -5,6 +5,9 @@ from word2number import w2n
 from translate import Translator
 import subprocess
 
+
+class MediaPlayerException(Exception): ...
+
 class MediaPlayer:
     """
     Media player
@@ -19,9 +22,9 @@ class MediaPlayer:
             "org.mpris.MediaPlayer2.")]
         if mpris_services:
             self.player = session_bus.get(
-                mpris_services[0], "/org/mpris/MediaPlayer2")
+                mpris_services[0], "/org/mpris/MediaPlayer2") # TODO: try get the active player
         else:
-            self.player = None
+            raise MediaPlayerException("No media player found")
 
     def play(self):
         if self.player:
@@ -40,35 +43,49 @@ class MediaPlayer:
             self.player.Next()
         else:
             return Response(voice="Медиаплеер не включен")
-
-    def previous_track(self):
+        
+    def seek_to_start(self):
         if self.player:
-            self.player.Previous()
             self.player.Previous()
         else:
             return Response(voice="Медиаплеер не включен")
 
-    def set_volume(self, vol: String):
+    def previous_track(self):
+        if not self.player:
+            return Response(voice="Медиаплеер не включен")
+        
+        self.player.Previous()
+        self.player.Previous()
+
+    def set_volume(self, vol: String): # int 0...100
         try:
             print("Выполняю")
+            
+            # TODO: custom class
             num = Translator(to_lang="en", from_lang="ru").translate(vol.value)
             num = w2n.word_to_num(num)
+            
+            except ValueError as e:
+            print(f"Ошибка преобразования текста в число: {e}")
+            return Response(voice="Не удалось ра
+            # END
+            
         # Преобразование входного параметра в строку
             volume = max(0, min(num, 100))  # Ограничение в пределах 0-100
             subprocess.run(["amixer", "sset", "Master", f"{volume}%"])
             print(f"Системная громкость установлена на {volume}%.")
 
-        except ValueError as e:
-            print(f"Ошибка преобразования текста в число: {e}")
-            return Response(voice="Не удалось распознать указанную громкость. Попробуйте снова.")
+        # except ValueError as e:
+        #     print(f"Ошибка преобразования текста в число: {e}")
+        #     return Response(voice="Не удалось распознать указанную громкость. Попробуйте снова.")
 
-        except AttributeError as e:
-            print(f"Ошибка доступа к плееру: {e}")
-            return Response(voice="Плеер не найден или не поддерживает управление громкостью.")
+        # except AttributeError as e: # TODO: check if needed
+        #     print(f"Ошибка доступа к плееру: {e}")
+        #     return Response(voice="Плеер не найден или не поддерживает управление громкостью.")
 
-        except Exception as e:
-            print(f"Неожиданная ошибка ({type(e)}): {e}")
-            return Response(voice="Произошла ошибка при установке громкости.")
+        # except Exception as e:
+        #     print(f"Неожиданная ошибка ({type(e)}): {e}")
+        #     return Response(voice="Произошла ошибка при установке громкости.")
 
     def maximum(self):
         volume = 100
@@ -88,12 +105,25 @@ class MediaPlayer:
     def get_info(self):
         if not self.player:
             return Response(voice="Медиаплеер не найден.")
+        
         metadata = self.player.Metadata
-        track_name = metadata.get("xesam:title", "Неизвестно")
+        track_name = metadata.get("xesam:title", None)
         # Проверяем наличие артиста и возвращаем первое имя, если оно есть, или дефолтное значение
-        artist_name = metadata.get("xesam:artist", ["Неизвестен"])[
+        artist_name = metadata.get("xesam:artist", ["Неизвестен"])[ # TODO: use None if no info
             0] if metadata.get("xesam:artist") else "Неизвестен"
         album_name = metadata.get("xesam:album", "Неизвестен")
+        # TODO: is_playing = metadata.get("xesam:playing", False) # check if exists
 
         print(
-            f"Сейчас играет: {track_name} — {artist_name} (Альбом: {album_name})")
+            f"Сейчас играет: {track_name} — {artist_name} (Альбом: {album_name})") # TODO: no album name in voice, only in text
+            
+        # TODO:
+        return MediaPlayerInfo(track_name, etc)
+
+@dataclass # Model
+class MediaPlayerInfo:
+    track_name: str
+    artist_name: str
+    album_name: str
+    is_playing: bool = False
+

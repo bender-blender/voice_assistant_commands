@@ -2,12 +2,7 @@
 downloads/
 /проблемы.txt
 .vscode/
-/__pycache__
-/voice_commands/__pycache__
-/dependencies/__pycache__
-/voice_commands/clock/__pycache__
-/voice_commands/user_media/__pycache__
-/voice_commands/timer/__pycache__
-/voice_commands/user_request/__pycache__
+__pycache__
 .pytest_cache/
 /pytest.ini
+.env

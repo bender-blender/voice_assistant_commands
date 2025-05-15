@@ -1,4 +1,4 @@
-from dependencies.auxiliary_functions import convert, day_to_date, parse_day_phrase
+from dependencies.helpers import convert, day_to_date, parse_day_phrase
 from .weather_manager_master import WeatherManager
 from stark.core.types import String
 from translate import Translator

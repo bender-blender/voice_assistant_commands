@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch
 from datetime import datetime
 from stark import Response
-from dependencies.auxiliary_functions import convert
+from dependencies.helpers import convert
 from voice_commands import Time  # Замените your_module на реальное имя файла
 
 @pytest.fixture

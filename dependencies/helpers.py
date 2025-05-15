@@ -1,11 +1,13 @@
 from num2words import num2words
-def convert(number):  # Преобразовать число в строку
-    word = num2words(number, lang="ru")
+
+
+def num2word(number):  # Преобразовать число в строку
+    word = num2words(number, lang="ru") # TODO: make language an ENV var
     return word
 
 #---------------------------
 
-from translate import Translator # <--------- это установить!
+from translate import Translator
 
 def translate_city(city:str, to_lang="en", from_lang="ru"):
     translator = Translator(to_lang=f"{to_lang}", from_lang=f"{from_lang}")
@@ -18,7 +20,7 @@ def translate_city(city:str, to_lang="en", from_lang="ru"):
 import datetime
 
 # Сопоставление русских дней недели с weekday()
-days_map = {
+days_map = { # Use system solution
     "понедельник": 0,
     "вторник": 1,
     "среда": 2,
