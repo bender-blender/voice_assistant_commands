@@ -4,15 +4,17 @@ from voice_commands import (
     time)
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
+from dotenv import load_dotenv
+import os
 
 
-VOSK_MODEL_URL = "https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip"
-SILERO_MODEL_URL = "https://models.silero.ai/models/tts/ru/v3_1_ru.pt"
+load_dotenv("/home/max/commands/example.env")
+
+VOSK_MODEL_URL = os.getenv("VOSK_MODEL_URL")
+SILERO_MODEL_URL = os.getenv("SILERO_MODEL_URL")
 
 recognizer = VoskSpeechRecognizer(model_url=VOSK_MODEL_URL)
 synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
-
-
 
 async def main():
     async with anyio.create_task_group() as tg:
