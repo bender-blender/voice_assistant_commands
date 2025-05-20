@@ -4,5 +4,4 @@ downloads/
 .vscode/
 __pycache__
 .pytest_cache/
-/pytest.ini
-.env
+/example.env
