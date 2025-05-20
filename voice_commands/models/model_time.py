@@ -10,3 +10,6 @@ class TimeModel:
         locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
         return self.current_date.strftime("%H:%M")
     
+    def get_formatted_date(self) -> str:
+        locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
+        return self.current_date.strftime('%-d %B %Y')
