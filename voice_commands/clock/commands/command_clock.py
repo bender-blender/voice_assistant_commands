@@ -1,4 +1,4 @@
-from ..models.model_time import TimeModel
+from ...models.model_time import TimeModel
 from datetime import datetime
 
 class TimeCommands:    
