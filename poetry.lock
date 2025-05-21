@@ -1595,6 +1595,17 @@ toml = ["toml (>=0.10.2)"]
 vulture = ["vulture"]
 
 [[package]]
+name = "pymorphy2-dicts-ru"
+version = "2.4.417127.4579844"
+description = "Russian dictionaries for pymorphy2"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pymorphy2-dicts-ru-2.4.417127.4579844.tar.gz", hash = "sha256:78cad03adca605021abd387a3b2eb515c851b86e94682a1ef2354a2c74fcc196"},
+    {file = "pymorphy2_dicts_ru-2.4.417127.4579844-py2.py3-none-any.whl", hash = "sha256:9a322a6ee78fd4a5dceead0545c24b9a91687ad5df95cbac1b36f6c36cbb498a"},
+]
+
+[[package]]
 name = "pymsgbox"
 version = "1.0.9"
 description = "A simple, cross-platform, pure Python module for JavaScript-like message boxes."
@@ -2521,4 +2532,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "dc02627d154118dd64affaad472766f83449781193db744e5b46e968b13c7593"
+content-hash = "acdfbf967b4efae687b6c278ce13a5ffeeb8f7c9f7a9efdfdb7c84e037437a87"
