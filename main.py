@@ -1,14 +1,15 @@
 import anyio
 from stark import run
 from voice_commands import (
-    time_manager)
+    time_manager,
+    stopwatch_manager)
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
 from dotenv import load_dotenv
 import os
 
 
-load_dotenv("/home/max/commands/example.env")
+load_dotenv("examlpe.env")
 
 VOSK_MODEL_URL = os.getenv("VOSK_MODEL_URL")
 SILERO_MODEL_URL = os.getenv("SILERO_MODEL_URL")
@@ -16,6 +17,7 @@ SILERO_MODEL_URL = os.getenv("SILERO_MODEL_URL")
 recognizer = VoskSpeechRecognizer(model_url=VOSK_MODEL_URL)
 synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
 
+time_manager.extend(stopwatch_manager)
 
 
 async def main():
