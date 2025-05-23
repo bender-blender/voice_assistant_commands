@@ -1,6 +1,6 @@
 from stark import Response, CommandsManager
 from .providers import TimeCommands,DateCommands,TimeCityProvider
-from .helpers.helpers import num2word, numerals_dict
+from ..helpers.helpers import num2word, numerals_dict
 from stark.core.types import String
 
 
