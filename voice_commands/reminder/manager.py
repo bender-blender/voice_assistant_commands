@@ -1,6 +1,6 @@
 from stark import CommandsManager, Response
 from .providers.reminders import Reminder
-from .custom_types import Time,Day,Year
+from .custom_types import Day, Time, Year
 from stark.core.types import String
 
 
@@ -19,26 +19,29 @@ def call_add_summary(content:String):
     return Response(voice="добавлено")
 
 @reminder_manager.new(r"(дата начала|дата) $value:Day")
-def call_day(value:Day):
-    reminder.add_time(value)
-    return Response(voice="добавлено")
+def call_day(value: Day):
+    reminder.add_date(value)
+    return Response(voice=f"Дата добавлена")
 
-@reminder_manager.new(r"(года|год|годы) $value:Year")
-def call_year(value:Year):
+@reminder_manager.new(r"(время|время начала) $value:Time")
+def call_time(value: Time):
+    reminder.add_time(value)
+    return Response(voice=f"Время добавлено")
+
+@reminder_manager.new(r"год $value:Year")
+def call_year(value: Year):
     reminder.add_year(value)
-    return Response(voice="добавлено")
+    return Response(voice=f"Год добавлен")
 
-@reminder_manager.new(r"время в $value:Time")
-def call_hour(value:Time):
-    reminder.add_time(value)
-    return Response(voice="добавлено")
-
-@reminder_manager.new(r"(место|локация) $content:String")
-def call_location(content:String):
+@reminder_manager.new(r"(место|локация|адрес) $content:String")
+def call_location(content: String):
     reminder.add_location(content)
-    return Response(voice="добавлено")
+    return Response(voice="Место добавлено")
 
-@reminder_manager.new(r"(сохранить|завершить)")
-def call_save():
+@reminder_manager.new(r"(сохранить|завершить|готово)")
+def call_save_reminder():
+    print("Сохраняем заметку — возвращаем ответ")
     reminder.save()
-    return Response(voice="Сохранено")
+    return Response(voice="Заметка сохранена")
+
+

@@ -3,7 +3,7 @@ from stark.general.classproperty import classproperty
 from stark.core.patterns import Pattern
 from ...models.model_time import TimeModel
 from .data_dictionary import GeneralDictionary
-from datetime import datetime
+from datetime import time
 
 
 class Time(Object):
@@ -37,7 +37,7 @@ class Time(Object):
         if not (0 <= minute <= 59):
             raise ParseError(f"Некорректные минуты: {minute}")
 
-        self.hour = datetime(hour=hour, minute=minute)
+        self.hour = time(hour=hour, minute=minute)
         self.hour = TimeModel(self.hour).get_formatted_time()
         return self.hour
 

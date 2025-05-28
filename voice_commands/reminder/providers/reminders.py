@@ -1,5 +1,5 @@
 from ..model.model_note import ModelReminder
-from ..custom_types import Time, Day, Year
+from ..custom_types import Day, Time, Year
 from icalendar import Event, Calendar
 from stark.core.types import String
 from datetime import datetime
@@ -27,7 +27,6 @@ class Reminder:
         self.current_reminder = Event()
 
     def add_summary(self, content: String):
-        #print(f"DEBUG: content = {content}, content.value = {content.value}")
         if self.current_reminder is None:
             return Response(voice="Создайте заметку")
         
@@ -35,45 +34,57 @@ class Reminder:
             return Response(voice="Описание уже добавлено")
 
         self.summary = content.value
-        return self.summary
+        
 
     def add_time(self, content: Time):
-        print(content.hour)        
-        # if self.current_reminder == None:
-        #     return Response(voice="Создайте заметку")
         
-        # if self.time != None:
-        #     return Response(voice="Время уже добавлено")
-        # self.time = content.hour
-        # return self.time
+        if self.current_reminder is None:
+            return Response(voice="Создайте заметку")
+        
+        if self.time is not None:
+            return Response(voice="Время уже добавлено")
+        
+        self.time = content.hour
+        
 
     def add_date(self, content: Day):
+
+        if self.current_reminder is None:
+            return Response(voice="Создайте заметку")
+    
+        if self.date is not None:
+            return Response(voice="Дата уже добавлена")
+    
+        self.date = content.day
+        
+
+    def add_year(self, content: Year):
+        
         if self.current_reminder == None:
             return Response(voice="Создайте заметку")
         
-        if self.date != None:
-            return Response(voice="Дата уже добавлена")
-        self.date = content.day
-        return self.date
-
-    def add_year(self, content: Year):
-        if self.current_reminder == None:
-            return Response(voice="Создайте заметку")
+        if self.year is not None:
+            return Response(voice="Год уже добавлен")
+        
         self.year = content.year
-        return self.year
+        
 
     def add_location(self, content: String):
-        if self.current_reminder == None:
+        if self.current_reminder is None:
             return Response(voice="Создайте заметку")
+    
+        if self.location is not None:
+            return Response(voice="Место уже добавлено")
+
         self.location = content.value
-        return self.location
+        
+        
 
     def save(self, file_path="reminders.ics"):
+        
         if not self.year:
             self.year = str(datetime.now().year)
             
-
-
         reminder = ModelReminder(
             event_summary=self.summary,
             event_time=self.time,
@@ -86,12 +97,13 @@ class Reminder:
         try:
             event = reminder.to_event()
             self.calendar.add_component(event)
-        except ValueError as e:
+        
+        except ValueError:
             self.current_reminder = None
             self.summary = self.time = self.date = self.year = self.location = None
-            return Response(voice=f"Ошибка при создании события")
+            #return Response(voice=f"Ошибка при создании события")
     
-        self.reminders.append(reminder)
+        self.events.append(reminder)
 
         with open(file_path, 'wb') as f:
             f.write(self.calendar.to_ical())
@@ -100,33 +112,33 @@ class Reminder:
         self.summary = self.time = self.date = self.year = self.location = None
     
 
-    async def reminder_loop(self):
-        while True:
-            now = datetime.now()
+    # async def reminder_loop(self):
+    #     while True:
+    #         now = datetime.now()
 
-            for reminder in self.reminders[:]:  # Копия списка для безопасного удаления
-                # Преобразуем данные в datetime
-                full_time_str = f"{reminder.event_time} {reminder.event_date} {reminder.event_year}"
-                event_time = parse(full_time_str)
+    #         for reminder in self.reminders[:]:  # Копия списка для безопасного удаления
+    #             # Преобразуем данные в datetime
+    #             full_time_str = f"{reminder.event_time} {reminder.event_date} {reminder.event_year}"
+    #             event_time = parse(full_time_str)
 
-                if not event_time:
-                    continue
+    #             if not event_time:
+    #                 continue
 
-                if event_time <= now:
-                    # Удаляем из списка напоминаний
-                    self.reminders.remove(reminder)
+    #             if event_time <= now:
+    #                 # Удаляем из списка напоминаний
+    #                 self.reminders.remove(reminder)
 
-                    # Удаляем из календаря
-                    for component in list(self.calendar.subcomponents):
-                        if component.name == "VEVENT" and component.get("summary") == reminder.event_summary:
-                            self.calendar.subcomponents.remove(component)
-                            break
+    #                 # Удаляем из календаря
+    #                 for component in list(self.calendar.subcomponents):
+    #                     if component.name == "VEVENT" and component.get("summary") == reminder.event_summary:
+    #                         self.calendar.subcomponents.remove(component)
+    #                         break
 
-                    # Обновляем .ics файл
-                    with open("reminders.ics", "wb") as f:
-                        f.write(self.calendar.to_ical())
+    #                 # Обновляем .ics файл
+    #                 with open("reminders.ics", "wb") as f:
+    #                     f.write(self.calendar.to_ical())
 
-                    # Отправляем ответ
-                    yield Response(voice=f"Событие «{reminder.event_summary}» наступило")
+    #                 # Отправляем ответ
+    #                 yield Response(voice=f"Событие «{reminder.event_summary}» наступило")
 
-            await anyio.sleep(1)
+    #         await anyio.sleep(1)

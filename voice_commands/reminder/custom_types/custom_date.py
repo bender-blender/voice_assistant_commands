@@ -2,9 +2,11 @@ from stark.core.types import Object, String, ParseError
 from stark.general.classproperty import classproperty
 from stark.core.patterns import Pattern
 from .data_dictionary import GeneralDictionary
-
+from dataclasses import dataclass
     
 
+
+@dataclass
 class Day(Object):
     day: String
     dictionary = GeneralDictionary().words_to_numbers
@@ -33,8 +35,7 @@ class Day(Object):
 
         self.day = " ".join([str(day)] + unknown_words) if day > 0 else " ".join(unknown_words)
         if not self.day:
-            raise ParseError("Значение не найдено")
+            raise ParseError("Error parsing day: no valid words found")
         return self.day
 
 Pattern.add_parameter_type(Day)
-
