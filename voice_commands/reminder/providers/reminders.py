@@ -112,33 +112,35 @@ class Reminder:
         self.summary = self.time = self.date = self.year = self.location = None
     
 
-    # async def reminder_loop(self):
-    #     while True:
-    #         now = datetime.now()
+    async def reminder_loop(self):
+        while True:
+            now = datetime.now()
 
-    #         for reminder in self.reminders[:]:  # Копия списка для безопасного удаления
-    #             # Преобразуем данные в datetime
-    #             full_time_str = f"{reminder.event_time} {reminder.event_date} {reminder.event_year}"
-    #             event_time = parse(full_time_str)
+            # Копируем список событий, чтобы можно было безопасно изменять оригинал
+            for reminder in self.events[:]:
+                
+                full_time_str = f"{reminder.event_time} {reminder.event_date} {reminder.event_year}"
+                event_time = parse(full_time_str)
 
-    #             if not event_time:
-    #                 continue
+                if not event_time:
+                    # Не удалось распарсить дату — пропускаем
+                    continue
 
-    #             if event_time <= now:
-    #                 # Удаляем из списка напоминаний
-    #                 self.reminders.remove(reminder)
+                if event_time <= now:
+                        
+                    self.events.remove(reminder)
 
-    #                 # Удаляем из календаря
-    #                 for component in list(self.calendar.subcomponents):
-    #                     if component.name == "VEVENT" and component.get("summary") == reminder.event_summary:
-    #                         self.calendar.subcomponents.remove(component)
-    #                         break
+                    # Удаляем событие из календаря
+                    for component in list(self.calendar.subcomponents):
+                        if (component.name == "VEVENT" and
+                            component.get("summary") == reminder.event_summary and
+                            component.get("location") == reminder.event_location):
+                            self.calendar.subcomponents.remove(component)
+                            break
 
-    #                 # Обновляем .ics файл
-    #                 with open("reminders.ics", "wb") as f:
-    #                     f.write(self.calendar.to_ical())
+                        
+                    with open("reminders.ics", "wb") as f:
+                        f.write(self.calendar.to_ical())
 
-    #                 # Отправляем ответ
-    #                 yield Response(voice=f"Событие «{reminder.event_summary}» наступило")
-
-    #         await anyio.sleep(1)
+                    yield Response(voice=f"Событие «{reminder.event_summary}» наступило")
+            await anyio.sleep(1)
