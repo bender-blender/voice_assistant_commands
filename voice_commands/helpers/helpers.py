@@ -1,8 +1,18 @@
 from num2words import num2words
+from word2number import w2n
+
 
 def num2word(number) -> str:  # Преобразовать число в строку
     word = num2words(number, lang="ru")
     return word
+
+
+def word2num(word: str) -> int:
+    try:
+        number = w2n.word_to_num(word)
+    except ValueError:
+        raise ValueError(f"Не удалось преобразовать слово '{word}' в число.")
+    return number
 
 
 numerals_dict = {
