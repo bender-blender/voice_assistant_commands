@@ -20,30 +20,24 @@ class WeatherProvider:
         self.api_key = os.getenv("api_key")
         self.coord = None
     
-    def define_the_city(self, location: CustomCity | None = None):
-
-        if location is not None:
-            print(location.terrain)
-            self.coord = CityInfo(location.terrain).get_coordinates()
-            
-        else:
+    def define_the_place(self, location: CustomCity | None = None):
+        
+        if location is None:
             response = requests.get("http://ip-api.com/json/")
             data = response.json()
-            city = data.get("city", "Неизвестный город")
-            print(city)
-            self.coord = CityInfo(city).get_coordinates()
-
-
-
-    def return_location(self, location: CustomCity):
-        return self.define_the_city(location)
+            place = data.get("city", "Неизвестный город")
+            self.coord = CityInfo(place).get_coordinates()
+        else:
+            self.coord =  CityInfo(location.terrain).get_coordinates()
+        
+        return self.coord
+                    
     
-    def find_a_city(self):
-        return self.define_the_city(None)
-    
-    def __prepare_data(self, time: String | None = None):
+
+    def prepare_data(self, time: String = None):
         if time is None:
             target_date = datetime.now()
+            return target_date
         else:
             parsed = day_to_date(time.value)
             if parsed is None:
@@ -54,26 +48,39 @@ class WeatherProvider:
                 return Response(voice="Неверный формат")
             target_date = parsed
             return target_date
+
+
+    def get_weather_parameters(self, time: String = None):
+        if self.coord is None:
+            self.define_the_place(None)
+
+        target_date = self.prepare_data(time)
         
 
-    
-    def get_any_parameter(self, time: String = None):
-        
-        target_date = self.__prepare_data(time)
         weather = WeatherManager(api_key=self.api_key, location=self.coord, days_count=20)
         days = weather.get_days()
-
-        for day in days:
-            if day.date.date() == target_date.date():
-                return day
-
-        return Response(voice="Нет данных о погоде на выбранную дату")
+        return days, target_date
 
     
     def get_without_time(self):
-        return self.get_any_parameter(None)
+        days, target_date = self.get_weather_parameters(None)
+        if isinstance(target_date, Response):
+            return target_date
+
+    
+        for day in days:
+            if day.date.date() == target_date.date():
+                return day
+        return Response(voice="Нет данных о погоде на выбранную дату")
+
     
     def get_from_time(self, time: String):
-        return self.get_any_parameter(time)
+        days, target_date = self.get_weather_parameters(time)
+        if isinstance(target_date, Response):
+            return target_date
 
         
+        for day in days:
+            if day.date.date() == target_date.date():
+                return day
+        return Response(voice="Нет данных о погоде на выбранную дату")
