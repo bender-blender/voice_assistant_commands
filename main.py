@@ -6,7 +6,8 @@ from voice_commands import (
     reminder_manager,
     reminder,
     webbrowser_manager,
-    player_manager)
+    player_manager,
+    weather_manager)
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
 from dotenv import load_dotenv
@@ -25,6 +26,7 @@ reminder_manager.extend(stopwatch_manager)
 reminder_manager.extend(time_manager)
 reminder_manager.extend(webbrowser_manager)
 reminder_manager.extend(player_manager)
+reminder_manager.extend(weather_manager)
 
 async def main():
     async with anyio.create_task_group() as tg:
