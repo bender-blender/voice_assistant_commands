@@ -1,7 +1,10 @@
 .venv/
 downloads/
+
+# REMOVE:
 /проблемы.txt
+
 .vscode/
 __pycache__
 .pytest_cache/
-/example.env
+.env
