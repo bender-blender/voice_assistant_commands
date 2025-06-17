@@ -2,7 +2,7 @@ from ..custom_types.custom_time_parser import CustomTimeParser
 from ..model.model_timer import TimerModel
 from datetime import datetime
 from stark import Response
-from ....helpers.helpers import num2word
+from .....helpers.helpers import num2word
 
 class TimerProvider:
 
@@ -10,12 +10,12 @@ class TimerProvider:
         self.list_timers = []
 
     def set_a_timer(self, interval: CustomTimeParser) -> int | Response:
-        end_time = interval.raw_input
+        end_time = interval.value
 
-        if end_time < datetime.now():
+        if end_time < datetime.now(): # type: ignore
             return Response(voice="Указанное время уже прошло, пожалуйста, установите другое время.")
 
-        seconds = TimerModel(end_time).return_seconds()
+        seconds = TimerModel(end_time).return_seconds() # type: ignore
         self.list_timers.append(self)
         return seconds
 

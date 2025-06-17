@@ -1,8 +1,6 @@
 .venv/
 downloads/
 
-# REMOVE:
-/проблемы.txt
 
 .vscode/
 __pycache__

@@ -1,7 +1,4 @@
-from ...models.model_city import CityInfo
-from ...models.model_time import TimeModel
 from timezonefinder import TimezoneFinder
-from stark.core.types import String
 from datetime import datetime
 # from stark import Response # not allowed in providers
 import pytz

@@ -6,7 +6,7 @@ authors = ["Maxim Osadchiy  <maksimgarsia709@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.13.5"
 stark-engine = {extras = ["sound"], version = "^4.0.7"}
 vosk = "^0.3.45"
 numpy = "^2.2.1"

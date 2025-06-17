@@ -1,4 +1,5 @@
-
+from datetime import datetime
+from stark.core.types import Object, Pattern, classproperty
 
 
 class Date(Object):
@@ -17,4 +18,4 @@ class Date(Object):
 
         return from_string
 
-Pattern.add_parameter_type(Location)
+Pattern.add_parameter_type(Date)

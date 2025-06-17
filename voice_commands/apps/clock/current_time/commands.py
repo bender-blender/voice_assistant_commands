@@ -1,32 +1,37 @@
-from ..clock.timer.custom_types.custom_time_parser import CustomTimeParser
-from .providers import TimeCommands,DateCommands,TimeProvider
-from ..clock.timer.providers.provider_timer import TimerProvider
-from ..helpers.helpers import num2word, numerals_dict
-from stark import Response, CommandsManager
-from stark.core.types import String
-import asyncio
 from voice_commands.providers.location_provider import LocationProvider
 from voice_commands.formatters.time import TimeFormatter
+from .providers.time_provider import TimeProvider
+from stark import Response, CommandsManager
+from stark.core.types import String
+from ....helpers.helpers import num2word
 
 
-time_manager = CommandsManager()
+time_manager = CommandsManager() 
 
-@time_manager.new("время в $city:String") # TODO: city:Location
-def call_time_in_city(city: String):
-    coordinates = LocationProvider().get_coordinates(str(city.value).title())
+@time_manager.new("время( $city:String)?")  # TODO: city:Location
+def call_time(city: String | None = None):
+
+    if city is not None:
+        city_name = str(city.value).title()
+    else:
+        city_name = None
+
+    coordinates = LocationProvider().get_coordinates(city_name)  # None будет обрабатываться внутри
     time = TimeProvider().get_time(coordinates)
     formatted_time = TimeFormatter(time).get_formatted_time()
-    sentence = f"В {city} сейчас {formatted_time}"
+    hour, minute = num2word(formatted_time[0]), num2word(formatted_time[1])
+
+    if city is not None:
+        sentence = f"В {city_name} сейчас {hour} часов {minute} минут"
+    else:
+        sentence = f"Сейчас {hour} часов {minute} минут"
+
     return Response(voice=sentence)
 
-@time_manager.new("время")
-def call_time():
-    now = TimeProvider().get_time()
-    sentence = TimeFormatter(now).get_formatted_time()
-    return Response(voice=sentence)
 
 @time_manager.new("дата")
 def call_date():
     now = TimeProvider().get_time()
     sentence = TimeFormatter(now).get_formatted_date()
+    print(sentence)
     return Response(voice=sentence)

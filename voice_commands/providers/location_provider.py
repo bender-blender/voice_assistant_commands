@@ -8,6 +8,8 @@ class Coordinates(NamedTuple):
     longitude: float
 
 class LocationProvider:
+    def __init__(self):
+        self.home: Coordinates | None = None
 
     def get_coordinates(self, location_name: str | None = None) -> Coordinates:
 
@@ -30,4 +32,6 @@ class LocationProvider:
 
     def _coordinates_from_name(self, location_str: str) -> Coordinates:
         location = Nominatim(user_agent="geo_app").geocode(location_str)
-        return Coordinates(location.latitude, location.longitude)
+        if not location:
+            raise ValueError(f"Не удалось найти координаты для: {location_str}")
+        return Coordinates(location.latitude, location.longitude) # type: ignore
