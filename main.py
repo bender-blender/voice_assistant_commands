@@ -2,11 +2,11 @@ import anyio
 from stark import run
 from voice_commands import (
     manager,
+    player_manager,
     #stopwatch_manager,
     #reminder_manager,
     #reminder,
     #webbrowser_manager,
-    #player_manager,
     #weather_manager
     )
 from stark.interfaces.vosk import VoskSpeechRecognizer
@@ -22,6 +22,8 @@ SILERO_MODEL_URL = os.getenv("SILERO_MODEL_URL")
 
 recognizer = VoskSpeechRecognizer(model_url=VOSK_MODEL_URL)
 synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
+
+manager.extend(player_manager)
 
 # reminder_manager.extend(stopwatch_manager)
 # reminder_manager.extend(time_manager)
