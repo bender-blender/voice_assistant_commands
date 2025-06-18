@@ -1,4 +1,4 @@
-from ..custom_types.custom_time_parser import CustomTimeParser
+from .....parameters.time_interval import TimeInterval
 from ..model.model_timer import TimerModel
 from datetime import datetime
 from stark import Response
@@ -9,7 +9,7 @@ class TimerProvider:
     def __init__(self):
         self.list_timers = []
 
-    def set_a_timer(self, interval: CustomTimeParser) -> int | Response:
+    def set_a_timer(self, interval: TimeInterval) -> int | Response:
         end_time = interval.value
 
         if end_time < datetime.now(): # type: ignore

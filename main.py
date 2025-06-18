@@ -7,7 +7,7 @@ from voice_commands import (
     #reminder_manager,
     #reminder,
     #webbrowser_manager,
-    #weather_manager
+    weather_manager
     )
 from stark.interfaces.vosk import VoskSpeechRecognizer
 from stark.interfaces.silero import SileroSpeechSynthesizer
@@ -24,7 +24,7 @@ recognizer = VoskSpeechRecognizer(model_url=VOSK_MODEL_URL)
 synthesizer = SileroSpeechSynthesizer(model_url=SILERO_MODEL_URL)
 
 manager.extend(player_manager)
-
+manager.extend(weather_manager)
 # reminder_manager.extend(stopwatch_manager)
 # reminder_manager.extend(time_manager)
 # reminder_manager.extend(webbrowser_manager)
