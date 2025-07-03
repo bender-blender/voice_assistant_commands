@@ -1,4 +1,4 @@
-from ....parameters.time_interval import TimeInterval
+from ....parameters.date_time import DateTime
 from voice_commands.apps.clock.timer.providers.provider_timer import TimerProvider
 from stark import Response, CommandsManager
 import asyncio
@@ -7,8 +7,8 @@ import asyncio
 timer = TimerProvider()
 timer_manager = CommandsManager()
 
-@timer_manager.new("(поставь|установи|запусти|заведи|включи|сделай|стартуй) (таймер|счётчик) (на|через) $interval:TimeInterval") # type: ignore
-async def call_timer(interval:TimeInterval):
+@timer_manager.new("(поставь|установи|запусти|заведи|включи|сделай|стартуй) (таймер|счётчик) (на|через) $interval:DateTime") # type: ignore
+async def call_timer(interval:DateTime):
     print(interval.value)
     response = timer.set_a_timer(interval)
     yield Response(voice=f"Таймер установлен")

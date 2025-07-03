@@ -1,4 +1,4 @@
-from .....parameters.time_interval import TimeInterval
+from .....parameters.date_time import DateTime
 from ..model.model_timer import TimerModel
 from datetime import datetime
 from stark import Response
@@ -9,10 +9,10 @@ class TimerProvider:
     def __init__(self):
         self.list_timers = []
 
-    def set_a_timer(self, interval: TimeInterval) -> int | Response:
+    def set_a_timer(self, interval: DateTime) -> int | Response:
         end_time = interval.value
 
-        if end_time < datetime.now(): # type: ignore
+        if end_time < datetime.now():
             return Response(voice="Указанное время уже прошло, пожалуйста, установите другое время.")
 
         seconds = TimerModel(end_time).return_seconds() # type: ignore

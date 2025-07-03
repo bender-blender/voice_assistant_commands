@@ -63,7 +63,7 @@ days_map = {
     "воскресенье": 6
 }
 
-def day_to_date(day: str) -> datetime.datetime | None:
+def day_to_date(day) -> datetime.datetime | None:
     day = day.strip().lower()
     if day not in days_map:
         return None
@@ -128,7 +128,7 @@ dictionary_num = {
 }
 
 
-def parse_day_phrase(from_string: str, dictionary=dictionary_num):
+def parse_day_phrase(from_string, dictionary=dictionary_num) -> datetime.datetime | None:
     """
     Преобразует строку, содержащую словесное числительное и месяц,
     в строку с числом (например, 'три мая' → '3 мая') и парсит её.

@@ -1,35 +1,36 @@
+from ....providers.location_provider import LocationProvider
 from stark.core.types import Object, String, ParseError
 from stark.general.classproperty import classproperty
 from stark.core.patterns import Pattern
 from dataclasses import dataclass
-from translate import Translator
-
 
 
 @dataclass
 class Location(Object):
 
-    value: String
+    coord: String
+
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern("$value:String")
+        return Pattern("$coord:String")
 
     async def did_parse(self, from_string: str) -> str:
+        location = LocationProvider()
         if not from_string:
             raise ParseError("Город не указан")
-
-        #print("[DEBUG] from_string:", repr(from_string))
-        from_string = from_string.strip()
-        translator = Translator(to_lang="en", from_lang="ru")
-        translated_city = translator.translate(from_string.title())
-
-        #print("[DEBUG] translated_city:", translated_city)
-
-        self.value = translated_city # type: ignore
-
-        #print("[DEBUG] self.terrain set to:", self.terrain)
-
+        
+        part_line = from_string.split(" ")
+        while True:
+            line = " ".join(part_line)
+            try:
+                place = location.get_coordinates(line)
+                self.value = place
+                self.coord = self.value
+                break
+            except ValueError:
+                part_line.pop(0)
+        
         return from_string
 
 Pattern.add_parameter_type(Location)
