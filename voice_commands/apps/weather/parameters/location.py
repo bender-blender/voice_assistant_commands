@@ -1,36 +1,35 @@
-from ....providers.location_provider import LocationProvider
-from stark.core.types import Object, String, ParseError
+from ....providers.location_provider import LocationProvider, Coordinates
 from stark.general.classproperty import classproperty
+from stark.core.types import Object, ParseError
 from stark.core.patterns import Pattern
-from dataclasses import dataclass
 
 
-@dataclass
+
 class Location(Object):
-
-    coord: String
-
-
+    value: Coordinates | None = None
+    
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern("$coord:String")
+        return Pattern("**")
 
-    async def did_parse(self, from_string: str) -> str:
-        location = LocationProvider()
-        if not from_string:
-            raise ParseError("Город не указан")
+    async def did_parse(self, from_string) -> str:
+        location_provider = LocationProvider()
+        print(from_string)
+        words = from_string.replace("-"," ").split(" ")
+        count_words = len(words)
+        substring = []
+        for i in range(count_words):
+            for j in range(i+1, count_words):
+                substring.append(words[i:j])
         
-        part_line = from_string.split(" ")
-        while True:
-            line = " ".join(part_line)
-            try:
-                place = location.get_coordinates(line)
-                self.value = place
-                self.coord = self.value
-                break
-            except ValueError:
-                part_line.pop(0)
+        substring_dictionary = {}
+        for sub in substring:
+            substring_dictionary[" ".join(
+                sub)] = location_provider.get_coordinates(" ".join(sub))
         
+        print(substring_dictionary)
+
+        self.value = Coordinates(42,23)
         return from_string
 
 Pattern.add_parameter_type(Location)

@@ -1,11 +1,9 @@
-from ...helpers.helpers import  num2word
+from ...helpers.helpers import num2word
 from .providers.provider_weather import WeatherProvider
 from ...parameters.date_time import DateTime
 from stark import CommandsManager, Response
 from .parameters.location import Location
 from stark.core import ResponseHandler
-from translate import Translator
-import dateparser
 
 
 weather_manager = CommandsManager()
@@ -13,14 +11,11 @@ weather_manager = CommandsManager()
 weather = WeatherProvider()
 
 
-
-@weather_manager.new("погода( $time:DateTime)?( $location:Location)?")
-def call_weather(time:DateTime | None = None, location: Location | None = None):
-    print(time.value)
-    print(location.coord)
-    
-
-
+# ( $location:Location)?
+# location: Location | None = None
+@weather_manager.new("(погода|погоду)( $location:Location)?")
+def call_weather(location: Location | None = None):
+    print(f"location = {getattr(location, 'value', None)}")
 
 # @weather_manager.new("$time_interval:TimeInterval", hidden=True)
 # def get_the_weather(time_interval: DateTime, handler: ResponseHandler, location:Location):
@@ -29,12 +24,12 @@ def call_weather(time:DateTime | None = None, location: Location | None = None):
 
 #     if coord is None:
 #         return Response(voice="Не удалось определить координаты. Попробуйте ещё раз.")
-    
+
 #     print(f"Координаты:{coord}")
 
 #     value = time_interval.value
 
-    
+
 #     parsed = day_to_date(value) or dateparser.parse(value) or parse_day_phrase(value)
 #     if parsed is None:
 #         raise Exception("Invalid date format")

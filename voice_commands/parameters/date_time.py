@@ -14,11 +14,13 @@ class DateTime(Object):
         return Pattern("**")
 
     async def did_parse(self, from_string) -> str:
-        if not from_string:
-            raise ParseError(f"Не удалось распознать дату/время из строки: {from_string}")
 
+        print(f"[DEBUG] Parsing string: {from_string}")
         *string, date = search_dates(from_string)
+        if date is None:
+            raise ParseError("Couldn't find date in line")
         self.value = date[1]
-        return from_string
+        return date[0]
+
 
 Pattern.add_parameter_type(DateTime)

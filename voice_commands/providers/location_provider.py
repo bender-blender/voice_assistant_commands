@@ -1,6 +1,6 @@
 from typing_extensions import NamedTuple
-import requests
 from geopy.geocoders import Nominatim
+import requests
 
 
 class Coordinates(NamedTuple):
@@ -10,6 +10,7 @@ class Coordinates(NamedTuple):
 class LocationProvider:
     def __init__(self):
         self.home: Coordinates | None = None
+
 
     def get_coordinates(self, location_name: str | None = None) -> Coordinates:
 
@@ -30,8 +31,15 @@ class LocationProvider:
 
         return home
 
-    def _coordinates_from_name(self, location_str: str) -> Coordinates:
-        location = Nominatim(user_agent="geo_app").geocode(location_str)
+    def _coordinates_from_name(self, location_str: str) -> Coordinates | None:
+        geolocator = Nominatim(user_agent="geo_app", timeout=5)
+        location = geolocator.geocode(location_str)
         if not location:
-            raise ValueError(f"Не удалось найти координаты для: {location_str}")
-        return Coordinates(location.latitude, location.longitude) # type: ignore
+            return None  # Нельзя обращаться к location.raw, если location — None
+
+        raw = location.raw
+        loc_type = raw.get("type", "")       
+        if loc_type in ("city", "administrative", "country", "residential"):
+            return Coordinates(location.latitude, location.longitude)
+
+        return None
