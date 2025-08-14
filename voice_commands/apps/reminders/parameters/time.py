@@ -1,10 +1,12 @@
 # TODO: Implement custom class
-from stark.core.types import Object, String, ParseError
-from stark.general.classproperty import classproperty
+from datetime import time
+
 from stark.core.patterns import Pattern
+from stark.core.types import Object, ParseError, String
+from stark.general.classproperty import classproperty
+
 from ....formatters import TimeFormatter
 from .data_dictionary import GeneralDictionary
-from datetime import time
 
 
 class Time(Object):
@@ -13,7 +15,7 @@ class Time(Object):
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern('$hour:String')
+        return Pattern("$hour:String")
 
     async def did_parse(self, from_string) -> str:
         words = [w for w in from_string.lower().split() if not w.startswith(("час", "минут")) and w != "ровно"]
@@ -41,8 +43,9 @@ class Time(Object):
         parsed_time = time(hour=hour, minute=minute)
 
         self.hour = TimeFormatter(target_datetime=parsed_time).get_formatted_time()  # type: ignore
-        self.value = self.hour  
+        self.value = self.hour
 
         return from_string
+
 
 Pattern.add_parameter_type(Time)

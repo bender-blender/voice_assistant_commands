@@ -24,7 +24,7 @@ mkdir /{app}/modules/{module} (for module-specific code)
 + commands.py
 + providers.py
 + models.py
-+ helpers 
++ helpers
 \* each file can be replaced with folder (python module) that contains multiple files if needed, for example, in case of many long code structures. Use a single file only for a few short items.
 
 ### gitignore
@@ -85,7 +85,7 @@ stark_weather = Weather(weather_at_location) # Maybe, to avoid confusion, we sho
 return Response(text=stark_weather.formatted)
 ```
 
-4. use guard clause instead of nesting `if`s 
+4. use guard clause instead of nesting `if`s
    https://www.youtube.com/watch?v=CFRhGnuXG-4
 
 5.  L42: don't call same long services multiple times, use saved in ram value instead
@@ -106,7 +106,7 @@ Use requirements.txt or even better - poetry for dependency management.
 1. remove obvious comments
 2. no need for separate reset, just do it in stop
 3. separate text-speech from pure programming stopwatch implementation
-	1. timer object manages only 
+	1. timer object manages only
 
 ### Notes
 
@@ -116,7 +116,7 @@ Use requirements.txt or even better - poetry for dependency management.
 4. Separate ST layer from programming logic
 5. Change approach to command context menus, aggregate all info there. Talk to the provider class only once per session, so each call is a complete CRUD transaction without intermediate states. google.com/search?q=транзакционность
    Why: abort in the middle, update info. Namespace (context) visibility.
-6. 
+6.
 
 ### Timer
 
@@ -129,7 +129,7 @@ Use requirements.txt or even better - poetry for dependency management.
 ### Media
 
 1. again, separate layers
-2. (command) volume: add int and percentage (separate) custom types with parsing 
+2. (command) volume: add int and percentage (separate) custom types with parsing
 3. (provider) volume: expect exact player-native value format, add NewType or a custom class for it e.g. PlayerVolume with int from 0 to 100
 4. make self.player not optional, raise error on init if can't get it, because the class is useless without it
 5. add "seek to beginning" method
@@ -150,4 +150,3 @@ Use requirements.txt or even better - poetry for dependency management.
 ###  WebSearch
 
 1. Instead of opening a new tab, give a quick summary of the request. Also, you can use it as a fallback command. See the implementation of google, dictionary, and wiki search at old stark commands sent earlier.
-

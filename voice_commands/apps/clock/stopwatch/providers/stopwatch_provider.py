@@ -2,7 +2,6 @@ import time
 
 
 class StopwatchProvider:
-
     start_time = None
 
     def start(self):

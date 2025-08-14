@@ -1,19 +1,19 @@
+import os
+
 import anyio
+from dotenv import load_dotenv
 from stark import run
+from stark.interfaces.silero import SileroSpeechSynthesizer
+from stark.interfaces.vosk import VoskSpeechRecognizer
+
 from voice_commands import (
     manager,
     player_manager,
-    webbrowser_manager,
-    weather_manager,
+    reminder,
     reminders_manager,
-    reminder
-    )
-
-from stark.interfaces.vosk import VoskSpeechRecognizer
-from stark.interfaces.silero import SileroSpeechSynthesizer
-from dotenv import load_dotenv
-import os
-
+    weather_manager,
+    webbrowser_manager,
+)
 
 load_dotenv("example.env")
 
@@ -28,18 +28,18 @@ reminders_manager.extend(player_manager)
 reminders_manager.extend(weather_manager)
 reminders_manager.extend(webbrowser_manager)
 
+
 async def main():
     async with anyio.create_task_group() as tg:
         tg.start_soon(run, reminders_manager, recognizer, synthesizer)
         tg.start_soon(handle_reminders)
+
 
 async def handle_reminders():
     async for response in reminder.reminder_loop():
         speech = await synthesizer.synthesize(response.voice)
         await speech.play()
 
+
 if __name__ == "__main__":
     anyio.run(main)
-
-
-

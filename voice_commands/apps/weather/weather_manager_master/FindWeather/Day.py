@@ -1,20 +1,12 @@
-from typing import List
-
-
 from datetime import datetime
-
-
+from typing import List
 from uuid import UUID
 
-
+from .Hour import Hour
 from .Info import Info
 
 
-from .Hour import Hour
-
-
 class Day(Info):
-
     id: UUID
 
     hours: List[Hour]

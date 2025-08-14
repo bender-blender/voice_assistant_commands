@@ -1,11 +1,11 @@
-from .providers.provider_player import MediaPlayerProvider
-from .parameters.volume import Volume
-from ..clock.commands import manager
 from stark import CommandsManager
 
+from .parameters.volume import Volume
+from .providers.provider_player import MediaPlayerProvider
 
 player_manager = CommandsManager()
 media = MediaPlayerProvider()
+
 
 @player_manager.new("(медиа|медиаплеер|плеер|музыка)")
 def call_play_media():
@@ -36,4 +36,3 @@ def call_set_volume(volume_percentages: Volume):
 @player_manager.new("информация")
 def call_get_info():
     media.get_info()
-

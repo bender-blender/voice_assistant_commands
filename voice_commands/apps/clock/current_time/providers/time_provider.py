@@ -1,14 +1,14 @@
-from timezonefinder import TimezoneFinder
 from datetime import datetime
+
 # from stark import Response # not allowed in providers
 import pytz
+from timezonefinder import TimezoneFinder
+
 from voice_commands.providers.location_provider import Coordinates
 
 
 class TimeProvider:
-
     def get_time(self, location: Coordinates | None = None) -> datetime:
-
         if not location:
             return datetime.now()
 

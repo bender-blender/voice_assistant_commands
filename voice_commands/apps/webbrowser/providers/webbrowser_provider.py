@@ -1,10 +1,10 @@
-from stark.core.types import String
 import urllib.parse
 import webbrowser
 
+from stark.core.types import String
+
 
 class WebBrowserProvider:
-
     def open_browser(self, query: String):
         webbrowser.open(self._get_google_url(query.value))
 

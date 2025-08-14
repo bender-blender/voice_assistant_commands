@@ -1,1 +1,1 @@
-from .commands import reminders_manager,reminder
+from .commands import reminder, reminders_manager

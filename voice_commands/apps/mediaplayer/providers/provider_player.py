@@ -1,21 +1,19 @@
-from ..parameters.volume import Volume
-from pydbus import SessionBus
-from stark import  Response
 import subprocess
+
+from pydbus import SessionBus
+from stark import Response
+
+from ..parameters.volume import Volume
 
 
 class MediaPlayerProvider:
-
     def __init__(self):
         session_bus = SessionBus()
-        dbus_service = session_bus.get(
-            "org.freedesktop.DBus", "/org/freedesktop/DBus")
+        dbus_service = session_bus.get("org.freedesktop.DBus", "/org/freedesktop/DBus")
         services = dbus_service.ListNames()
-        mpris_services = [service for service in services if service.startswith(
-            "org.mpris.MediaPlayer2.")]
+        mpris_services = [service for service in services if service.startswith("org.mpris.MediaPlayer2.")]
         if mpris_services:
-            self.player = session_bus.get(
-                mpris_services[0], "/org/mpris/MediaPlayer2")
+            self.player = session_bus.get(mpris_services[0], "/org/mpris/MediaPlayer2")
         else:
             raise Exception("Отсутствует доступный медиаплеер")
 
@@ -34,19 +32,15 @@ class MediaPlayerProvider:
 
     def set_volume(self, volume: Volume):
         try:
-            volume = max(0, min(int(str(volume.value)), 100)) # type: ignore
+            volume = max(0, min(int(str(volume.value)), 100))  # type: ignore
             subprocess.run(["amixer", "sset", "Master", f"{volume}%"])
-        
 
-        except ValueError as e:
+        except ValueError:
             return Response(voice="Не удалось распознать указанную громкость. Попробуйте снова.")
 
     def get_info(self):
-
         metadata = self.player.Metadata
         track_name = metadata.get("xesam:title", None)
-        artist_name = metadata.get("xesam:artist", [None])[
-            0] if metadata.get("xesam:artist") else None
+        artist_name = metadata.get("xesam:artist", [None])[0] if metadata.get("xesam:artist") else None
 
-        print(
-            f"Сейчас играет: {track_name} — {artist_name}")
+        print(f"Сейчас играет: {track_name} — {artist_name}")

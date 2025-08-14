@@ -1,19 +1,20 @@
-from stark.general.classproperty import classproperty
-from .data_dictionary import GeneralDictionary
-from stark.core.patterns import Pattern
-from stark.core.types.object import Object, ParseError
 from dataclasses import dataclass
+
+from stark.core.patterns import Pattern
 from stark.core.types import String
+from stark.core.types.object import Object, ParseError
+from stark.general.classproperty import classproperty
+
+from .data_dictionary import GeneralDictionary
 
 
 @dataclass
 class Day(Object):
-    
-    day: String  
+    day: String
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern(f"$day:String")
+        return Pattern("$day:String")
 
     async def did_parse(self, from_string) -> str:
         words = from_string.strip().lower().split()

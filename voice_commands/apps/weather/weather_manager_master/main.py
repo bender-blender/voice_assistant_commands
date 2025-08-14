@@ -1,5 +1,6 @@
-from FindWeather.WeatherManager import WeatherManager
 from pprint import pprint
+
+from FindWeather.WeatherManager import WeatherManager
 
 API_KEY = "6529245dc1ac4297849161313250105"
 CITY = "Москва"

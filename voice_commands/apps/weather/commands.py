@@ -1,10 +1,7 @@
-from ...helpers.helpers import num2word
-from .providers.provider_weather import WeatherProvider
-from ...parameters.date_time import DateTime
-from stark import CommandsManager, Response
-from .parameters.location import Location
-from stark.core import ResponseHandler
+from stark import CommandsManager
 
+from .parameters.location import Location
+from .providers.provider_weather import WeatherProvider
 
 weather_manager = CommandsManager()
 
@@ -13,9 +10,12 @@ weather = WeatherProvider()
 
 # ( $location:Location)?
 # location: Location | None = None
+# ( $time:DateTime)?
+# time: DateTime | None = None
 @weather_manager.new("(погода|погоду)( $location:Location)?")
 def call_weather(location: Location | None = None):
-    print(f"location = {getattr(location, 'value', None)}")
+    print(f"time = {getattr(location, 'value', None)}")
+
 
 # @weather_manager.new("$time_interval:TimeInterval", hidden=True)
 # def get_the_weather(time_interval: DateTime, handler: ResponseHandler, location:Location):

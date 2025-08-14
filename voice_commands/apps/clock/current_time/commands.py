@@ -1,16 +1,17 @@
-from voice_commands.providers.location_provider import LocationProvider
-from voice_commands.formatters.time import TimeFormatter
-from .providers.time_provider import TimeProvider
-from stark import Response, CommandsManager
+from stark import CommandsManager, Response
 from stark.core.types import String
+
+from voice_commands.formatters.time import TimeFormatter
+from voice_commands.providers.location_provider import LocationProvider
+
 from ....helpers.helpers import num2word
+from .providers.time_provider import TimeProvider
 
+time_manager = CommandsManager()
 
-time_manager = CommandsManager() 
 
 @time_manager.new("время( $city:String)?")  # TODO: city:Location
 def call_time(city: String | None = None):
-
     if city is not None:
         city_name = str(city.value).title()
     else:

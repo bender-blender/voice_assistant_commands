@@ -7,10 +7,8 @@ authors = ["Maxim Osadchiy  <maksimgarsia709@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
-stark-engine = {extras = ["sound"], version = "^4.0.7"}
-vosk = "^0.3.45"
-numpy = "^2.2.1"
-torch = "^2.5.1"
+stark-engine = {extras = ["sound"], version = "^4.0.8"}
+numpy = "^1.24.4"
 num2words = "^0.5.14"
 black = "^24.10.0"
 pylama = "^8.4.1"
@@ -23,19 +21,20 @@ translate = "^3.6.1"
 pytz = "^2024.2"
 geopy = "^2.4.1"
 timezonefinder = "^6.5.7"
-stark = "^0.1.1"
 pytest-asyncio = "^0.25.2"
 pydbus = "^0.6.0"
-pygobject = "^3.50.0"
+pygobject = "3.50.0"
 word2number = "^1.1"
 dateparser = "^1.2.1"
 icalendar = "^6.1.3"
 python-dotenv = "^1.1.0"
+torch = "^2.7.1"
 
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
 setuptools = "^75.8.0"
+pre-commit = "^4.3.0"
 
 [build-system]
 requires = ["poetry-core"]
