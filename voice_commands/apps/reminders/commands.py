@@ -40,7 +40,7 @@ def call_add_time(time: Time, **params):
     reminder.add_time(time)
     return Response(
         voice="Где это будет",
-        parameters={**params, "time": time.hour},
+        parameters={**params, "time": time.value},
         commands=[call_add_location],
     )
 

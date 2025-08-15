@@ -1,0 +1,50 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+
+  # Ruff (линтер + форматтер)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.7
+    hooks:
+      - id: ruff
+        args: [--fix, --show-fixes]
+
+  # Pyflakes (через `language: python`)
+  - repo: local
+    hooks:
+      - id: pyflakes
+        name: pyflakes
+        entry: pyflakes
+        language: python
+        types: [python]
+
+  # Mypy (проверка типов)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        args: [--ignore-missing-imports]
+
+  # Pytest
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: python
+        types: [python]
+        pass_filenames: false
+
+  # Unittest (альтернатива pytest)
+  - repo: local
+    hooks:
+      - id: unittest
+        name: unittest
+        entry: python -m unittest discover
+        language: python
+        types: [python]
+        pass_filenames: false

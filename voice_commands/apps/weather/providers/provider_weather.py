@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from ....providers.location_provider import Coordinates
-from ..weather_manager_master import WeatherManager
+from ..weather_manager_master.FindWeather.WeatherManager import WeatherManager
 
 
 class WeatherProvider:

@@ -7,7 +7,7 @@ from stark import Response
 from stark.core.types import String
 
 from ..model.reminder import ReminderModel
-from ..parameters import Day, Time
+from ..parameters import Day,Time
 
 
 class RemindersProvider:
