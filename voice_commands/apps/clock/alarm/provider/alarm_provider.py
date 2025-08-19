@@ -1,6 +1,7 @@
 from ..model.alarm_model import AlarmModel
 from stark.core.types import String
 from voice_commands.parameters import Time
+from typing import Dict
 import schedule
 
 
@@ -19,15 +20,14 @@ class ProviderAlarm:
 
     def add_target_time(self, target_time: Time) -> None:
         self.target_time = target_time.value
+        print(self.target_time)
 
     def add_day(self, day: String) -> None:
         self.day = day.value
 
     def start_alarm(self) -> None:
-        validation_date = f"{self.target_time[0]}:{self.target_time[1]}"
-        if len(validation_date.split(':')[0]) == 1:
-            target_time = f"0{self.target_time}"
-
+        target_time = f"{self.target_time[0]:02d}:{self.target_time[1]:02d}"
+        
         def call_alarm():
             print(f"Будильник {self.name} сработал")
             return call_alarm
@@ -59,5 +59,6 @@ class ProviderAlarm:
         alarm = name.value
         self.model.cancel_alarm(alarm)
 
-    def get_alarm(self) -> None:
-        self.model.see_alarm()
+    def get_alarm(self) -> Dict[str, tuple[str, str, schedule.Job]]:
+        alarms = self.model.see_alarm()
+        return alarms

@@ -47,17 +47,26 @@ def call_add_day(day: String, **params) -> Response:
 @alarm_manager.new("(да|сохрани|сохранить)", hidden=True)
 def call_save_alarm(handler: ResponseHandler, **params):
     alarm.start_alarm()
-    handler.pop_context()
+    while True:
+        try:
+            handler.pop_context()
+        except Exception:
+            break
     return Response(voice="Будильник сохранен.")
 
 
 
-@alarm_manager.new("(удалить|удали|) (будильник)? $name:String")
+@alarm_manager.new("(удалить|удали) (будильник)? $name:String")
 def call_del_alarm(name:String):
     alarm.cancel_alarm(name)
     return Response(voice="Будильник удален")
 
 @alarm_manager.new("посмотри будильники")
 def call_get_alarm():
-    alarm.get_alarm()
+    alarms = alarm.get_alarm()
+    if not alarms:
+        return Response(voice="Будильников нет")
+
+    for k,v in alarms.items():
+        print(f"Будильник: {k}, Время: {v[0]}, День: {v[1]}")
     return Response(voice="Все будильники")
