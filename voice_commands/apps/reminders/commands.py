@@ -2,7 +2,7 @@ from stark import CommandsManager, Response
 from stark.core import ResponseHandler
 from stark.core.types import String
 
-from .parameters import Day, Time
+from voice_commands.parameters import Day,Time
 from .providers.reminders_provider import RemindersProvider
 
 reminders_manager = CommandsManager()

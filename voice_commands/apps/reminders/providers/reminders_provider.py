@@ -7,11 +7,11 @@ from stark import Response
 from stark.core.types import String
 
 from ..model.reminder import ReminderModel
-from ..parameters import Day,Time
+from voice_commands.parameters import Day,Time
 
 
 class RemindersProvider:
-    def __init__(self):
+    def __init__(self) -> None:
         self.calendar = Calendar()
         self.events: list[ReminderModel] = []
 

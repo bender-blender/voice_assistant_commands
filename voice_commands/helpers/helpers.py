@@ -10,12 +10,12 @@ def num2word(number) -> str:  # Преобразовать число в стр�
     return word
 
 
-def word2num(word: str) -> int:
+def word2num(word: str) -> int | None | float:
     try:
         number = w2n.word_to_num(word)
+        return number
     except ValueError:
         raise ValueError(f"Не удалось преобразовать слово '{word}' в число.")
-    return number
 
 
 # ---------------------------------
@@ -46,12 +46,13 @@ def day_to_date(words: list):
 
     today = datetime.date.today()
     today_weekday = today.weekday()
-
-    if today_weekday <= target_weekday:
-        days_ahead = target_weekday - today_weekday
+    if target_weekday is not None:
+        if today_weekday <= target_weekday:
+            days_ahead = target_weekday - today_weekday
+        else:
+            days_ahead = 7 - (today_weekday - target_weekday)
     else:
-        days_ahead = 7 - (today_weekday - target_weekday)
-
+        return None
     next_date = today + datetime.timedelta(days=days_ahead)
     return (find_value, datetime.datetime.combine(next_date, datetime.time.min))
 

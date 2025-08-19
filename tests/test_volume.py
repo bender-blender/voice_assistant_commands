@@ -1,5 +1,4 @@
 import unittest
-
 from voice_commands.apps.mediaplayer.parameters.volume import Volume
 
 

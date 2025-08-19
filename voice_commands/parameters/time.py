@@ -1,11 +1,11 @@
 # TODO: Implement custom class
-from datetime import time
+from datetime import time, datetime, date
 
 from stark.core.patterns import Pattern
 from stark.core.types import Object, ParseError
 from stark.general.classproperty import classproperty
 
-from ....formatters.time import TimeFormatter
+from voice_commands.formatters.time import TimeFormatter
 from .data_dictionary import GeneralDictionary
 
 
@@ -41,9 +41,8 @@ class Time(Object):
             raise ParseError(f"Некорректные минуты: {minute}")
 
         parsed_time = time(hour=hour, minute=minute)
-
-        self.value = TimeFormatter(
-            target_datetime=parsed_time).get_formatted_time()
+        datetime_obj = datetime.combine(date.today(), parsed_time)
+        self.value = TimeFormatter(target_datetime=datetime_obj).get_formatted_time()
         return from_string
 
 

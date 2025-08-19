@@ -85,9 +85,9 @@ class WeatherManager:
 
     def get_days(self) -> List[Day]:
         params = {
-            "key": self.api_key,
-            "q": self.get_location_query(),
-            "days": self.days_count,
+        "key": self.api_key,
+        "q": self.get_location_query(),
+        "days": str(self.days_count),  # Преобразуем int в str
         }
 
         response_info = requests.get(self.get_url("forecast"), params=params)

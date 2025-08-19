@@ -13,9 +13,10 @@ class TimerProvider:
         self.list_timers = []
 
     def set_a_timer(self, interval: Interval) -> int | Response:
-        end_time = interval.value
-        if end_time < datetime.now():
-            return Response(voice="Указанное время уже прошло, пожалуйста, установите другое время.")
+        if interval.value is not None:
+            end_time = interval.value
+            if end_time < datetime.now():
+                return Response(voice="Указанное время уже прошло, пожалуйста, установите другое время.")
 
         seconds = TimerModel(end_time).return_seconds()  # type: ignore
         self.list_timers.append(self)

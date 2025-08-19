@@ -1,7 +1,8 @@
-from typing import Any, Callable
+from typing import Any, Callable, Optional, Tuple, TypeVar
 
+T = TypeVar("T")  # Объявляем TypeVar
 
-def cookie[T: Any](phrase: str, parser: Callable[[str], T | None]) -> tuple[str, T] | None:
+def cookie(phrase: str, parser: Callable[[str], Optional[T]]) -> Optional[Tuple[str, T]]:
     """For dirty providers only"""
     value = parser(phrase)
 

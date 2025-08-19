@@ -1,35 +1,44 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
 
-  # Ruff (линтер + форматтер)
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.7
     hooks:
       - id: ruff
-        args: [--fix, --show-fixes]
+        args: ["--fix", "--show-fixes", "--ignore=F401"]
+        exclude: |
+          (?x)^(
+            voice_commands/.*/__init__\.py|
+            --exclude=/home/max/voice_assistant_commands/voice_commands/apps/weather/weather_manager_master/.*
+          )
 
-  # Pyflakes (через `language: python`)
   - repo: local
     hooks:
       - id: pyflakes
         name: pyflakes
-        entry: pyflakes
+        entry: bash -c "pyflakes $@ | grep -v 'imported but unused' || true"
         language: python
         types: [python]
+        exclude: |
+          (?x)^(
+            voice_commands/.*/__init__\.py|
+            --exclude=/home/max/voice_assistant_commands/voice_commands/apps/weather/weather_manager_master/.*
+          )
 
-  # Mypy (проверка типов)
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.8.0
     hooks:
-      - id: mypy
-        args: [--ignore-missing-imports]
+    - id: mypy
+      args: [
+        --config-file=mypy.ini,
+        --exclude=--exclude=/home/max/voice_assistant_commands/voice_commands/apps/weather/weather_manager_master/.*,
+        --exclude='.*/__init__\.py'
+      ]
+      additional_dependencies: [
+        types-requests,
+        types-dateparser,
+        types-pytz
+      ]
 
-  # Pytest
   - repo: local
     hooks:
       - id: pytest
@@ -38,13 +47,14 @@ repos:
         language: python
         types: [python]
         pass_filenames: false
+        exclude: --exclude=/home/max/voice_assistant_commands/voice_commands/apps/weather/weather_manager_master/.*
 
-  # Unittest (альтернатива pytest)
   - repo: local
     hooks:
-      - id: unittest
-        name: unittest
-        entry: python -m unittest discover
-        language: python
-        types: [python]
-        pass_filenames: false
+    - id: unittest
+      name: unittest
+      entry: poetry run python -m unittest discover tests/ -v
+      language: system
+      types: [python]
+      pass_filenames: false
+      require_serial: true

@@ -71,7 +71,7 @@ class DBModel:
     columns: List[str]
 
     @sqlite
-    def __init__(self, execute, table_name: str, columns: Dict[str, str] = []):
+    def __init__(self, execute, table_name: str, columns: Dict[str, str] = {}):
         self.table_name = table_name
 
         if not execute(f'select * from sqlite_master WHERE type = "table" AND name = "{self.table_name}"').fetchall():
@@ -86,7 +86,7 @@ class DBModel:
             self.columns = [properties[1] for properties in execute(f"pragma table_info({self.table_name})").fetchall()]
 
     @sqlite
-    def all(self, execute) -> Dict[str, Any]:
+    def all(self, execute) -> List[Dict[str, Any]]:
         rows = execute(f"select * from {self.table_name}").fetchall()
 
         data = []

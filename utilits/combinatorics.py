@@ -2,15 +2,13 @@ import asyncio
 
 # from functools import wraps
 import time
-from typing import Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable, TypeVar
 
 # General optimizations:
 # - caching
+T = TypeVar("T")
 
-
-async def async_combinatorics[
-    T: Any
-](
+async def async_combinatorics(
     phrase: str,
     parser: Callable[[str], Awaitable[T | None]],
     desc_filter: bool = True,

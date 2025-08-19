@@ -1,7 +1,7 @@
 import requests
 from geopy.geocoders import Nominatim
 from typing_extensions import NamedTuple
-
+import asyncio
 
 class Coordinates(NamedTuple):
     latitude: float
@@ -12,8 +12,9 @@ class LocationProvider:
     def __init__(self):
         self.home: Coordinates | None = None
 
-    async def get_coordinates(self, location_name: str | None = None) -> Coordinates:
+    async def get_coordinates(self, location_name: str | None = None) -> Coordinates | None:
         if location_name:
+            await asyncio.sleep(0.1)
             return self._coordinates_from_name(location_name)
 
         if self.home:

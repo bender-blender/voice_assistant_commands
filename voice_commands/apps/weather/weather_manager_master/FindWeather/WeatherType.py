@@ -80,7 +80,7 @@ class WeatherType(str, Enum):
     # radio = 'ГОТОВЬ СЧЕТЧИК ГЕЙГЕРА И ИДИ В БУНКЕР'
 
     @staticmethod
-    def get_type_by_code(code: int) -> "WeatherType":
+    def get_type_by_code(code: int) -> str | None:
         if code in sun_codes:
             return WeatherType.sun
 
@@ -98,3 +98,5 @@ class WeatherType(str, Enum):
 
         elif code in thunder_codes:
             return WeatherType.thunder
+        else:
+            return None

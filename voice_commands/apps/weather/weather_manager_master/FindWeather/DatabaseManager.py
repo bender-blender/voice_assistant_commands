@@ -6,8 +6,12 @@ from .Hour import Hour
 
 
 class DatabaseManager:
+    def __init__(self):
+        self.days = None
+        self.hours = None
+
     def create_database(self):
-        days = DBModel(
+        self.days = DBModel(  # Сохраняем как атрибут класса
             "days",
             {
                 "date": "text",
@@ -20,11 +24,11 @@ class DatabaseManager:
                 "pressure_in": "real",
                 "condition_text": "text",
                 "weather_condition": "text",
-                "day_id": "text",  # Changed to text to store UUID as string
+                "day_id": "text",
             },
         )
 
-        hours = DBModel(
+        self.hours = DBModel(  # Сохраняем как атрибут класса
             "hours",
             {
                 "hour_index": "integer",
@@ -38,11 +42,14 @@ class DatabaseManager:
                 "wind_degree_rad": "real",
                 "condition_text": "text",
                 "weather_condition": "text",
-                "day_id": "text",  # Changed to text to store UUID as string
+                "day_id": "text",
             },
         )
 
     def save_days(self, days: List[Day]):
+        if self.days is None:
+            raise ValueError("Database not initialized. Call create_database() first.")
+
         for day in days:
             day_dict = {
                 "date": day.date,
@@ -55,12 +62,14 @@ class DatabaseManager:
                 "pressure_in": day.pressure_in,
                 "condition_text": day.condition_text,
                 "weather_condition": day.weather_condition,
-                "day_id": str(day.id),  # Convert UUID to string for storage
+                "day_id": str(day.id),
             }
-
-            days.insert(day_dict)
+            self.days.insert(day_dict)  # Теперь доступ есть
 
     def save_hours(self, hours: List[Hour]):
+        if self.hours is None:
+            raise ValueError("Database not initialized. Call create_database() first.")
+
         for hour in hours:
             hour_dict = {
                 "hour_index": hour.hour_index,
@@ -74,8 +83,6 @@ class DatabaseManager:
                 "wind_degree_rad": hour.wind_degree_rad,
                 "condition_text": hour.condition_text,
                 "weather_condition": hour.weather_condition,
-                # Convert UUID to string for storage
                 "day_id": str(hour.day_id),
             }
-
-            hours.insert(hour_dict)
+            self.hours.insert(hour_dict)  # Теперь доступ есть
