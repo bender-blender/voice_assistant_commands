@@ -3,7 +3,7 @@ from stark.core import ResponseHandler
 from stark.core.types import String
 from .provider.alarm_provider import ProviderAlarm
 from voice_commands.parameters import Time
-
+from voice_commands.apps.clock.alarm.parameters.time_alarm import WeekDay
 
 alarm_manager = CommandsManager()
 alarm = ProviderAlarm()
@@ -34,8 +34,8 @@ def call_add_time(time: Time, **params) -> Response:
     )
 
 
-@alarm_manager.new("$day:String", hidden=True)
-def call_add_day(day: String, **params) -> Response:
+@alarm_manager.new("$day:WeekDay", hidden=True)
+def call_add_day(day: WeekDay, **params) -> Response:
     alarm.add_day(day)
     return Response(
         voice="Сохранить?",
@@ -67,6 +67,8 @@ def call_get_alarm():
     if not alarms:
         return Response(voice="Будильников нет")
 
-    for k,v in alarms.items():
-        print(f"Будильник: {k}, Время: {v[0]}, День: {v[1]}")
+    for name, alarms in alarm.model.list_jobs.items():
+        print(f"Будильник: {name}")
+        for time, day, task in alarms:
+            print(f"  Время: {time}, День: {day}")
     return Response(voice="Все будильники")

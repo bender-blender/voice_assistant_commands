@@ -1,7 +1,8 @@
+from voice_commands.apps.clock.alarm.parameters.time_alarm import WeekDay
+from voice_commands.parameters import Time
 from ..model.alarm_model import AlarmModel
 from stark.core.types import String
-from voice_commands.parameters import Time
-from typing import Dict
+from typing import Tuple, List, Dict
 import schedule
 
 
@@ -11,54 +12,40 @@ class ProviderAlarm:
         self.model = AlarmModel()
 
         self.name: str
-        self.day: str
-
-        self.target_time: tuple
+        self.day: List[Tuple[str,schedule.Job]] | None
+        self.target_time: str
 
     def add_name(self, name: String) -> None:
         self.name = name.value
 
     def add_target_time(self, target_time: Time) -> None:
-        self.target_time = target_time.value
-        print(self.target_time)
+        number_hours, number_minutes = target_time.value
+        self.target_time = f"{number_hours:02d}:{number_minutes:02d}"
 
-    def add_day(self, day: String) -> None:
+
+    def add_day(self, day: WeekDay) -> None:
         self.day = day.value
 
     def start_alarm(self) -> None:
-        target_time = f"{self.target_time[0]:02d}:{self.target_time[1]:02d}"
-        
         def call_alarm():
             print(f"Будильник {self.name} сработал")
             return call_alarm
-
-        day = self.day.lower()
-        if "понедельник" in day:
-            create_task = schedule.every().monday.at(target_time).do(call_alarm)
-        elif "вторник" in day:
-            create_task = schedule.every().tuesday.at(target_time).do(call_alarm)
-        elif "сред" in day:
-            create_task = schedule.every().wednesday.at(target_time).do(call_alarm)
-        elif "четверг" in day:
-            create_task = schedule.every().thursday.at(target_time).do(call_alarm)
-        elif "пятниц" in day:
-            create_task = schedule.every().friday.at(target_time).do(call_alarm)
-        elif "суббот" in day:
-            create_task = schedule.every().saturday.at(target_time).do(call_alarm)
-        elif "воскресенье" in day:
-            create_task = schedule.every().sunday.at(target_time).do(call_alarm)
-        elif "каждый день" in day:
-            create_task = schedule.every().day.at(target_time).do(call_alarm)
-
-        self.model.list_jobs[self.name] = (target_time, day, create_task)
+        
+        if self.day is not None:
+            for day in self.day:
+                task = day[1].at(self.target_time).do(call_alarm)
+                if self.name not in self.model.list_jobs:
+                    self.model.list_jobs[self.name] = [(self.target_time, day[0], task)]
+                else:
+                    self.model.list_jobs[self.name].append((self.target_time, day[0], task))
         self.name = ""
-        self.target_time = ()
-        self.day = ""
+        self.target_time = ""
+        self.day = None
 
     def cancel_alarm(self, name:String) -> None:
         alarm = name.value
         self.model.cancel_alarm(alarm)
 
-    def get_alarm(self) -> Dict[str, tuple[str, str, schedule.Job]]:
+    def get_alarm(self) -> Dict[str, List[tuple[str, str, schedule.Job]]]:
         alarms = self.model.see_alarm()
         return alarms
