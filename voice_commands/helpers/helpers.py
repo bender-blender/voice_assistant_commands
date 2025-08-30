@@ -3,6 +3,7 @@ import datetime
 import dateparser
 from num2words import num2words
 from word2number import w2n
+from translate import Translator
 
 
 def num2word(number) -> str:  # Преобразовать число в строку
@@ -10,9 +11,10 @@ def num2word(number) -> str:  # Преобразовать число в стр�
     return word
 
 
-def word2num(word: str) -> int | None | float:
+def word2num(word: str, lang: str) -> int | None | float:
+    translate = Translator(from_lang=lang,to_lang="en").translate(word)
     try:
-        number = w2n.word_to_num(word)
+        number = w2n.word_to_num(translate)
         return number
     except ValueError:
         raise ValueError(f"Не удалось преобразовать слово '{word}' в число.")
@@ -35,7 +37,7 @@ days_map = {
 }
 
 
-def day_to_date(words: list):
+def parse_day_to_date(words: list) -> tuple[str,datetime.datetime] | None:
     list_date = [i for i in words if i in days_map]
     if len(list_date) == 0:
         return None
@@ -210,24 +212,56 @@ months = [
 ]
 
 
-def parse_day_phrase(words: list, dictionary=dictionary_num, list_month=months) -> tuple | None:
-    list_date = [i for i in words if i in dictionary or i in list_month]
-    list_copy = list_date.copy()
-    for index, number in enumerate(list_date):
-        if dictionary_num.get(number):
-            list_date[index] = str(dictionary_num.get(number))
-
-    result = dateparser.parse(" ".join(list_date))
-
-    if result is None:
+def parse_day_phrase(words: list, dictionary=dictionary_num, list_month=months) -> tuple[str,datetime.datetime] | None:
+    list_date = [i for i in words if i in dictionary]
+    month = [i for i in words if i in list_month]
+    
+    if len(month) == 0 or len(list_date) == 0:
         return None
+    
+    else:
 
-    # Приводим к datetime
-    if isinstance(result, datetime.date) and not isinstance(result, datetime.datetime):
-        result = datetime.datetime.combine(result, datetime.time.min)
+        list_copy = list_date.copy()
+        for index, number in enumerate(list_date):
+            if dictionary_num.get(number):
+                list_date[index] = dictionary_num.get(number)
+        list_with_numbers = [str(sum(list_date))]
+        
+        result = dateparser.parse(" ".join(list_with_numbers + month))
+        if result is None:
+            return None
 
-    now = datetime.datetime.now()
-    if now > result:
-        result = result.replace(year=result.year + 1)
+        # Приводим к datetime
+        if isinstance(result, datetime.date) and not isinstance(result, datetime.datetime):
+            result = datetime.datetime.combine(result, datetime.time.min)
 
-    return (" ".join(list_copy), result)
+        now = datetime.datetime.now()
+        if now > result:
+            result = result.replace(year=result.year + 1)
+
+        return (" ".join(list_copy + month), result)
+
+
+# ----------------------
+
+def parse_phrase_in_time(phrase:list) -> tuple[str,list[str]] | None:
+    
+    nums = [dictionary_num[i] for i in phrase if i in dictionary_num]
+    returned_string = [i for i in phrase if i in dictionary_num]
+    res:list[int] = []
+    for n in nums:
+        if res and res[-1] % 10 == 0 and n < 10:  
+            res[-1] += n 
+        else:
+            res.append(n)
+        
+        
+    for i in range(len(res) - 1, 0, -1):
+        h, m = res[i-1], res[i]
+        if h < 24 and m < 60:   
+            return (f"{h}:{m}",returned_string)
+    
+    if len(res) == 1 and res[0] < 24: #! Если найдены только часы
+        return (f"{res[0]}:*",returned_string)
+
+    return None 

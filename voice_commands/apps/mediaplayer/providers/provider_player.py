@@ -30,10 +30,10 @@ class MediaPlayerProvider:
         self.player.Previous()
         self.player.Previous()
 
-    def set_volume(self, volume: Volume):
+    def set_sound(self, volume: Volume):
         try:
-            volume = max(0, min(int(str(volume.value)), 100))  # type: ignore
-            subprocess.run(["amixer", "sset", "Master", f"{volume}%"])
+            sound = int(str(volume.value))  
+            subprocess.run(["amixer", "sset", "Master", f"{sound}%"])
 
         except ValueError:
             return Response(voice="Не удалось распознать указанную громкость. Попробуйте снова.")

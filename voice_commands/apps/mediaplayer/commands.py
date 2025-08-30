@@ -29,8 +29,8 @@ def call_previous_track():
 
 
 @player_manager.new("громкость $volume_percentages:Volume")
-def call_set_volume(volume_percentages: Volume):
-    media.set_volume(volume_percentages)
+def call_set_sound(volume_percentages: Volume):
+    media.set_sound(volume_percentages)
 
 
 @player_manager.new("информация")

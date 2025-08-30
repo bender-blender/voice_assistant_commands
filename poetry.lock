@@ -326,6 +326,21 @@ files = [
 ]
 
 [[package]]
+name = "croniter"
+version = "6.0.0"
+description = "croniter provides iteration for datetime object with cron like format"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.6"
+files = [
+    {file = "croniter-6.0.0-py2.py3-none-any.whl", hash = "sha256:2f878c3856f17896979b2a4379ba1f09c83e374931ea15cc835c5dd2eee9b368"},
+    {file = "croniter-6.0.0.tar.gz", hash = "sha256:37c504b313956114a983ece2c2b07790b1f1094fe9d81cc94739214748255577"},
+]
+
+[package.dependencies]
+python-dateutil = "*"
+pytz = ">2021.1"
+
+[[package]]
 name = "dateparser"
 version = "1.2.2"
 description = "Date parsing library designed to parse dates from HTML pages"
@@ -1123,6 +1138,16 @@ test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=8.3.4)", "pytest-
 type = ["mypy (>=1.14.1)"]
 
 [[package]]
+name = "playsound"
+version = "1.2.2"
+description = "Pure Python, cross platform, single function module with no dependencies for playing sounds."
+optional = false
+python-versions = "*"
+files = [
+    {file = "playsound-1.2.2-py2.py3-none-any.whl", hash = "sha256:1e83750a5325cbccee03d6e751ba3e78c037ac95b95a3ba1f38d0c5aca9e1a34"},
+]
+
+[[package]]
 name = "pluggy"
 version = "1.6.0"
 description = "plugin and hook calling mechanisms for python"
@@ -1555,6 +1580,21 @@ docs = ["sphinx (>=5.3)", "sphinx-rtd-theme (>=1)"]
 testing = ["coverage (>=6.2)", "hypothesis (>=5.7.1)"]
 
 [[package]]
+name = "python-crontab"
+version = "3.3.0"
+description = "Python Crontab API"
+optional = false
+python-versions = "*"
+files = [
+    {file = "python_crontab-3.3.0-py3-none-any.whl", hash = "sha256:739a778b1a771379b75654e53fd4df58e5c63a9279a63b5dfe44c0fcc3ee7884"},
+    {file = "python_crontab-3.3.0.tar.gz", hash = "sha256:007c8aee68dddf3e04ec4dce0fac124b93bd68be7470fc95d2a9617a15de291b"},
+]
+
+[package.extras]
+cron-description = ["cron-descriptor"]
+cron-schedule = ["croniter"]
+
+[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 description = "Extensions to the standard Python datetime module"
@@ -1852,20 +1892,6 @@ files = [
     {file = "ruff-0.12.9-py3-none-win_arm64.whl", hash = "sha256:63c8c819739d86b96d500cce885956a1a48ab056bbcbc61b747ad494b2485089"},
     {file = "ruff-0.12.9.tar.gz", hash = "sha256:fbd94b2e3c623f659962934e52c2bea6fc6da11f667a427a368adaf3af2c866a"},
 ]
-
-[[package]]
-name = "schedule"
-version = "1.2.2"
-description = "Job scheduling for humans."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "schedule-1.2.2-py3-none-any.whl", hash = "sha256:5bef4a2a0183abf44046ae0d164cadcac21b1db011bdd8102e4a0c1e91e06a7d"},
-    {file = "schedule-1.2.2.tar.gz", hash = "sha256:15fe9c75fe5fd9b9627f3f19cc0ef1420508f9f9a46f45cd0769ef75ede5f0b7"},
-]
-
-[package.extras]
-timezone = ["pytz"]
 
 [[package]]
 name = "setuptools"
@@ -2306,4 +2332,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "d5673f31c9a4b012169500ef0dc3a0f3a41b60fd769578d0cf2ac2181fb5632c"
+content-hash = "1efb1a546d64b01ad0ca95712f70d9175a7786f9fd90924dbaf421d1da48ec40"

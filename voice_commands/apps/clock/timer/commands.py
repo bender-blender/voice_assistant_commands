@@ -9,10 +9,10 @@ timer = TimerProvider()
 timer_manager = CommandsManager()
 
 
-# type: ignore
+
 @timer_manager.new(
     "(поставь|установи|запусти|заведи|включи|сделай|стартуй) (таймер|счётчик) (на|через) $interval:Interval"
-)
+) # type: ignore
 async def call_timer(interval: Interval):
     response = timer.set_a_timer(interval)
     if isinstance(response, Response):

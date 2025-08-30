@@ -56,33 +56,43 @@ class RemindersProvider:
 
     async def reminder_loop(self):
         while True:
-            now = datetime.now()
+            now = datetime.now().replace(tzinfo=None)
 
             for reminder in self.events[:]:
-                current_year = now.year
-                full_time_str = f"{reminder.event_time} {reminder.event_date} {current_year}"
-
-                event_time = parse(full_time_str, languages=["ru"])
-
-                # Если дата распарсилась, но в прошлом — сдвигаем на следующий год
-                if event_time and event_time < now:
-                    event_time = parse(
-                        f"{reminder.event_time} {reminder.event_date} {current_year + 1}",
-                        languages=["ru"],
-                    )
+                full_time_str = f"{reminder.event_time} {reminder.event_date} {now.year}"
+                event_time = parse(
+                    full_time_str,
+                    languages=["ru"],
+                    settings={"DATE_ORDER": "DMY"}
+                )
 
                 if not event_time:
-                    # Не удалось распарсить дату — пропускаем
                     continue
 
-                if event_time <= now:
+                if event_time.tzinfo:
+                    event_time = event_time.replace(tzinfo=None)
+
+                # переносим на следующий год только если событие уже прошло в этом году
+                if event_time.date() < now.date():
+                    event_time = parse(
+                        f"{reminder.event_time} {reminder.event_date} {now.year + 1}",
+                        languages=["ru"],
+                        settings={"DATE_ORDER": "DMY"}
+                    )
+                    if event_time and event_time.tzinfo:
+                        event_time = event_time.replace(tzinfo=None)
+
+                # проверяем окно в 1 сек
+                if event_time and abs((event_time - now).total_seconds()) <= 1:
+                    
+
                     self.events.remove(reminder)
 
                     for component in list(self.calendar.subcomponents):
                         if (
                             component.name == "VEVENT"
-                            and component.get("summary") == reminder.event_summary
-                            and component.get("location") == reminder.event_location
+                            and str(component.get("summary")) == str(reminder.event_summary)
+                            and str(component.get("location")) == str(reminder.event_location)
                         ):
                             self.calendar.subcomponents.remove(component)
                             break

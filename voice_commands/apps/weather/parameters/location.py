@@ -5,7 +5,7 @@ from stark.general.classproperty import classproperty
 
 from utilits.combinatorics import async_combinatorics
 
-from ....providers.location_provider import Coordinates, LocationProvider
+from voice_commands.providers.location_provider import Coordinates, LocationProvider
 from typing import Optional, Tuple
 
 class Location(Object):

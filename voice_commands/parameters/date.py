@@ -18,27 +18,28 @@ class Day(Object):
     async def did_parse(self, from_string) -> str:
         words = from_string.strip().lower().split()
         day = 0
-        unknown_words = []
-        i = 0
+        known_words = []
+        index = 0
 
         dictionary = GeneralDictionary().words_to_numbers
 
-        while i < len(words):
-            word = words[i]
+        while index < len(words):
+            word = words[index]
             if word in dictionary:
-                if i + 1 < len(words) and words[i + 1] in dictionary:
-                    day += dictionary[word] + dictionary[words[i + 1]]
-                    i += 1
+                if index + 1 < len(words) and words[index + 1] in dictionary:
+                    day += dictionary[word] + dictionary[words[index + 1]]
+                    index += 1
                 else:
                     day += dictionary[word]
             else:
-                unknown_words.append(word)
-            i += 1
+                known_words.append(word)
+            index += 1
 
-        result = " ".join([str(day)] + unknown_words) if day > 0 else " ".join(unknown_words)
-
-        if not result:
+        if not day and not known_words:
             raise ParseError("Error parsing day: no valid words found")
+        
+        result = " ".join([str(day)] + known_words)
+
 
         self.value = result
         return from_string

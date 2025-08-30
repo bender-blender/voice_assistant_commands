@@ -5,7 +5,7 @@ from stark.core.patterns import Pattern
 from stark.core.types import Object, ParseError
 from stark.general.classproperty import classproperty
 
-from ..helpers.helpers import day_to_date, parse_day_phrase
+from ..helpers.helpers import parse_day_to_date, parse_day_phrase
 
 
 class DateTime(Object):
@@ -25,7 +25,7 @@ class DateTime(Object):
                 return custom_checks[0]
 
         except ValueError:
-            custom_checks = day_to_date(word)
+            custom_checks = parse_day_to_date(word)
             if custom_checks:
                 self.value = custom_checks[1]
                 return custom_checks[0]

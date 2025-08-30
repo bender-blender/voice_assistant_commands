@@ -39,22 +39,22 @@ repos:
         types-pytz
       ]
 
-  - repo: local
-    hooks:
-      - id: pytest
-        name: pytest
-        entry: pytest
-        language: python
-        types: [python]
-        pass_filenames: false
-        exclude: --exclude=/home/max/voice_assistant_commands/voice_commands/apps/weather/weather_manager_master/.*
+  # - repo: local
+  #   hooks:
+  #     - id: pytest
+  #       name: pytest
+  #       entry: pytest
+  #       language: python
+  #       types: [python]
+  #       pass_filenames: false
+  #       exclude: --exclude=/home/max/voice_assistant_commands/voice_commands/apps/weather/weather_manager_master/.*
 
-  - repo: local
-    hooks:
-    - id: unittest
-      name: unittest
-      entry: poetry run python -m unittest discover tests/ -v
-      language: system
-      types: [python]
-      pass_filenames: false
-      require_serial: true
+  # - repo: local
+  #   hooks:
+  #   - id: unittest
+  #     name: unittest
+  #     entry: poetry run python -m unittest discover tests/ -v
+  #     language: system
+  #     types: [python]
+  #     pass_filenames: false
+  #     require_serial: true

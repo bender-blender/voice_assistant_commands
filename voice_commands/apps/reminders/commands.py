@@ -30,7 +30,7 @@ def call_add_day(date: Day, **params):
     reminder.add_date(date)
     return Response(
         voice="Укажи время.",
-        parameters={**params, "date": date.day},
+        parameters={**params, "date": date.value},
         commands=[call_add_time],
     )
 
@@ -57,6 +57,11 @@ def call_add_location(location: String, **params):
 
 @reminders_manager.new("(да|сохрани|сохранить)", hidden=True)
 def call_save_reminder(handler: ResponseHandler, **params):
+    
     reminder.save()
-    handler.pop_context()
+    while True:
+        try:
+            handler.pop_context()
+        except Exception:
+            break
     return Response(voice="Заметка сохранена.")
