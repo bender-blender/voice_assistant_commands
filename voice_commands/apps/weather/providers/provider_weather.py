@@ -5,6 +5,7 @@ from voice_commands.providers.location_provider import LocationProvider
 
 class WeatherProvider:
     """
+    Returns a Weather object to get a forecast
     """
     def __init__(self):
         load_dotenv("example.env")

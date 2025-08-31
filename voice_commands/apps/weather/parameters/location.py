@@ -1,12 +1,11 @@
-import anyio
-from stark.core.patterns import Pattern
-from stark.core.types import Object, ParseError
-from stark.general.classproperty import classproperty
-
-from utilits.combinatorics import async_combinatorics
-
 from voice_commands.providers.location_provider import Coordinates, LocationProvider
+from utilits.combinatorics import async_combinatorics
+from stark.general.classproperty import classproperty
+from stark.core.types import Object, ParseError
+from stark.core.patterns import Pattern
 from typing import Optional, Tuple
+
+
 
 class Location(Object):
     value: Coordinates | None = None
@@ -18,9 +17,9 @@ class Location(Object):
 
     async def did_parse(self, from_string: str) -> str:
         # Optimization: use offline geo names library at least for pre-validation
+        
 
         res:Optional[Tuple[str, Optional[Coordinates]]] = await async_combinatorics(from_string, self.location_provider.get_coordinates, True, min_delay_sec=1.1)
-        await anyio.sleep(0.000001)
         if res is None:
             raise ParseError("Не удалось определить местоположение.")
 
