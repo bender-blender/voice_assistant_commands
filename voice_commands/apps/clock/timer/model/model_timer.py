@@ -8,4 +8,4 @@ class TimerModel:
 
     def return_seconds(self) -> int:
         delta = self.target_time - datetime.now()
-        return max(0, int(delta.total_seconds()))  # not sure negative seconds should be cut
+        return int(delta.total_seconds())
