@@ -319,6 +319,30 @@ ___
 
 #### example of work
 I want to demonstrate the operation of several applications, which could be seen clearly.
-An example would be opening links in the browser and media player
+An example would be opening links in the browser media player and for weather forecast
 
+**Webbrowser**
 ![video](webbrowser.gif)
+
+**Mediaplayer**
+![video2](mediaplayer.gif)
+
+If it’s not very clear what you just saw on the screen.
+1. Play music
+2. Next track
+3. Pause
+4. Change sound
+
+**weather forecast**
+![video3](weather.gif)
+___
+
+# Bottom line
+In my opinion, a colossal amount of work was completed.
+1. [x] clock
+2. [x] mediaplayer
+3. [x] browser
+4. [x] weather
+5. [x] reminder
+
+The Python language is endless in learning. This is what turns me on. I just started my journey, this is my first project. I think everything will be fine. :tada:
