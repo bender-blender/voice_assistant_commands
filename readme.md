@@ -320,4 +320,5 @@ ___
 #### example of work
 I want to demonstrate the operation of several applications, which could be seen clearly.
 An example would be opening links in the browser and media player
+
 ![video](webbrowser.gif)
