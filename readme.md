@@ -322,6 +322,7 @@ I want to demonstrate the operation of several applications, which could be seen
 An example would be opening links in the browser media player and for weather forecast
 
 **Webbrowser**
+
 ![video](webbrowser.gif)
 
 
@@ -331,6 +332,7 @@ An example would be opening links in the browser media player and for weather fo
 
 
 **Mediaplayer**
+
 ![video2](mediaplayer.gif)
 
 If it’s not very clear what you just saw on the screen.
@@ -347,6 +349,7 @@ If it’s not very clear what you just saw on the screen.
 
 
 **weather forecast**
+
 ![video3](weather.gif)
 ___
 
