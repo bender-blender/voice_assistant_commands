@@ -324,6 +324,7 @@ An example would be opening links in the browser media player and for weather fo
 **Webbrowser**
 ![video](webbrowser.gif)
 
+
 **Mediaplayer**
 ![video2](mediaplayer.gif)
 
@@ -332,6 +333,7 @@ If it’s not very clear what you just saw on the screen.
 2. Next track
 3. Pause
 4. Change sound
+
 
 **weather forecast**
 ![video3](weather.gif)
