@@ -20,14 +20,14 @@ ___
 The project consists of the following applications
 
 + :file_folder:app
-  + :file_folder:clock
+  + :watch:clock
     + :file_folder:current_time
     + :file_folder:stopwatch
     + :file_folder:timer
-  + :file_folder: mediaplayer
-  + :file_folder: reminder
-  + :file_folder: weather
-  + :file_folder: webbrowser
+  + :radio: mediaplayer
+  + :calendar: reminder
+  + :mount_fuji: weather
+  + :mag_right: webbrowser
 + :file_folder: helpers
 + :file_folder: parameters
 + :file_folder: providers
@@ -178,8 +178,11 @@ class TimerModel:
         return int(delta.total_seconds())
 ```
 
-I also want to talk about an important thing in the STARK framework. There is a concept in the framework as a **custom class**. These are parsers that are embedded in command templates. 
-They can take either one word or the entire line to the end, and then parse it.
+I also want to talk about an important thing within STARK. The framework has the concept of a **user class**. These are parsers built into command templates. 
+They can take either one word or the entire line to the end, and then parse it. For example, the user sets the command
+> ***set the timer for five minutes*** 
+
+(STARK does not recognize numbers). And we need to somehow get these 5 minutes. So that then, so to speak, put the process to sleep, and after it is completed, return a message
 ```python
 from datetime import datetime
 
@@ -212,3 +215,109 @@ class Interval(Object):
 
 Pattern.add_parameter_type(Interval)
 ```
+
+let's go back to the provider
+```python
+class TimerProvider:
+    def __init__(self):
+        self.list_timers = []
+
+    def set_a_timer(self, interval: Interval) -> int | Response:
+        if interval.value is not None:
+            end_time = interval.value
+            if end_time < datetime.now():
+                return Response(voice="Указанное время уже прошло, пожалуйста, установите другое время.")
+
+        seconds = TimerModel(end_time).return_seconds()  # type: ignore
+        self.list_timers.append(self)
+        return seconds
+
+    def get_a_list_of_timers(self) -> list | str:
+        if self.list_timers:
+            active_timers = [f"Таймер {num2word(index + 1)}" for index in range(len(self.list_timers))]
+            return active_timers
+        else:
+            return "Нет активных таймеров."
+
+    def check_timer_status(self) -> str:
+        count = len(self.list_timers)
+        if count:
+            return f"Количество активных таймеров: {num2word(count)}"
+        else:
+            return "Нет активных таймеров."
+
+    def cancel_timer(self):
+        if not self.list_timers:
+            return Response(voice="Нет таймеров для отмены.")
+
+        self.list_timers.pop(0)
+```
+Let's go through the provider. Our provider stores timers (models). 
+And methods: 
+1. set timer
+2. get list of timers
+3. check timer status
+4. delete timer
+
+Commands
+```python
+import asyncio
+
+from stark import CommandsManager, Response
+
+from voice_commands.apps.clock.timer.parameters.interval import Interval
+from voice_commands.apps.clock.timer.providers.provider_timer import TimerProvider
+
+timer = TimerProvider()
+timer_manager = CommandsManager()
+
+
+
+@timer_manager.new(
+    "(поставь|установи|запусти|заведи|включи|сделай|стартуй) (таймер|счётчик) (на|через) $interval:Interval"
+) # type: ignore
+async def call_timer(interval: Interval):
+    response = timer.set_a_timer(interval)
+    if isinstance(response, Response):
+        # Если вернулся Response (ошибка), озвучиваем его
+        yield response
+    else:
+        yield Response(voice="Таймер установлен")
+        # Если вернулось число (секунды), ждём и уведомляем
+        await asyncio.sleep(response)
+        yield Response(voice="Таймер сработал!")
+
+
+@timer_manager.new("покажи таймер")
+def call_show_the_timer():
+    response = timer.get_a_list_of_timers()
+    if isinstance(response, list):
+        return Response(voice=f"Активные таймеры: {', '.join(response)}")
+    else:
+        return Response(voice=response)
+
+
+@timer_manager.new("проверить состояние таймера")
+def call_check_state_timer():
+    response = timer.check_timer_status()
+    return Response(voice=response)
+
+
+@timer_manager.new("(отмени|удали) (таймер|счётчик)")
+def call_cancel_timer():
+    response = timer.cancel_timer()
+    if isinstance(response, Response):
+        return response
+    else:
+        return Response(voice="Таймер отменён.")
+
+```
+
+
+This is a short short story about one application. You can see the rest for yourself.
+___
+
+#### example of work
+I want to demonstrate the operation of several applications, which could be seen clearly.
+An example would be opening links in the browser and media player
+![video](webbrowser.gif)
