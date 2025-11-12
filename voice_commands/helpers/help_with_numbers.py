@@ -16,14 +16,6 @@ def get_part(list_num:list[int|float], line:list[str]) -> None | float:
         
 
 def get_a_fraction(list_num: list[int | float], line: list[str]) -> float | None:
-    """
-    Универсальная функция для дробей:
-    - "три точка четырнадцать" / "three point one four" -> 3.14
-    - "два целых пять десятых" / "two and five tenths" -> 2.5
-    - "один и шесть" -> 1.6
-    - "четырнадцать сотых" -> 0.14
-    - "одна вторая" -> 0.5
-    """
     if not list_num:
         return None
 

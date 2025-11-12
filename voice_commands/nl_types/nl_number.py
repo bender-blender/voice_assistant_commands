@@ -36,13 +36,11 @@ class NLNumber(Object):
             
         if get_a_fraction(num, split_line):
             self.value = round(get_a_fraction(num, split_line),2) #type:ignore
-            print(f"{from_string} прошел с функцией дробей")
             return from_string
         
         
         if get_part(num, split_line):
             self.value = round(get_part(num, split_line),2) #type:ignore
-            print(f"{from_string} прошел с функцией частей")
             return from_string
         
 
@@ -50,13 +48,11 @@ class NLNumber(Object):
         half = get_half(num, split_line)
         if half:
             self.value = round(half,2)
-            print(f"{from_string} прошел с функцией половин")
             return from_string
         
 
         for word in split_line:
             if word in multipliers and len(num) == 1:
-                print("С тысячами")
                 self.value = num[0] * multipliers.get(word)
                 return from_string
         
