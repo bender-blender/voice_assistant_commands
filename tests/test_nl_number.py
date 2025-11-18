@@ -64,6 +64,7 @@ from voice_commands.nl_types.nl_number import NLNumber
 @pytest.mark.asyncio
 async def test_nlnumber_parse(lang, text, expected_value, expected_ordinal):
     nl_number = NLNumber(None)
-    await nl_number.did_parse(text)
+    b = await nl_number.did_parse(text)
+    print(b)
     assert nl_number.value == expected_value
     assert nl_number.is_ordinal == expected_ordinal

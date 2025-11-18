@@ -11,11 +11,11 @@ def num2word(number) -> str:  # Преобразовать число в стр�
     return word
 
 
-def word2num(word: str, lang: str) -> int | None | float:
+def word2num(word: str, lang: str) -> int  | float:
     translate = Translator(from_lang=lang,to_lang="en").translate(word)
     try:
         number = w2n.word_to_num(translate)
-        return number
+        return float(number)
     except ValueError:
         raise ValueError(f"Не удалось преобразовать слово '{word}' в число.")
 

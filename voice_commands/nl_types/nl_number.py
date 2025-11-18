@@ -1,76 +1,66 @@
 from stark.core.patterns import Pattern, ParseError
 from stark.core.types import Object
 from stark.general.classproperty import classproperty
-from fb_duckling import Duckling
-from deep_translator import GoogleTranslator
-from voice_commands.helpers.helpers import word2num
-from voice_commands.helpers.help_with_numbers import (
-    get_part,
-    get_a_fraction,
-    multipliers,
-    get_half)
+from .nl_number_implementation import (
+    NLNumberParserDucklingTranslatedRu,
+    NLNumberParserWord2NumRu,
+    NLNumberParseCustomRu,
+    NLNumberParserDucklingTranslatedEn,
+    NLNumberParserWord2NumEn,
+    NLNumberParseCustomEn
+)
 
+from voice_commands.helpers.detect_lang import identify_the_language
 
 
 class NLNumber(Object):
-    value: float | None
+    value: float
     is_ordinal: bool
-    
+
     @classproperty
     def pattern(cls) -> Pattern:
         return Pattern("**")
-    
+
     async def did_parse(self, from_string: str) -> str:
-        translate = GoogleTranslator(source="auto",target="ru").translate(from_string)
-        duckling = Duckling(locale="ru_RU")
-        words = translate.lower().replace(".", "")
-        split_line = words.split()
-    
-        
-        result = duckling(words)
-        ordinal = [o["dim"] for o in result]
-        num = [r["value"]["value"]
-               for r in result if not isinstance(r["value"]["value"], str)]
+        lang = identify_the_language(from_string)
+        if lang == "ru":
 
-        self.is_ordinal = True if ordinal and ordinal[0] == "ordinal" else False
-            
-        if get_a_fraction(num, split_line):
-            self.value = round(get_a_fraction(num, split_line),2) #type:ignore
-            return from_string
-        
-        
-        if get_part(num, split_line):
-            self.value = round(get_part(num, split_line),2) #type:ignore
-            return from_string
-        
+            custom = NLNumberParseCustomRu(from_string, lang).parse()
+            if custom:
+                self.value = round(custom[0],2)
+                self.is_ordinal = custom[1]
+                return from_string
 
+            duckling = NLNumberParserDucklingTranslatedRu(from_string).parse()
+            if duckling:
+                self.value = duckling[0]
+                self.is_ordinal = duckling[1]
+                return from_string
 
-        half = get_half(num, split_line)
-        if half:
-            self.value = round(half,2)
-            return from_string
-        
-
-        for word in split_line:
-            if word in multipliers and len(num) == 1:
-                self.value = num[0] * multipliers.get(word)
+            word2num = NLNumberParserWord2NumRu(from_string).parse()
+            if word2num:
+                self.value = word2num[0]  
+                self.is_ordinal = word2num[1]
                 return from_string
         
-        # Порядковые или простые дроби
-        if len(num) == 1:
-            self.value = num[0]
-            return from_string
-
-
-        composite = word2num(translate, "ru")
-        if composite:
-            self.value = composite
-            return from_string
+        if lang == "en":
+            custom = NLNumberParseCustomEn(from_string).parse()
+            if custom:
+                self.value = round(custom[0], 2)
+                self.is_ordinal = custom[1]
+                return from_string
+            
+            duckling = NLNumberParserDucklingTranslatedEn(from_string).parse()
+            if duckling:
+                self.value = duckling[0]
+                self.is_ordinal = duckling[1]
+                return from_string
+            
+            word2num = NLNumberParserWord2NumEn(from_string).parse()
+            if word2num:
+                self.value = word2num[0]
+                self.is_ordinal = word2num[1]
+                return from_string
         
-        
 
-        
         raise ParseError("not found number")
-        
-        
-
