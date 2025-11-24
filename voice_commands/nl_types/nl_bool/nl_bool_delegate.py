@@ -12,8 +12,10 @@ class NLBoolDelegate:
     
     def parse(self, from_string: str) -> Tuple[str, bool] | None:
         lang = identify_the_language(from_string)
-        if lang:
-            parser = self.language_parsers.get(lang)
-            if parser:
-                return parser.parse(from_string)
-        raise ParseError(f'Unsupported language: {lang}')
+        if not lang:
+            raise ParseError(f'Unsupported language: {lang}')
+        
+        parser = self.language_parsers.get(lang)
+        if not parser:
+            raise ParseError(f'Unsupported language: {lang}')
+        return parser.parse(from_string)
