@@ -1,4 +1,4 @@
-from stark.core.patterns import ParseError
+from stark.core.parsing import ParseError
 from voice_commands.nl_types.nl_number.nl_number_implementation import (
     NLNumberParseCustomEn,
     NLNumberParseCustomRu,
