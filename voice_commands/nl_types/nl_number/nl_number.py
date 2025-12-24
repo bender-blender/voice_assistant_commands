@@ -23,8 +23,9 @@ class NLNumberParse(ObjectParser):
 
     async def did_parse(self, obj:NLNumber, from_string: str) -> str:
         delegate = NLNumberDelegate().parse(from_string)
-        obj.value = round(delegate[0],2) #type: ignore
-        obj.is_ordinal = delegate[1] #type: ignore
+        if delegate is not None:
+            obj.value = round(delegate[0],2)
+            obj.is_ordinal = delegate[1] 
         return from_string
 
 
