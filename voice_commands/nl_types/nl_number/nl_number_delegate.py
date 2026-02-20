@@ -24,19 +24,18 @@ class NLNumberDelegate:
             "ru": (
                 NLNumberParseCustomRu(), 
                 NLNumberParserDucklingTranslatedRu(),
-                NLNumberParseWordToNumRu()),
+                NLNumberParseWordToNumRu(),
+            ),
             "en": (
                 NLNumberParseCustomEn(),
                 NLNumberParserDucklingTranslatedEn(),
-                NLNumberParseWordToNumEn()
+                NLNumberParseWordToNumEn(),
             )
         }
     
     def parse(self, from_string: str) -> Tuple[float, bool] | None:
         lang = identify_the_language(from_string)
-
         parsers = self.language_parsers.get(lang)  # type: ignore
-        
         if not parsers:
             raise ParseError(f'Unsupported language: {lang}')
         
