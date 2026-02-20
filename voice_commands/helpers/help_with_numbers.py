@@ -1,5 +1,5 @@
 from .num_ru import fractions,half
-from .num_en import fraction_en,half_en
+from .num_en import half_en
 
 
 def get_part(list_num: list[int | float], line: list[str]) -> None | float:
@@ -63,10 +63,7 @@ def get_half(list_num: list[int | float], line: list[str]) -> None | float:
 
 
 def get_half_en(list_num: list[int | float], line: list[str]) -> None | float:
-    print(list_num)
     for key in half_en:
-
-
         if key in line and len(list_num) == 0:
             return half_en[key]
         
@@ -92,4 +89,4 @@ def get_a_fraction_en(list_num: list[int | float], line:list[str]):
     string_assembly = ""
     for i in list_num:
         string_assembly += str(i)
-    return string_assembly
+    return float(string_assembly)
