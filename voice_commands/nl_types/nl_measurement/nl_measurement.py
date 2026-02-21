@@ -20,7 +20,7 @@ class NLMeasurement(Object):
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern("($number:NLNumber $unit:NLUnit|**)")
+        return Pattern("$number:NLNumber $unit:NLUnit")
 
 
 class NLMeasurementParse(ObjectParser):
@@ -44,7 +44,6 @@ class NLMeasurementParse(ObjectParser):
 
 
         parse = duckling(from_string)
-
         if parse:
             result = parse[0]
             value = result["value"]["value"]
@@ -54,7 +53,6 @@ class NLMeasurementParse(ObjectParser):
                 obj.unit = unit
                 obj.value = Quantity(obj.number, obj.unit)
                 return from_string
-
         raise ParseError("physical quantity not found")
 
 
