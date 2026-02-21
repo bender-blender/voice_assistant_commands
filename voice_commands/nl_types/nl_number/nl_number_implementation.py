@@ -48,7 +48,6 @@ class NLNumberParserDucklingTranslatedRu(NLNumberParserDucklingTranslated):
     def parse(self, pharse: str) -> Tuple[float | int, bool] | None:
         duckling_parse = parse_duckling(pharse,"ru_RU")
         if duckling_parse:
-            print(f"Парсится с duckling ru : {pharse}")
             return duckling_parse
         return None
 
