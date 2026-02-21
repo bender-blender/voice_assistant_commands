@@ -15,6 +15,13 @@ class NLNumber(Object):
     def pattern(cls) -> Pattern:
         return Pattern("**")
     
+    async def did_parse(self, from_string: str) -> str:
+        delegate = NLNumberDelegate().parse(from_string)
+        if delegate is not None:
+            self.value = round(delegate[0],2)
+            self.is_ordinal = delegate[1] 
+        return from_string
+    
 
 
 class NLNumberParse(ObjectParser):

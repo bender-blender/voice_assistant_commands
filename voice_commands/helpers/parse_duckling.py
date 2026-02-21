@@ -22,7 +22,6 @@ def parse_duckling(pharse: str, lang_code:str = "en_US") -> Number | None:
     ]
     ordinal_list = [o["dim"] for o in result_parse]
     ordinal = True if ordinal_list and ordinal_list[0] == "ordinal" else False
-    
     if len(number_list) == 1:
         return Number(number_list[0], ordinal)
 
