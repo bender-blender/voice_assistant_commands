@@ -1,9 +1,10 @@
 from pymorphy3 import MorphAnalyzer
-from pint import UnitRegistry
 
 
-from .nl_measurement_interface import MeasurementParseInterface
+
+from .nl_measurement_interface import MeasurementParseInterface, PhysicalQuantity
 from .units import ureg
+
 
 
 
@@ -57,11 +58,11 @@ class MeasurementParseRu(MeasurementParseInterface):
             "киловатт": self.pint.kilowatt,
         }
     
-    def parse(self, from_string: str) -> UnitRegistry | None:
+    def parse(self, from_string: str) -> PhysicalQuantity | None:
         split_line = from_string.lower().split()
         morphy = MorphAnalyzer()
         result = [
-            self.dictionary_quantities[morphy.parse(value)[0].normal_form] for value in split_line
+            PhysicalQuantity(self.dictionary_quantities[morphy.parse(value)[0].normal_form], value) for value in split_line
             if morphy.parse(value)[0].normal_form in self.dictionary_quantities
             ]
 
@@ -144,10 +145,10 @@ class MeasurementParseEn(MeasurementParseInterface):
             "kilowatts": self.pint.kilowatt,
         }
     
-    def parse(self, from_string: str) -> UnitRegistry | None:
+    def parse(self, from_string: str) -> PhysicalQuantity | None:
         split_line = from_string.lower().split()
         result = [
-            self.dictionary_quantities[value] for value in split_line
+            PhysicalQuantity(self.dictionary_quantities[value],value) for value in split_line
             if value in self.dictionary_quantities
         ]
 

@@ -1,12 +1,12 @@
 from voice_commands.nl_types.nl_measurement.nl_measurement_implementation import (
     MeasurementParseRu,
-    MeasurementParseEn
+    MeasurementParseEn,
 )
 
-from voice_commands.nl_types.nl_measurement.nl_measurement_interface import MeasurementParseInterface
+from voice_commands.nl_types.nl_measurement.nl_measurement_interface import MeasurementParseInterface, PhysicalQuantity
 from voice_commands.helpers.detect_lang import identify_the_language
 from stark.core.parsing import ParseError
-from pint import UnitRegistry
+
 
 
 class MeasurmentDelegate:
@@ -15,7 +15,7 @@ class MeasurmentDelegate:
         self.language_parsers:dict[str,MeasurementParseInterface] = {"ru":MeasurementParseRu(),"en":MeasurementParseEn()}
 
     
-    def parse(self, from_string:str) -> UnitRegistry | None:
+    def parse(self, from_string:str) -> PhysicalQuantity | None:
         lang = identify_the_language(from_string)
         if not lang:
             raise ParseError(f'Unsupported language: {lang}')

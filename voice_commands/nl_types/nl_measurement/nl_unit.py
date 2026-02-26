@@ -1,4 +1,4 @@
-from stark.core.parsing import PatternParser, ObjectParser, Pattern
+from stark.core.parsing import PatternParser, ObjectParser, Pattern, ParseError
 from stark.general.classproperty import classproperty
 from stark.core.types import Object
 
@@ -24,8 +24,9 @@ class NLUnitParse(ObjectParser):
     async def did_parse(self,obj:NLUnit, from_string: str) -> str:
         delegate = MeasurmentDelegate().parse(from_string)
         if delegate:
-            obj.value = delegate
-        return from_string
+            obj.value = delegate.value
+            return delegate.form
+        raise ParseError("value not found")
 
 
 pattern_parser.register_parameter_type(
