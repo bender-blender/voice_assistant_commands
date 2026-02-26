@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 from pint import UnitRegistry
-from typing import Dict
+from typing import Dict,NamedTuple
+
+
+
+class PhysicalQuantity(NamedTuple):
+    value: float
+    form: str
 
 class MeasurementParseInterface(ABC):
 
@@ -9,7 +15,7 @@ class MeasurementParseInterface(ABC):
     
 
     @abstractmethod
-    def parse(self, from_string: str) -> UnitRegistry | None:
+    def parse(self, from_string: str) -> PhysicalQuantity | None:
         pass
 
 
