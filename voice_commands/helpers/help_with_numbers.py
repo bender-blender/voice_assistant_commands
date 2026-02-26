@@ -24,7 +24,7 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
         return None
 
     first_number = str(list_num[0]) if list_num[0] % 10 != 0 else str(int(list_num[0] / 10))
-    second_number = str(list_num[1]) if list_num[1] % 10 != 0 else str(int(list_num[1] / 10))
+    #second_number = str(list_num[1]) if list_num[1] % 10 != 0 else str(int(list_num[1] / 10))
     # тип "три точка четырнадцать"
     if "точка" in line and len(list_num) >= 2:
         point_index = line.index("точка")
@@ -34,9 +34,9 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
         value = float(f"{integer_part}.{decimal_part}")
 
         start = point_index - len(first_number)
-        end = point_index + len(second_number)
+        #end = point_index + len(second_number)
 
-        return make_result(value, line ,start, end)
+        return make_result(value, line ,start, len(line))
 
     # тип "один и шесть" или "два целых пять"
     for word in ["и", "целых"]:
@@ -44,11 +44,11 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
             idx = line.index(word)
             if len(list_num) == 2:
                 value = float(f"{int(list_num[0])}.{int(list_num[1])}")
-                return make_result(value, line , idx - len(first_number), idx + len(second_number) + 1)
+                return make_result(value, line , idx - len(first_number), idx + len(list_num))
 
             elif len(list_num) > 2:
                 value = list_num[0] + list_num[1] / list_num[2]
-                return make_result(value, line ,idx - len(first_number), idx + len(second_number) + 2)
+                return make_result(value, line ,idx - len(first_number), idx + len(list_num))
 
     # тип "пять десятых", "одна вторая"
     for i, word in enumerate(line):
@@ -56,11 +56,11 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
 
             if len(list_num) == 2:
                 value = list_num[0] / list_num[1]
-                return make_result(value, line, i - len(first_number), i + len(second_number))
+                return make_result(value, line, i - len(first_number), i + len(list_num))
 
             elif len(list_num) == 3:
                 value = list_num[0] + list_num[1] / list_num[2]
-                return make_result(value, line, i - len(first_number), i + len(second_number) + 1)
+                return make_result(value, line, i - len(first_number), i + len(list_num) + 1)
 
     return None
 
