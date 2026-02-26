@@ -1,17 +1,18 @@
 from typing import Tuple,Protocol
+from voice_commands.helpers.parse_duckling import Number
 
 class NLNumberParseWordToNum(Protocol):
-    def parse(self, pharse:str) -> Tuple[float, bool] | None:
+    def parse(self, pharse:str) -> Tuple[Number, str] | None:
         pass
 
 
 class NLNumberParserDucklingTranslated(Protocol):
-    def parse(self, pharse: str) -> Tuple[float, bool] | None:
+    def parse(self, pharse: str) -> Tuple[Number, str] | None:
         pass
 
 
 class NLNumberParseCustom(Protocol):
-    def parse(self, pharse: str) -> Tuple[float, bool] | None:
+    def parse(self, pharse: str) -> Tuple[Number, str] | None:
         pass
 
     def _get_fraction(self, list_num: list[int | float], pharse: list[str]) -> str | None:
