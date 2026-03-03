@@ -2,7 +2,7 @@ from typing import Dict
 from voice_commands.providers.location_provider import LocationProvider,PlaceInfo,Coordinates
 
 
-class NLLocationImplement:
+class NLLocationProvider:
 
     def __init__(self, home: str | None = None):
         self.provider = LocationProvider()
@@ -12,10 +12,7 @@ class NLLocationImplement:
         """
         Provide the user with the nearest points upon request
         """
-        if self.provider.name_point is None:
-            await self.provider.get_coordinates(self.home)
-        
-        mark = await self.provider._get_list_of_tags(place, radius_in_kilometers=radius_in_kilometers)
+        mark = await self.provider.get_places(place, radius_km=radius_in_kilometers)
         return mark
         
     

@@ -4,7 +4,7 @@ from stark import Response
 
 from voice_commands.apps.clock.timer.parameters.interval import Interval
 
-from .....helpers.helpers import num2word
+from .....helpers.date_helpers import num2word
 from ..model.model_timer import TimerModel
 
 

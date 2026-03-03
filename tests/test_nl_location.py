@@ -31,13 +31,16 @@ def get_home():
         ("Построй маршрут к Макдональдсу", "макдональдсу"),
     ],
 )
-
 async def test_city_extraction(get_home, text: str, obj: str):
     home = get_home
     nl_location = NLLocation(None)
     nl_parse = NLLocationParse(pattern_parser,home.home)
-    await nl_parse.did_parse(nl_location,text.lower())
+    await nl_parse.did_parse(nl_location,text.lower()) # NOTE: doesn't cover the NER Processor part
     
     print(nl_location.loc_name, obj)
     
     assert nl_location.loc_name == obj
+
+# e2e tests:
+# https://github.com/MarkParker5/STARK/blob/master/tests/test_commands_flow/test_command_run.py
+# https://github.com/MarkParker5/STARK/blob/0113017e02218434733c068bca36ca91fcc80b1a/tests/conftest.py#L69

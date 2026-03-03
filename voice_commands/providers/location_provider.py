@@ -27,32 +27,32 @@ class LocationProvider:
     
     def __init__(self):
         self.cache_place: dict[str, dict[str,PlaceInfo] | dict[str,Coordinates]] = {}  # point storage
-        self.home: Coordinates | None = None
-        self.name_point = None
+        self.home_coordinates: Coordinates | None = None
         self.geolocator = Nominatim(user_agent="geo_app", timeout=5)
-        
-
-    @asyncify
-    def _geocode_sync(self,location_str: str) -> Coordinates | None:
-        return self.coordinates_from_name(location_str)
     
-
-    async def get_coordinates(self, location_name: str | None = None) -> Coordinates | None:
+    async def fetch_home_coordinates_if_needed(self, location_name: str | None = None):
+        if not self.home_coordinates:
+            await self.fetch_home_coordinates(location_name)
+        
+    
+    async def fetch_home_coordinates(self, location_name: str | None = None):
         """
-        Get the coordinates of a home point
+        Update the home point.
         :param location_name: name 
         :type location_name: str | None if the parameter is missing, the provider's location
         :return: Named tuple or None in the absence of coordinates
         :rtype: Coordinates | None
         """
+        
+        # try to get coordinates by location name if it is provided
+        
         if location_name:
             await asyncio.sleep(0.1)
-            self.home = await self._geocode_sync(location_name)
+            self.home_coordinates = await asyncify(self.coordinates_from_name)(location_name)
             self.name_point = location_name
-            return self.home
+            return self.home_coordinates
 
-        if self.home:
-            return self.home
+        # Location name is not provided, try to determine it by IP
         
         async with httpx.AsyncClient(timeout=5) as client:
             response = await client.get("http://ip-api.com/json/")
@@ -64,11 +64,9 @@ class LocationProvider:
         if not place:
             raise ValueError("Can't determine the city by IP")
 
-        self.home = await self._geocode_sync(place)
-        self.name_point = place
+        self.home_coordinates = await asyncify(self.coordinates_from_name)(place)
 
-        return self.home
-        
+        return self.home_coordinates
 
     def coordinates_from_name(self, location_str: str, timeout: int = 10) -> Coordinates | None:
         """
@@ -87,14 +85,10 @@ class LocationProvider:
             return None
 
         return Coordinates(location.latitude, location.longitude)
-    
 
-    
-
-
-    async def _get_list_of_tags(self, place: str, radius_in_kilometers: float | None = None) -> Dict[str,PlaceInfo] | Dict[str, Coordinates]:
+    async def get_places(self, place_name: str, radius_km: float | None = None) -> Dict[str,PlaceInfo] | Dict[str, Coordinates]:
         """
-        Docstring для _get_list_of_tags
+        TODO:
         
         :param place: name
         :type place: str
@@ -103,19 +97,23 @@ class LocationProvider:
         :return: Dictionary of the format 'name: {full address:{distance,coordinates,opening hours}(PlaceInfo)'
         :rtype: Dict[str, PlaceInfo] | Dict[str, Coordinates]
         """
-        if not isinstance(self.home, Coordinates):
-            raise ValueError("Home location is not set")
+        await self.fetch_home_coordinates_if_needed()
         
-
-        if not isinstance(self.name_point,str):
+        if not isinstance(self.home_coordinates, Coordinates):
             raise ValueError("Home location is not set")
 
-
-        if place in self.cache_place:
-            return self.cache_place[place]
+        # if place in self.cache_place:
+        #     return self.cache_place[place]
         
+        # TODO: cache
+        # functools.cache
+        # https://www.datacamp.com/tutorial/python-cache-introduction
+        # lru cache
+        # https://realpython.com/lru-cache-python/
         
-        if radius_in_kilometers is None:
+    
+        
+        if radius_km is None:
             coords = self.coordinates_from_name(place)
             if coords is None:
                 return {}
@@ -128,10 +126,10 @@ class LocationProvider:
 
             return {place: place_info}
         
-        home_lat = self.home.latitude
-        home_lon = self.home.longitude
-        lat_delta = radius_in_kilometers / 111.0
-        lon_delta = radius_in_kilometers / (
+        home_lat = self.home_coordinates.latitude
+        home_lon = self.home_coordinates.longitude
+        lat_delta = radius_km / 111.0
+        lon_delta = radius_km / (
             111.0 * math.cos(math.radians(home_lat))
         )
 

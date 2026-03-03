@@ -19,7 +19,7 @@ class Location(Object):
         # Optimization: use offline geo names library at least for pre-validation
         
 
-        res:Optional[Tuple[str, Optional[Coordinates]]] = await async_combinatorics(from_string, self.location_provider.get_coordinates, True, min_delay_sec=1.1)
+        res:Optional[Tuple[str, Optional[Coordinates]]] = await async_combinatorics(from_string, self.location_provider.fetch_home_coordinates, True, min_delay_sec=1.1)
         if res is None:
             raise ParseError("Не удалось определить местоположение.")
 
