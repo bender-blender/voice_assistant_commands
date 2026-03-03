@@ -6,7 +6,11 @@ def make_result(value, line, start, end) -> tuple[float, str]:
     return value, substring
 
 def get_part(list_num: list[int | float], line: list[str]) -> tuple[float,str] | None:
-    number_in_string = str(list_num[0])
+    try:
+        number_in_string = str(list_num[0])
+    except IndexError:
+        return None
+    
     for i,word in enumerate(line):
         if word in fractions:
             if len(list_num) == 0:
@@ -66,7 +70,11 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
 
 
 def get_half(list_num: list[int | float], line: list[str]) -> tuple[float, str] | None:
-    number_in_string = str(list_num[0]) if list_num[0] % 10 != 0 else str(int(list_num[0] / 10))
+    try:
+        number_in_string = str(list_num[0]) if list_num[0] % 10 != 0 else str(int(list_num[0] / 10))
+    except IndexError:
+        return None
+    
     for i,word in enumerate(line):
         if word in half:
             if len(line) == 1:
@@ -80,15 +88,16 @@ def get_half(list_num: list[int | float], line: list[str]) -> tuple[float, str] 
 
 
 def get_half_en(list_num: list[int | float], line: list[str]) -> tuple[float, str] | None:
-    number_in_string = str(list_num[0]) if list_num[0] % 10 != 0 else str(int(list_num[0] / 10))
-    for i,word in enumerate(line):
-        if word in half_en:
-            if len(line) == 1:
-                return make_result(half_en[word],line,i,i+1)
-        
-            return make_result(list_num[0] + half_en[word],line,i-len(number_in_string),i+1)
-        
-    return None
+    try:
+        number_in_string = str(list_num[0]) if list_num[0] % 10 != 0 else str(int(list_num[0] / 10))
+        for i,word in enumerate(line):
+            if word in half_en:
+                if len(line) == 1:
+                    return make_result(half_en[word],line,i,i+1)
+            
+                return make_result(list_num[0] + half_en[word],line,i-len(number_in_string),i+1)
+    except IndexError:  
+        return None
 
 
 # def get_a_part_en(list_num: list[int | float],line:list[str]):
