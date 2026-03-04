@@ -1,5 +1,5 @@
 import pytest
-from voice_commands.nl_types.nl_bool import NLBool
+from voice_commands.nl_types.nl_bool.nl_bool import NLBool
 
 @pytest.mark.parametrize('lang, text, expected_value', [
     # English positive
@@ -19,7 +19,7 @@ from voice_commands.nl_types.nl_bool import NLBool
     ("ru", "нет", False),
     ("ru", "не хочу", False),
     ("ru", "ни за что", False),
-])
+    ])
 @pytest.mark.asyncio
 async def test_nlbool_parse(lang, text, expected_value):
     nl_bool = NLBool(None)
