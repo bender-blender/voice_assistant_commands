@@ -3,7 +3,7 @@ from stark.core.types import Object, ParseError
 from stark.general.classproperty import classproperty
 from translate import Translator
 
-from ....helpers.helpers import word2num
+from ....helpers.date_helpers import word2num
 
 
 class Volume(Object):
