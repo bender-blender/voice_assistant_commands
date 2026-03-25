@@ -10,7 +10,7 @@ from voice_commands.nl_types.nl_number.nl_number_interface import (
     NLNumberParseWordToNum
 )
 
-from voice_commands.helpers.help_with_numbers import (
+from voice_commands.nl_types.nl_number.help_with_numbers import (
     get_a_fraction,
     get_a_fraction_en,
     get_part,
@@ -18,7 +18,7 @@ from voice_commands.helpers.help_with_numbers import (
     get_half,
     get_half_en,
 )
-from voice_commands.helpers.parse_duckling import (
+from voice_commands.nl_types.nl_number.parse_duckling import (
     parse_duckling,
     parse_custom,
     Number
@@ -64,7 +64,7 @@ class NLNumberParseWordToNumEn(NLNumberParseWordToNum):
 class NLNumberParserDucklingTranslatedRu(NLNumberParserDucklingTranslated):
 
     def parse(self, pharse: str) -> Tuple[Number,str] | None:
-        duckling_parse = parse_duckling(pharse,"ru_RU")
+        duckling_parse = parse_duckling(pharse,"ru_RU",True)
         if duckling_parse:
             return duckling_parse
         return None
@@ -73,7 +73,7 @@ class NLNumberParserDucklingTranslatedRu(NLNumberParserDucklingTranslated):
 class NLNumberParserDucklingTranslatedEn(NLNumberParserDucklingTranslated):
     
     def parse(self, pharse: str) -> Tuple[Number,str] | None | None:
-        duckling_parse = parse_duckling(pharse)
+        duckling_parse = parse_duckling(pharse,block_unit=True)
         if duckling_parse:
             return duckling_parse
         return None

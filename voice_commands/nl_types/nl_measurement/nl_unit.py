@@ -1,33 +1,23 @@
-from stark.core.parsing import PatternParser, ObjectParser, Pattern, ParseError
 from stark.general.classproperty import classproperty
+from stark.core.parsing import Pattern
 from stark.core.types import Object
-
-
-from voice_commands.nl_types.nl_measurement.nl_delegate import MeasurmentDelegate
-from voice_commands.nl_types.parsing_context import pattern_parser
-from pint import UnitRegistry
+from pint import Unit
 
 
 
-class NLUnit(Object):
-    value: UnitRegistry
+class NLAbstractUnit(Object):
+    value: Unit
+    
+    _unit_keywords: str
+
+    key: Unit
+
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern("**")
+        return Pattern(f"{cls._unit_keywords}")
 
+    async def did_parse(self, from_string):
+        self.value = self.key
+        return from_string
 
-class NLUnitParse(ObjectParser):
-    def __init__(self, pattern_parser: PatternParser):
-        self.pattern_parser = pattern_parser
-
-    async def did_parse(self,obj:NLUnit, from_string: str) -> str:
-        delegate = MeasurmentDelegate().parse(from_string)
-        if delegate:
-            obj.value = delegate.value
-            return delegate.form
-        raise ParseError("value not found")
-
-
-pattern_parser.register_parameter_type(
-    NLUnit, parser=NLUnitParse(pattern_parser))

@@ -15,6 +15,14 @@ class NLNumber(Object):
     def pattern(cls) -> Pattern:
         return Pattern("**")
     
+    async def did_parse(self, from_string: str) -> str:
+        delegate = NLNumberDelegate().parse(from_string)
+        if delegate is not None:
+            self.value = round(delegate[0].value,2)
+            self.is_ordinal = delegate[0].ordinal
+            return delegate[1]
+        raise ParseError("value not found")
+    
     
 
 
@@ -31,5 +39,4 @@ class NLNumberParse(ObjectParser):
         raise ParseError("value not found")
 
 
-pattern_parser.register_parameter_type(
-    NLNumber, parser=NLNumberParse(pattern_parser))
+pattern_parser.register_parameter_type(NLNumber)
