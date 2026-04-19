@@ -4,15 +4,88 @@ from voice_commands.nl_types.nl_measurement.nl_measurement import NLMeasurement
 from voice_commands.nl_types.nl_measurement.nl_unit import NLAbstractUnit
 from voice_commands.nl_types.parsing_context import pattern_parser
 from voice_commands.nl_types.nl_measurement.nl_group import Group
-from voice_commands.nl_types.nl_measurement.generation_pattern import create_pattern,all_forms_en,all_forms_ru
+from voice_commands.nl_types.nl_measurement.generation_pattern import create_pattern
+from locales.variables import translator
+
 
 unit = UnitRegistry()
+
+
+
+ru_word = [
+    "километр*",
+    "метр*",
+    "миля*",
+    "фут*",
+    "грамм*",
+    "килограмм*",
+    "фунт*",
+    "унци*",
+    "секунд*",
+    "минут*",
+    "час*",
+    "градус*",
+    "цельси*",
+    "фаренгейт*",
+    "кельвин*",
+    "метр* в секунд*",
+    "километр* в час*",
+    "мил* в час*",
+    "литр*",
+    "миллилитр*",
+    "чашк*",
+    "галлон*",
+    "джоул*",
+    "калори*",
+    "киловатт* час*",
+    "ватт*",
+    "киловатт*",
+    "градус*",
+]
+
+
+en_word = [
+    "kilometer*",
+    "meter*",
+    "mile*",
+    "foot*",
+    "gram*",
+    "kilogram*",
+    "pound*",
+    "ounce*",
+    "second*",
+    "minute*",
+    "hour*",
+    "degree*",
+    "celsius*",
+    "fahrenheit*",
+    "kelvin*",
+    "meter* per second*",
+    "kilometer* per hour*",
+    "mile* per hour*",
+    "liter*",
+    "milliliter*",
+    "cup*",
+    "gallon*",
+    "joule*",
+    "calorie*",
+    "kilowatt* hour*",
+    "watt*",
+    "kilowatt*",
+    "degree*"]
+
+
+for ru,en in zip(ru_word,en_word):
+    translator.write_translation("ru",en,ru)
+    translator.write_translation("en",en,en)
+
+_ = translator.mark_translation()
 
 
 #--------------------------------- Distance
 
 class NLUnitKilometer(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("километр"),all_forms_en("kilometer"))
+    _unit_keywords = create_pattern(False,_("kilometer*"))
     key = unit.kilometer
 
 class NLMeasurementKilometer(NLMeasurement):
@@ -20,7 +93,7 @@ class NLMeasurementKilometer(NLMeasurement):
 
 
 class NLUnitMeter(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("метр"),all_forms_en("meter"))
+    _unit_keywords = create_pattern(False,_("meter*"))
     key = unit.meter
 
 class NLMeasurementMeter(NLMeasurement):
@@ -28,7 +101,7 @@ class NLMeasurementMeter(NLMeasurement):
 
 
 class NLUnitMile(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("миля"),all_forms_en("mile"))
+    _unit_keywords = create_pattern(False,_("mile*"))
     key = unit.mile
 
 class NLMeasurementMile(NLMeasurement):
@@ -36,7 +109,7 @@ class NLMeasurementMile(NLMeasurement):
 
 
 class NLUnitFeet(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("фут"),all_forms_en("foot"))
+    _unit_keywords = create_pattern(False,_("foot*"))
     key = unit.feet
 
 class NLMeasurementFeet(NLMeasurement):
@@ -55,7 +128,7 @@ class NLDistance(Group):
 
 
 class NLUnitGram(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("грамм"),all_forms_en("gram"))
+    _unit_keywords = create_pattern(False,_("gram*"))
     key = unit.gram
 
 class NLMeasurementGram(NLMeasurement):
@@ -63,7 +136,7 @@ class NLMeasurementGram(NLMeasurement):
 
 
 class NLUnitKilogram(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("килограмм"),all_forms_en("kilogram"))
+    _unit_keywords = create_pattern(False,_("kilogram*"))
     key = unit.kilogram
 
 class NLMeasurementKilogram(NLMeasurement):
@@ -71,7 +144,7 @@ class NLMeasurementKilogram(NLMeasurement):
 
 
 class NLUnitPound(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("фунт"),all_forms_en("kilogram"))
+    _unit_keywords = create_pattern(False,_("pound*"))
     key = unit.pound
 
 class NLMeasurementPound(NLMeasurement):
@@ -79,7 +152,7 @@ class NLMeasurementPound(NLMeasurement):
 
 
 class NLUnitOunce(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("унция"),all_forms_en("ounce"))
+    _unit_keywords = create_pattern(False,_("ounce*"))
     key = unit.ounce
 
 class NLMeasurementOunce(NLMeasurement):
@@ -97,7 +170,7 @@ class NLMass(Group):
 # ----------------- Duration
 
 class NLUnitSecond(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("секунда"),all_forms_en("second"))
+    _unit_keywords = create_pattern(False,_("second*"))
     key = unit.second
 
 class NLMeasurementSecond(NLMeasurement):
@@ -105,7 +178,7 @@ class NLMeasurementSecond(NLMeasurement):
 
 
 class NLUnitMinute(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("минута"), all_forms_en("minute"))
+    _unit_keywords = create_pattern(False,_("minute*"))
     key = unit.minute
 
 class NLMeasurementMinute(NLMeasurement):
@@ -113,7 +186,7 @@ class NLMeasurementMinute(NLMeasurement):
 
 
 class NLUnitHour(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("час"), all_forms_en("hour")) 
+    _unit_keywords = create_pattern(False,_("hour*")) 
     key = unit.hour
 
 class NLMeasurementHour(NLMeasurement):
@@ -130,8 +203,8 @@ class NLDuration(Group):
 # ------------------- Temperature
 
 class NLUnitCelsius(NLAbstractUnit):
-    _unit_keywords = create_pattern(True,all_forms_ru("градус"),all_forms_en("degree")) + \
-    create_pattern(False,all_forms_ru("цельсия") + "celsius") 
+    _unit_keywords = create_pattern(True, _("degree*")) + \
+    create_pattern(False,_("celsius*")) 
     key = unit.celsius
 
 class NLMeasurementCelsius(NLMeasurement):
@@ -139,7 +212,7 @@ class NLMeasurementCelsius(NLMeasurement):
 
 
 class NLUnitFahrenheit(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("фаренгейт") + "fahrenheit|fahrenheits")
+    _unit_keywords = create_pattern(False,_("fahrenheit*"))
     key = unit.fahrenheit
 
 class NLMeasurementFahrenheit(NLMeasurement):
@@ -147,7 +220,7 @@ class NLMeasurementFahrenheit(NLMeasurement):
 
 
 class NLUnitKelvin(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("кельвин") + "kelvin|kelvins") 
+    _unit_keywords = create_pattern(False,_("kelvin")) 
     key = unit.kelvin
 
 class NLMeasurementKelvin(NLMeasurement):
@@ -164,7 +237,7 @@ class NLTemperature(Group):
 # -------------------------- Speed
 
 class NLUnitMetersPerSecond(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("метр в секунду"),all_forms_en("meter per second"))
+    _unit_keywords = create_pattern(False,_("meter* per second*"))
     key = unit.meter / unit.second
 
 class NLMeasurementMeterPerSecond(NLMeasurement):
@@ -172,7 +245,7 @@ class NLMeasurementMeterPerSecond(NLMeasurement):
 
 
 class NLUnitKilometersPerHour(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("километр в час"),all_forms_en("kilometer per hour"))
+    _unit_keywords = create_pattern(False,_("kilometer* per hour*"))
     key = unit.kilometer / unit.hour
 
 class NLMeasurementKilometersPerHour(NLMeasurement):
@@ -180,7 +253,7 @@ class NLMeasurementKilometersPerHour(NLMeasurement):
 
 
 class NLUnitMilesPerHour(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("миля в час"),all_forms_en("mile per hour"))
+    _unit_keywords = create_pattern(False,_("mile* per hour*"))
     key = unit.mile / unit.hour
 
 class NLMeasurementMilesPerHour(NLMeasurement):
@@ -197,7 +270,7 @@ class NLPeed(Group):
 # ------------------------- Volume
 
 class NLUnitLiter(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("литр"),all_forms_en("liter"))
+    _unit_keywords = create_pattern(False,_("liter*"))
     key = unit.liter
 
 class NLMeasurementLiter(NLMeasurement):
@@ -205,7 +278,7 @@ class NLMeasurementLiter(NLMeasurement):
 
 
 class NLUnitMililiter(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("миллилитр") + all_forms_en("milliliter"))
+    _unit_keywords = create_pattern(False,_("milliliter*"))
     key = unit.milliliter
 
 class NLMeasurementMililiter(NLMeasurement):
@@ -213,7 +286,7 @@ class NLMeasurementMililiter(NLMeasurement):
 
 
 class NLUnitCup(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("чашка"),all_forms_en("cup"))
+    _unit_keywords = create_pattern(False,_("cup*"))
     key = unit.cup
 
 class NLMeasurementCup(NLMeasurement):
@@ -221,7 +294,7 @@ class NLMeasurementCup(NLMeasurement):
 
 
 class NLUnitGallon(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("галлон"),all_forms_en("gallon")) 
+    _unit_keywords = create_pattern(False,_("gallon*")) 
     key = unit.gallon
 
 class NLMeasurementGallon(NLMeasurement):
@@ -239,7 +312,7 @@ class NLVolume(Group):
 # ------------------------------------ Energy
 
 class NLUnitJoul(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("джоуль"), all_forms_ru("джоул"), all_forms_en("joule"))
+    _unit_keywords = create_pattern(False,_("joule*"))
     key = unit.joule
 
 class NLMeasurementJoul(NLMeasurement):
@@ -247,16 +320,16 @@ class NLMeasurementJoul(NLMeasurement):
 
 
 class NLUnitCalories(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("калория"), all_forms_en("calorie"))
-    
+    _unit_keywords = create_pattern(False,_("calorie*"))
     key = unit.calorie 
+
 
 class NLMeasurementCalories(NLMeasurement):
     _unit_type = NLUnitCalories
 
 
 class NLUnitKilowattPerHour(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("киловатт-час"),all_forms_en("kilowatt hour"))
+    _unit_keywords = create_pattern(False,_("kilowatt* hour*"))
     key = unit.kilowatt_hour
 
 class NLMeasurementKilowattPerHour(NLMeasurement):
@@ -272,7 +345,7 @@ class NLEnergy(Group):
 # --------------------------- Power
 
 class NLUnitWatt(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("ватт"), all_forms_en("watt"))
+    _unit_keywords = create_pattern(False,_("watt*"))
     key = unit.watt
 
 class NLMeasurementWatt(NLMeasurement):
@@ -280,7 +353,7 @@ class NLMeasurementWatt(NLMeasurement):
 
 
 class NLUnitKilowatt(NLAbstractUnit):
-    _unit_keywords = create_pattern(False,all_forms_ru("киловатт"), all_forms_en("kilowatt"))
+    _unit_keywords = create_pattern(False,_("kilowatt*"))
     key = unit.kilowatt
 
 class NLMeasurementKilowatt(NLMeasurement):

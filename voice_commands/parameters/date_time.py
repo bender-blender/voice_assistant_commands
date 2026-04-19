@@ -2,7 +2,8 @@ from datetime import datetime
 
 from dateparser.search import search_dates
 from stark.core.patterns import Pattern
-from stark.core.types import Object, ParseError
+from stark.core.types import Object
+from stark.core.parsing import ParseError
 from stark.general.classproperty import classproperty
 
 from ..helpers.helpers import parse_day_to_date, parse_day_phrase
@@ -38,4 +39,4 @@ class DateTime(Object):
         raise ParseError("Couldn't find date in line")
 
 
-Pattern.add_parameter_type(DateTime)
+#Pattern.add_parameter_type(DateTime)

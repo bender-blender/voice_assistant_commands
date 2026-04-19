@@ -2,7 +2,8 @@
 from datetime import time, datetime, date
 
 from stark.core.patterns import Pattern
-from stark.core.types import Object, ParseError
+from stark.core.types import Object
+from stark.core.parsing import ParseError
 from stark.general.classproperty import classproperty
 
 from voice_commands.formatters.time import TimeFormatter
@@ -46,4 +47,4 @@ class Time(Object):
         return from_string
 
 
-Pattern.add_parameter_type(Time)
+#Pattern.add_parameter_type(Time)

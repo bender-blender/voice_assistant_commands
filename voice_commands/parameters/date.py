@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
 from stark.core.patterns import Pattern
-from stark.core.types.object import Object, ParseError
+from stark.core.types.object import Object
+from stark.core.parsing import ParseError
 from stark.general.classproperty import classproperty
 
 from .data_dictionary import GeneralDictionary
@@ -45,4 +46,4 @@ class Day(Object):
         return from_string
 
 
-Pattern.add_parameter_type(Day)
+#Pattern.add_parameter_type(Day)

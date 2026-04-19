@@ -1,5 +1,6 @@
 from stark.core.patterns import Pattern
-from stark.core.types import Object, ParseError
+from stark.core.types import Object
+from stark.core.parsing import ParseError
 from stark.general.classproperty import classproperty
 from translate import Translator
 
@@ -26,4 +27,4 @@ class Volume(Object):
         return from_string
 
 
-Pattern.add_parameter_type(Volume)
+#Pattern.add_parameter_type(Volume)

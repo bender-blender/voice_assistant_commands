@@ -2,7 +2,8 @@ from datetime import datetime
 
 import dateparser
 from stark.core.patterns import Pattern
-from stark.core.types import Object, ParseError
+from stark.core.types import Object
+from stark.core.parsing import ParseError
 from stark.general.classproperty import classproperty
 
 
@@ -27,4 +28,4 @@ class Interval(Object):
         raise ParseError("the time indicated is past")
 
 
-Pattern.add_parameter_type(Interval)
+#Pattern.add_parameter_type(Interval)
