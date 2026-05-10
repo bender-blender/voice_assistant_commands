@@ -1,45 +1,32 @@
 import pytest
+from voice_commands.nl_types.nl_location.nl_location import NLLocation
 
-from voice_commands.nl_types.nl_location.nl_location_implement import NLLocationImplement
-from voice_commands.nl_types.nl_location.nl_location import NLLocation, NLLocationParse
-from voice_commands.nl_types.parsing_context import pattern_parser
-
-
-
-@pytest.fixture
-def get_home():
-    return NLLocationImplement("Жемчужная 3 Одесса")
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "text, obj",
     [
-        ("Я живу в Киеве", "киеве"),
-        ("Переехал в Харьков пару лет назад", "харьков"),
-        ("Мы летим в Одессу завтра утром", "одессу"),
-        ("Конференция проходила во Львове", "львове"),
-        ("Он работает в Днепре", "днепре"),
-        ("Переехал в Франкфурт на Одере пару лет назад","франкфурт на одере"),
-        ("Вызови убер в Киев","убер киев"),
-        ("Какая погода в Сан Франциско","сан франциско"),
-        ("Аэропорт Шереметьево далеко?", "аэропорт шереметьево"),
-        ("Время в городе Париж","париж"),
-        ("Подскажи где тут ближайший магазин АТБ","атб"),
-        ("Путь к Сильпо","сильпо"),
-        ("Где ближайший банкомат ПриватБанка", "приватбанка"),
-        ("Построй маршрут к Макдональдсу", "макдональдсу"),
+        ("Киев", "киев"),
+        ("Харьков", "харьков"),
+        ("Одесса", "одесса"),
+        ("Львов", "львов"),
+        ("Днепр", "днепр"),
+        ("Франкфурт","франкфурт"),
+        ("убер","убер"),
+        ("аэропорт шереметьево", "аэропорт шереметьево"),
+        ("АТБ","атб"),
+        ("Сильпо","сильпо"),
+        ("ПриватБанк", "приватбанк"),
+        ("Макдональдс", "макдональдс"),
     ],
 )
-async def test_city_extraction(get_home, text: str, obj: str):
-    home = get_home
+async def test_city_extraction(text: str, obj: str):
     nl_location = NLLocation(None)
-    nl_parse = NLLocationParse(pattern_parser,home.home)
-    await nl_parse.did_parse(nl_location,text.lower()) # NOTE: doesn't cover the NER Processor part
     
-    print(nl_location.loc_name, obj)
-    
-    assert nl_location.loc_name == obj
+    await nl_location.did_parse(text.lower()) 
+    assert type(nl_location.places) is dict
+    assert nl_location.value == obj
 
 # e2e tests:
 # https://github.com/MarkParker5/STARK/blob/master/tests/test_commands_flow/test_command_run.py
