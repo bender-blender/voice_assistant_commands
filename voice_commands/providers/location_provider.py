@@ -1,21 +1,23 @@
 from geopy.distance import geodesic, Distance
 from geopy.geocoders import Nominatim
+from async_lru import alru_cache
 from geopy.point import Point
 from asyncer import asyncify
 import asyncio
 import httpx
 
+from typing_extensions import NamedTuple
 
-from typing_extensions import NamedTuple,TypedDict,Dict
 import math
-
+from dataclasses import dataclass
 
 class Coordinates(NamedTuple):
     latitude: float
     longitude: float
 
 
-class PlaceInfo(TypedDict):
+@dataclass
+class PlaceInfo:
     distance_km: Distance
     coordinates: Coordinates
     opening_hours: str
@@ -25,11 +27,11 @@ class PlaceInfo(TypedDict):
 
 class LocationProvider:
     
-    def __init__(self):
-        self.cache_place: dict[str, dict[str,PlaceInfo] | dict[str,Coordinates]] = {}  # point storage
-        self.home_coordinates: Coordinates | None = None
-        self.geolocator = Nominatim(user_agent="geo_app", timeout=5)
+    home_coordinates = None
+
+    geolocator = Nominatim(user_agent="geo_app", timeout=5)
     
+
     async def fetch_home_coordinates_if_needed(self, location_name: str | None = None):
         if not self.home_coordinates:
             await self.fetch_home_coordinates(location_name)
@@ -85,10 +87,12 @@ class LocationProvider:
             return None
 
         return Coordinates(location.latitude, location.longitude)
+    
 
-    async def get_places(self, place_name: str, radius_km: float | None = None) -> Dict[str,PlaceInfo] | Dict[str, Coordinates]:
+    @alru_cache
+    async def get_places(self, place_name: str, radius_km: float | None = None) -> dict[str,PlaceInfo] | dict[str, Coordinates]:
         """
-        TODO:
+    
         
         :param place: name
         :type place: str
@@ -102,8 +106,6 @@ class LocationProvider:
         if not isinstance(self.home_coordinates, Coordinates):
             raise ValueError("Home location is not set")
 
-        # if place in self.cache_place:
-        #     return self.cache_place[place]
         
         # TODO: cache
         # functools.cache
@@ -114,17 +116,13 @@ class LocationProvider:
     
         
         if radius_km is None:
-            coords = self.coordinates_from_name(place)
+            coords = self.coordinates_from_name(place_name)
             if coords is None:
                 return {}
         
-            place_info: PlaceInfo = {
-                "distance_km": Distance(0),
-                "coordinates": coords,
-                "opening_hours": "не указано"
-            }
+            place_info = PlaceInfo(Distance(0),coords,"не указано")
 
-            return {place: place_info}
+            return {place_name: place_info}
         
         home_lat = self.home_coordinates.latitude
         home_lon = self.home_coordinates.longitude
@@ -140,7 +138,7 @@ class LocationProvider:
 
         
         result = self.geolocator.geocode(
-            query=f"{place}",
+            query=f"{place_name}",
             limit=50,
             exactly_one=False,
             addressdetails=True,
@@ -154,7 +152,7 @@ class LocationProvider:
         
 
         matches_found: dict[str, dict[str, PlaceInfo]] = {}
-        matches_found[place] = {}
+        matches_found[place_name] = {}
         for loc in result:
             address = loc.address
             loc_lat = float(loc.latitude)
@@ -169,15 +167,12 @@ class LocationProvider:
             hours = extratags.get("opening_hours", "не указано")
             
             
-            place_info: PlaceInfo = {
-               "distance_km": distance,
-               "coordinates": Coordinates(loc_lat, loc_lon),
-               "opening_hours": hours
-            }
+            place_info = PlaceInfo(distance,Coordinates(loc_lat, loc_lon),hours)
             
-            matches_found[place][address] = place_info
+            matches_found[place_name][address] = place_info
         
         
-        self.cache_place[place] = dict(sorted(matches_found[place].items(),
-                                              key=lambda item: item[1]["distance_km"]))
-        return self.cache_place[place]
+        return dict(sorted(matches_found[place_name].items(),
+                    key=lambda item: item[1].distance_km))
+        
+        

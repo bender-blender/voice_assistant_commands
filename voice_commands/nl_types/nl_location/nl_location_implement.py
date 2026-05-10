@@ -4,9 +4,8 @@ from voice_commands.providers.location_provider import LocationProvider,PlaceInf
 
 class NLLocationProvider:
 
-    def __init__(self, home: str | None = None):
+    def __init__(self):
         self.provider = LocationProvider()
-        self.home = home
     
     async def resolve(self, place: str, radius_in_kilometers: float | None = None) -> Dict[str,PlaceInfo] | Dict[str, Coordinates]:
         """
