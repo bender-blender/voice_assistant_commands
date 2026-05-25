@@ -15,7 +15,7 @@ from voice_commands.nl_types.nl_number.nl_number_interface import (
     NLNumberParseWordToNum
 )
 from voice_commands.helpers.detect_lang import identify_the_language
-from voice_commands.helpers.parse_duckling import Number
+from voice_commands.nl_types.nl_number.parse_duckling import Number
 
 
 class NLNumberDelegate:

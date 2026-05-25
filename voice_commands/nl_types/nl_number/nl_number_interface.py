@@ -1,5 +1,5 @@
 from typing import Tuple,Protocol
-from voice_commands.helpers.parse_duckling import Number
+from voice_commands.nl_types.nl_number.parse_duckling import Number
 
 class NLNumberParseWordToNum(Protocol):
     def parse(self, pharse:str) -> Tuple[Number, str] | None:
