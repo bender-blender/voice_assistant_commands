@@ -1,0 +1,126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-26 20:37+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:88
+msgid "kilometer*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:96
+msgid "meter*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:104
+msgid "mile*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:112
+msgid "foot*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:131
+msgid "gram*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:139
+msgid "kilogram*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:147
+msgid "pound*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:155
+msgid "ounce*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:173
+msgid "second*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:181
+msgid "minute*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:189
+msgid "hour*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:206
+msgid "degree*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:207
+msgid "celsius*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:215
+msgid "fahrenheit*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:223
+msgid "kelvin"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:240
+msgid "meter* per second*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:248
+msgid "kilometer* per hour*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:256
+msgid "mile* per hour*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:273
+msgid "liter*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:281
+msgid "milliliter*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:289
+msgid "cup*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:297
+msgid "gallon*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:315
+msgid "joule*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:323
+msgid "calorie*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:332
+msgid "kilowatt* hour*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:348
+msgid "watt*"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:356
+msgid "kilowatt*"
+msgstr ""
