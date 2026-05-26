@@ -14,11 +14,11 @@ from voice_commands.nl_types.nl_number.nl_number_interface import (
     NLNumberParserDucklingTranslated,
     NLNumberParseWordToNum
 )
-from locales.translator import Translator
+#from locales.translator import Translator
 from voice_commands.nl_types.nl_number.parse_duckling import Number
+from voice_commands.helpers.detect_lang import identify_the_language
 
-
-class NLNumberDelegate:
+class NLNumberParser:
 
     def __init__(self) -> None:
         self.language_parsers: dict[str, Tuple[NLNumberParseCustom, NLNumberParserDucklingTranslated, NLNumberParseWordToNum]] = {
@@ -35,15 +35,13 @@ class NLNumberDelegate:
         }
     
     def parse(self, from_string: str) -> Tuple[Number, str] | None:
-        translate = Translator()
-        lang = translate.change_language("ru")
+        lang = identify_the_language(from_string)
         parsers = self.language_parsers.get(lang)  # type: ignore
         if not parsers:
             raise ParseError(f'Unsupported language: {lang}')
         
         for parser in parsers:
             parsing_stages = parser.parse(from_string)
-            print(parsing_stages)
             if parsing_stages:
                 return parsing_stages
         return None
