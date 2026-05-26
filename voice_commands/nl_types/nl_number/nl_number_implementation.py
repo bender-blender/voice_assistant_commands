@@ -14,7 +14,7 @@ from voice_commands.nl_types.nl_number.help_with_numbers import (
     get_a_fraction,
     get_a_fraction_en,
     get_part,
-    #get_a_part_en,
+    get_a_part_en,
     get_half,
     get_half_en,
 )
@@ -64,7 +64,7 @@ class NLNumberParseWordToNumEn(NLNumberParseWordToNum):
 class NLNumberParserDucklingTranslatedRu(NLNumberParserDucklingTranslated):
 
     def parse(self, pharse: str) -> Tuple[Number,str] | None:
-        duckling_parse = parse_duckling(pharse,"ru_RU",True)
+        duckling_parse = parse_duckling(pharse,"ru_RU")
         if duckling_parse:
             return duckling_parse
         return None
@@ -73,7 +73,7 @@ class NLNumberParserDucklingTranslatedRu(NLNumberParserDucklingTranslated):
 class NLNumberParserDucklingTranslatedEn(NLNumberParserDucklingTranslated):
     
     def parse(self, pharse: str) -> Tuple[Number,str] | None | None:
-        duckling_parse = parse_duckling(pharse,block_unit=True)
+        duckling_parse = parse_duckling(pharse)
         if duckling_parse:
             return duckling_parse
         return None
@@ -83,22 +83,25 @@ class NLNumberParserDucklingTranslatedEn(NLNumberParserDucklingTranslated):
 class NLNumberParseCustomRu(NLNumberParseCustom):
     
     def _get_fraction(self, list_num: list[int | float], pharse: list[str]):
-        parse_fraction = get_a_fraction(list_num,pharse)
-        if parse_fraction:
+        try:
+            parse_fraction = get_a_fraction(list_num,pharse)
             return parse_fraction
-        return None
+        except IndexError:
+            return None
     
     def _get_half(self, list_num: list[float | int], pharse: list[str]):
-        parse_half = get_half(list_num,pharse)
-        if parse_half:
+        try:
+            parse_half = get_half(list_num,pharse)
             return parse_half
-        return None
+        except IndexError:
+            return None
     
     def _get_part(self, list_num:list[float|int], pharse: list[str]):
-        parse_part = get_part(list_num,pharse)
-        if parse_part:
+        try:
+            parse_part = get_part(list_num,pharse)
             return parse_part
-        return None
+        except IndexError:
+            return None
 
     def parse(self, pharse: str):
         duckling_parse = parse_custom(
@@ -115,22 +118,32 @@ class NLNumberParseCustomRu(NLNumberParseCustom):
 class NLNumberParseCustomEn(NLNumberParseCustom):
     
     def _get_fraction(self, list_num: list[int | float], pharse: list[str]) -> tuple[float, str] | None:
-        parse_fraction = get_a_fraction_en(list_num,pharse)
-        if parse_fraction:
+        try:
+            parse_fraction = get_a_fraction_en(list_num,pharse)
             return parse_fraction
-        return None
+        except IndexError:
+            return None
         
     def _get_half(self, list_num: list[int | float], pharse: list[str]) -> tuple[float, str] | None:
-        parse_half = get_half_en(list_num,pharse)
-        if parse_half:
+        try:
+            parse_half = get_half_en(list_num,pharse)
             return parse_half
-        return None
+        except IndexError:
+            return None
+    
+    def _get_part(self, list_num, pharse):
+        try:
+            parse_part = get_a_part_en(list_num,pharse)
+            return parse_part
+        except IndexError:
+            return None
     
     def parse(self, pharse: str) -> tuple[Number, str] | None:
         duckling_parse = parse_custom(
             pharse=pharse,
             func_fraction=self._get_fraction,
-            func_half=self._get_half
+            func_half=self._get_half,
+            func_part=self._get_part
         )
         if duckling_parse:
             return duckling_parse

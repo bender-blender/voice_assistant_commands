@@ -14,11 +14,13 @@ from voice_commands.nl_types.nl_number.nl_number_interface import (
     NLNumberParserDucklingTranslated,
     NLNumberParseWordToNum
 )
+#from locales.translator import Translator
+from voice_commands.nl_types.nl_number.parse_duckling import Number
 from voice_commands.helpers.detect_lang import identify_the_language
 from voice_commands.nl_types.nl_number.parse_duckling import Number
 
 
-class NLNumberDelegate:
+class NLNumberParser:
 
     def __init__(self) -> None:
         self.language_parsers: dict[str, Tuple[NLNumberParseCustom, NLNumberParserDucklingTranslated, NLNumberParseWordToNum]] = {

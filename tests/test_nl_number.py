@@ -67,3 +67,4 @@ async def test_nlnumber_parse(lang, text, expected_value, expected_ordinal):
     await nl_number.did_parse(text)
     assert nl_number.value == expected_value
     assert nl_number.is_ordinal == expected_ordinal
+
