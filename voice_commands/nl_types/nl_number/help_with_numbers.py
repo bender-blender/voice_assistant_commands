@@ -1,7 +1,4 @@
 from .num_ru import fractions,half
-from .num_en import half_en,part_en
-
-import ru_word2number.w2n
 from word2number.w2n import word_to_num
 
 
