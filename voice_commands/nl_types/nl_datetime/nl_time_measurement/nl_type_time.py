@@ -1,57 +1,76 @@
-from .duration_interval import DurationInterval, DurationIntervalParse
+from voice_commands.nl_types.nl_measurement.nl_measurement import NLMeasurement,NLAbstractUnit
+from voice_commands.nl_types.nl_measurement.generation_pattern import create_pattern
 from voice_commands.nl_types.parsing_context import pattern_parser
+from pint import UnitRegistry
 
 
-class NLSecond(DurationInterval):
-    pass
+unit = UnitRegistry()
 
-class NLSecondParse(DurationIntervalParse):
-    pass
+class NLUnitSecond(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"сек*","second*")
+    key = unit.second
 
-
-class NLMinute(DurationInterval):
-    pass
-
-class NLMinuteParse(DurationIntervalParse):
-    pass
-
-
-class NLHour(DurationInterval):
-    pass
-
-class NLHourParse(DurationIntervalParse):
-    pass
+class NLMeasurementSecond(NLMeasurement):
+    _unit_type = NLUnitSecond
 
 
 
-class NLDay(DurationInterval):
-    pass
+class NLUnitMinute(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"минут*","minute*")
+    key = unit.minute
 
-class NLDayParse(DurationIntervalParse):
-    pass
-
-
-
-class NLMonth(DurationInterval):
-    pass
-
-class NLMonthParse(DurationIntervalParse):
-    pass
+class NLMeasurementMinute(NLMeasurement):
+    _unit_type = NLUnitMinute
 
 
 
-class NLYear(DurationInterval):
-    pass
+class NLUnitHour(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"час*","hour*")
+    key = unit.hour
 
-class NLYearParse(DurationIntervalParse):
-    pass
+class NLMeasurementHour(NLMeasurement):
+    _unit_type = NLUnitHour
 
 
 
+class NLUnitDay(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"дн*","день","day*")
+    key = unit.day
 
-pattern_parser.register_parameter_type(NLSecond,NLSecondParse(pattern_parser,["сек","second"]))
-pattern_parser.register_parameter_type(NLMinute,NLMinuteParse(pattern_parser,["мин","minute"]))
-pattern_parser.register_parameter_type(NLHour,NLHourParse(pattern_parser,["час","hour"]))
-pattern_parser.register_parameter_type(NLDay,NLDayParse(pattern_parser,["дн","день","day"]))
-pattern_parser.register_parameter_type(NLMonth,NLMonthParse(pattern_parser,["месяц","month"]))
-pattern_parser.register_parameter_type(NLYear,NLYearParse(pattern_parser,["год","лет","year"]))
+class NLMeasurementDay(NLMeasurement):
+    _unit_type = NLUnitDay
+
+
+class NLUnitWeek(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"недел*","week*")
+    key = unit.week
+
+class NLMeasurementWeek(NLMeasurement):
+    _unit_type = NLUnitWeek
+
+
+class NLUnitMonth(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"месяц*","month*")
+    key = unit.month
+
+class NLMeasurementMonth(NLMeasurement):
+    _unit_type = NLUnitMonth
+
+
+class NLUnitYear(NLAbstractUnit):
+    _unit_keywords = create_pattern(False,"год*","лет","year*")
+    key = unit.year
+
+class NLMeasurementYear(NLMeasurement):
+    _unit_type = NLUnitYear
+
+
+def auto_register(module_globals):
+    for obj in module_globals.values():
+        if isinstance(obj,type) and issubclass(obj, (NLAbstractUnit, NLMeasurement)):
+            try:
+                pattern_parser.register_parameter_type(obj)
+            except Exception:
+                pass
+
+auto_register(globals())
