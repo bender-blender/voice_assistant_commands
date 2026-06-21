@@ -5,18 +5,7 @@ from gliner import GLiNER
 import anyio
 
 from voice_commands.nl_types.nl_location.nl_location import NLLocation
-
-import os
-import warnings
 from transformers import logging
-
-from huggingface_hub.utils.tqdm import disable_progress_bars
-
-
-disable_progress_bars()
-os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1" # TODO: document
-logging.set_verbosity_error() # __main__.py or CLI parameter
-warnings.filterwarnings("ignore") # same as logs
 
 
 class GliNERProcessor(CommandsContextProcessor):
