@@ -106,15 +106,7 @@ class LocationProvider:
         if not isinstance(self.home_coordinates, Coordinates):
             raise ValueError("Home location is not set")
 
-        
-        # TODO: cache
-        # functools.cache
-        # https://www.datacamp.com/tutorial/python-cache-introduction
-        # lru cache
-        # https://realpython.com/lru-cache-python/
-        
     
-        
         if radius_km is None:
             coords = self.coordinates_from_name(place_name)
             if coords is None:
