@@ -33,6 +33,7 @@ playsound = "1.2.2"
 python-crontab = "^3.3.0"
 ru-word2number = "^1.1"
 stark-engine = {extras = ["sound"], version = "^4.3.0"}
+faker = "^40.23.0"
 [tool.ruff.lint]
 ignore = ["F401"]  # Игнорировать неиспользуемые импорты
 [tool.ruff.lint.per-file-ignores]
