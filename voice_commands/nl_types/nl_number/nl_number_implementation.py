@@ -35,12 +35,13 @@ class NLNumberParseWordToNumRu(NLNumberParseWordToNum):
                 substring.append(word)
             except ValueError:
                 continue
-        
         if len(substring) == 0:
             return None
-        glue_string = " ".join(substring)
-        return Number(ru_word2number.w2n.word_to_num(glue_string), False ), glue_string
-
+        
+        if "минус" in pharse:
+            substring.insert(0,"минус")
+            return Number(-ru_word2number.w2n.word_to_num(" ".join(substring)), False ), " ".join(substring)
+        return Number(ru_word2number.w2n.word_to_num(" ".join(substring)), False ), " ".join(substring)
 
 class NLNumberParseWordToNumEn(NLNumberParseWordToNum):
     def parse(self, pharse: str) -> Tuple[Number, str] | None:

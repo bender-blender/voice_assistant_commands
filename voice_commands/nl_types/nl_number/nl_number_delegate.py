@@ -41,7 +41,7 @@ class NLNumberParser:
             raise ParseError(f'Unsupported language: {lang}')
         
         for parser in parsers:
-            parsing_stages = parser.parse(from_string)
+            parsing_stages = parser.parse(str(from_string))
             if parsing_stages:
                 return parsing_stages
         return None

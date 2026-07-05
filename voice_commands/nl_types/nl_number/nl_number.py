@@ -10,7 +10,7 @@ class NLNumber(Object):
     
     value: float
     is_ordinal: bool
-
+    negative_signs = ["минус","minus"]
     @classproperty
     def pattern(cls) -> Pattern:
         return Pattern("**")
@@ -21,6 +21,9 @@ class NLNumber(Object):
         try:
             parse = NLNumberParser().parse(from_string)
             self.value, self.is_ordinal = parse[0][0],parse[0][1]
+            for word in from_string:
+                if word in self.negative_signs:
+                    self.value, self.is_ordinal = -parse[0][0],parse[0][1]
             return parse[1]
         except TypeError as e:
             if 'cannot unpack non-iterable NoneType object' in str(e): 

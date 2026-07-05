@@ -1,7 +1,4 @@
 from .num_ru import fractions,half
-from .num_en import half_en,part_en
-
-import ru_word2number.w2n
 from word2number.w2n import word_to_num
 
 
@@ -42,10 +39,10 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
         start = point_index - len(first_number)
         end = point_index + len(second_number)
 
-        return make_result(value, line ,start, end)
+        return make_result(value, line ,start, end-1)
 
     # тип "один и шесть" или "два целых пять"
-    for word in ["и", "целых"]:
+    for word in ["и","целых"]:
         if word in line:
             idx = line.index(word)
             if len(list_num) == 2:
@@ -66,7 +63,7 @@ def get_a_fraction(list_num: list[int], line: list[str]) -> tuple[float,str] | N
 
             elif len(list_num) == 3:
                 value = list_num[0] + list_num[1] / list_num[2]
-                return make_result(value, line, i - len(first_number), i + len(second_number) + 1)
+                return make_result(value, line, i - len(first_number), i + len(second_number) + 2)
 
     return None
 
