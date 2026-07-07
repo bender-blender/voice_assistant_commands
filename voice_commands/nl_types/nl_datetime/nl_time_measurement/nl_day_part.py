@@ -17,8 +17,22 @@ class DayPart(IntEnum):
     night = 5
 
 
+class ClassParent(Object):
 
-class NLDayPart_Morning(Object):
+
+    def resolve(self):
+        data = {DayPart.morning:time(hour=9),
+                DayPart.noon:time(hour=12),
+                DayPart.afternoon:time(hour=13),
+                DayPart.evening:time(hour=17),
+                DayPart.night:time(hour=22)
+                }
+        return data[self.value]
+
+
+
+
+class NLDayPart_Morning(ClassParent):
     
     value = 1
     @classproperty
@@ -26,14 +40,14 @@ class NLDayPart_Morning(Object):
         return Pattern("утр*")
         
 
-class NLDayPart_Noon(Object):
+class NLDayPart_Noon(ClassParent):
     
     value = 2
     @classproperty
     def pattern(cls):
         return Pattern("полд*")
     
-class NLDayPart_Afternoon(Object):
+class NLDayPart_Afternoon(ClassParent):
     
     value = 3
     @classproperty
@@ -41,7 +55,7 @@ class NLDayPart_Afternoon(Object):
         return Pattern("во второй половине дня")
     
 
-class NLDayPart_Evening(Object):
+class NLDayPart_Evening(ClassParent):
     
     value = 4
     @classproperty
@@ -49,7 +63,7 @@ class NLDayPart_Evening(Object):
         return Pattern("вечер*")
 
 
-class NLDayPart_Night(Object):
+class NLDayPart_Night(ClassParent):
     value = 5
     @classproperty
     def pattern(cls):
@@ -67,13 +81,5 @@ class NLDayPartUnion(Union):
     ]
     
 
-    def resolve(self,value):
-        data = {DayPart.morning:time(hour=9),
-                DayPart.noon:time(hour=12),
-                DayPart.afternoon:time(hour=13),
-                DayPart.evening:time(hour=17),
-                DayPart.night:time(hour=22)
-                }
-        return data[value]
 
 pattern_parser.register_parameter_type(NLDayPartUnion)
