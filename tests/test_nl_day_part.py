@@ -20,8 +20,6 @@ from voice_commands.nl_types.parsing_context import pattern_parser
     ],
 )
 async def test_nl_day_part(text, expected, sub):
-    union = NLDayPartUnion()
     result = await pattern_parser.parse_object(NLDayPartUnion,text)
-    parse_time = union.resolve(result.obj.value.value)
-    assert parse_time == expected
+    assert result.obj.value.resolve() == expected
     assert str(result.substring) == sub
