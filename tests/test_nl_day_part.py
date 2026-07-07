@@ -2,7 +2,7 @@ import pytest
 from datetime import time
 
 from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_day_part import (
-    NLDayPart
+    NLDayPartUnion
 )
 
 from voice_commands.nl_types.parsing_context import pattern_parser
@@ -20,6 +20,8 @@ from voice_commands.nl_types.parsing_context import pattern_parser
     ],
 )
 async def test_nl_day_part(text, expected, sub):
-    result = await pattern_parser.parse_object(NLDayPart,text)
-    assert result.obj.value == expected
-    assert result.substring == sub
+    union = NLDayPartUnion()
+    result = await pattern_parser.parse_object(NLDayPartUnion,text)
+    parse_time = union.resolve(result.obj.value.value)
+    assert parse_time == expected
+    assert str(result.substring) == sub
