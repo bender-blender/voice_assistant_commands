@@ -8,8 +8,9 @@ import pytest
 
 fake = Faker("ru_RU")
 
+
 def create_pharse(number):
-    text = fake.words(10)
+    text = fake.sentence().split()
     index = randint(0,len(text))
     text_number = num2words(number, lang='ru')
     
@@ -23,23 +24,26 @@ def create_pharse(number):
         index += 1
     
 
-    return " ".join(text)
+    return " ".join(text).replace("."," ").lower()
+
+
+def generate_cases():
+    cases = []
+    for _ in range(1000):
+        options = [
+            fake.random_int(0, 10000000),
+            round(fake.random_int(10, 10000) / fake.random_int(10, 10000), 3),
+        ]
+        number = choice(options)
+        cases.append((create_pharse(number), number))
+    return cases
+
+cases = generate_cases()
 
 
 
+@pytest.mark.parametrize("phrase,expected", cases)
 @pytest.mark.asyncio
-@pytest.mark.parametrize("_", range(10))
-async def test_auto_number(_):
-    options = [
-        fake.random_int(0, 10000000),
-        round(fake.random_int(10, 10000) / fake.random_int(10, 10000),2),
-    ]
-
-    number = choice(options)
-    phrase = create_pharse(number)
-
-    print(phrase)
-    print(number)
-
+async def test_auto_number_integer(phrase, expected):
     res = await pattern_parser.parse_object(NLNumber, phrase)
-    assert res.obj.value == number
+    assert round(res.obj.value,2) == round(float(expected),2)
