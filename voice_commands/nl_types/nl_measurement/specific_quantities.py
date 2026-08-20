@@ -3,7 +3,7 @@ from pint import UnitRegistry
 from voice_commands.nl_types.nl_measurement.nl_measurement import NLMeasurement
 from voice_commands.nl_types.nl_measurement.nl_unit import NLAbstractUnit
 from voice_commands.nl_types.parsing_context import pattern_parser
-from voice_commands.nl_types.nl_measurement.nl_group import Group
+
 from voice_commands.nl_types.nl_measurement.generation_pattern import create_pattern
 from locales.variables import translator
 
@@ -116,13 +116,6 @@ class NLMeasurementFeet(NLMeasurement):
     _unit_type = NLUnitFeet
 
 
-class NLDistance(Group):
-    _types = [
-        NLMeasurementKilometer,
-        NLMeasurementMeter,
-        NLMeasurementFeet,
-        NLMeasurementMile,
-    ]
 
 # ------------------------- Mass
 
@@ -158,14 +151,6 @@ class NLUnitOunce(NLAbstractUnit):
 class NLMeasurementOunce(NLMeasurement):
     _unit_type = NLUnitOunce
 
-
-class NLMass(Group):
-    _types = [
-        NLMeasurementGram,
-        NLMeasurementKilogram,
-        NLMeasurementPound,
-        NLMeasurementOunce,
-    ]
     
 # ----------------- Duration
 
@@ -193,12 +178,6 @@ class NLMeasurementHour(NLMeasurement):
     _unit_type = NLUnitHour
 
 
-class NLDuration(Group):
-    _types = [
-        NLMeasurementSecond,
-        NLMeasurementMinute,
-        NLMeasurementHour,
-    ]
 
 # ------------------- Temperature
 
@@ -227,12 +206,6 @@ class NLMeasurementKelvin(NLMeasurement):
     _unit_type = NLUnitKelvin
 
 
-class NLTemperature(Group):
-    _types = [
-        NLMeasurementCelsius,
-        NLMeasurementFahrenheit,
-        NLMeasurementKelvin,
-    ]
 
 # -------------------------- Speed
 
@@ -260,12 +233,6 @@ class NLMeasurementMilesPerHour(NLMeasurement):
     _unit_type = NLUnitMilesPerHour
 
 
-class NLPeed(Group):
-    _types = [
-        NLMeasurementMeterPerSecond,
-        NLMeasurementKilometersPerHour,
-        NLMeasurementMilesPerHour,
-    ]
 
 # ------------------------- Volume
 
@@ -301,13 +268,6 @@ class NLMeasurementGallon(NLMeasurement):
     _unit_type = NLUnitGallon
 
 
-class NLVolume(Group):
-    _types = [
-        NLMeasurementCup,
-        NLMeasurementGallon,
-        NLMeasurementMililiter,
-        NLMeasurementLiter,
-    ]
 
 # ------------------------------------ Energy
 
@@ -335,12 +295,6 @@ class NLUnitKilowattPerHour(NLAbstractUnit):
 class NLMeasurementKilowattPerHour(NLMeasurement):
     _unit_type = NLUnitKilowattPerHour
 
-class NLEnergy(Group):
-    _types = [
-        NLMeasurementKilowattPerHour,
-        NLMeasurementCalories,
-        NLMeasurementJoul,
-    ]
 
 # --------------------------- Power
 
@@ -360,16 +314,11 @@ class NLMeasurementKilowatt(NLMeasurement):
     _unit_type = NLUnitKilowatt
     
 
-class NLPower(Group):
-    _types = [
-        NLMeasurementKilowatt,
-        NLMeasurementWatt,
-    ]
 
 
 def auto_register(module_globals):
     for obj in module_globals.values():
-        if isinstance(obj,type) and issubclass(obj, (NLAbstractUnit, NLMeasurement, Group)):
+        if isinstance(obj,type) and issubclass(obj, (NLAbstractUnit, NLMeasurement)):
             try:
                 pattern_parser.register_parameter_type(obj)
             except Exception:
