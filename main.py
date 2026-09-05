@@ -29,9 +29,20 @@ reminders_manager.extend(weather_manager)
 reminders_manager.extend(webbrowser_manager)
 
 
+# async def run(
+#     manager: CommandsManager,
+#     speech_recognizer: SpeechRecognizer,
+#     speech_synthesizer: SpeechSynthesizer,
+#     processors: list[CommandsContextProcessor] = [SearchProcessor()],
+# ):
+
 async def main():
     async with anyio.create_task_group() as tg:
-        tg.start_soon(run, reminders_manager, recognizer, synthesizer)
+        tg.start_soon(run, reminders_manager, recognizer, synthesizer, [
+            SpacyNERProcessor(),
+            GliNERProcessor(),
+            SearchProcessor()
+        ])
         tg.start_soon(handle_reminders)
 
 

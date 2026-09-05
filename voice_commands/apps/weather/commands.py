@@ -1,5 +1,5 @@
 from .providers.provider_weather import WeatherProvider
-from voice_commands.helpers.helpers import num2word
+from voice_commands.helpers.date_helpers import num2word
 from voice_commands.parameters import DateTime
 from stark import CommandsManager, Response
 from translate import Translator

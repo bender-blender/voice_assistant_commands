@@ -17,7 +17,7 @@ async def call_time(city: String | None = None):
     else:
         city_name = None
 
-    coordinates = await LocationProvider().get_coordinates(city_name)
+    coordinates = await LocationProvider().fetch_home_coordinates(city_name)
     time = TimeProvider().get_time(coordinates)
     formatted_time = TimeFormatter(time).get_formatted_time()
     hour, minute = num2word(formatted_time[0]), num2word(formatted_time[1])
