@@ -1,0 +1,130 @@
+# Russian translations for PACKAGE package
+# Английские переводы для пакета PACKAGE.
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-26 20:37+0300\n"
+"PO-Revision-Date: 2026-05-26 20:37+0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:88
+msgid "kilometer*"
+msgstr "километр*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:96
+msgid "meter*"
+msgstr "метр*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:104
+msgid "mile*"
+msgstr "миля*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:112
+msgid "foot*"
+msgstr "фут*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:131
+msgid "gram*"
+msgstr "грамм*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:139
+msgid "kilogram*"
+msgstr "килограмм*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:147
+msgid "pound*"
+msgstr "фунт*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:155
+msgid "ounce*"
+msgstr "унци*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:173
+msgid "second*"
+msgstr "секунд*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:181
+msgid "minute*"
+msgstr "минут*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:189
+msgid "hour*"
+msgstr "час*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:206
+msgid "degree*"
+msgstr "градус*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:207
+msgid "celsius*"
+msgstr "цельси*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:215
+msgid "fahrenheit*"
+msgstr "фаренгейт*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:223
+msgid "kelvin"
+msgstr ""
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:240
+msgid "meter* per second*"
+msgstr "метр* в секунд*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:248
+msgid "kilometer* per hour*"
+msgstr "километр* в час*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:256
+msgid "mile* per hour*"
+msgstr "мил* в час*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:273
+msgid "liter*"
+msgstr "литр*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:281
+msgid "milliliter*"
+msgstr "миллилитр*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:289
+msgid "cup*"
+msgstr "чашк*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:297
+msgid "gallon*"
+msgstr "галлон*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:315
+msgid "joule*"
+msgstr "джоул*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:323
+msgid "calorie*"
+msgstr "калори*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:332
+msgid "kilowatt* hour*"
+msgstr "киловатт* час*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:348
+msgid "watt*"
+msgstr "ватт*"
+
+#: voice_commands/nl_types/nl_measurement/specific_quantities.py:356
+msgid "kilowatt*"
+msgstr "киловатт*"
+
+msgid "kelvin*"
+msgstr "кельвин*"

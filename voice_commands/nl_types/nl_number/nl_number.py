@@ -1,67 +1,44 @@
-from stark.core.parsing import ParseError
-from stark.core.patterns import Pattern
-from stark.core.types import Object
+from stark.core.parsing import Pattern, ParseError
 from stark.general.classproperty import classproperty
-from .nl_number.nl_number_implementation import (
-    NLNumberParserDucklingTranslatedRu,
-    NLNumberParserWord2NumRu,
-    NLNumberParseCustomRu,
-    NLNumberParserDucklingTranslatedEn,
-    NLNumberParserWord2NumEn,
-    NLNumberParseCustomEn
-)
+from stark.core.types import Object
 
-from voice_commands.helpers.detect_lang import identify_the_language
+from .number_miltilang import NLMultiNumber
+from .number_ru import NLNumberRU
+from voice_commands.nl_types.parsing_context import pattern_parser
 
 
 class NLNumber(Object):
     value: float
     is_ordinal: bool
 
+    parsers = (
+        NLMultiNumber,
+        NLNumberRU,
+    )
+
     @classproperty
     def pattern(cls) -> Pattern:
         return Pattern("**")
 
-    async def did_parse(self, from_string: str) -> str:
-        lang = identify_the_language(from_string)
-        if lang == "ru":
+    async def did_parse(self, from_string):
+        last_error = None
 
-            custom = NLNumberParseCustomRu(from_string, lang).parse()
-            if custom:
-                self.value = round(custom[0],2)
-                self.is_ordinal = custom[1]
-                return from_string
+        for parser_class in self.parsers:
+            parser = parser_class()
 
-            duckling = NLNumberParserDucklingTranslatedRu(from_string).parse()
-            if duckling:
-                self.value = duckling[0]
-                self.is_ordinal = duckling[1]
-                return from_string
+            try:
+                substring = await parser.did_parse(from_string)
 
-            word2num = NLNumberParserWord2NumRu(from_string).parse()
-            if word2num:
-                self.value = word2num[0]  
-                self.is_ordinal = word2num[1]
-                return from_string
-        
-        if lang == "en":
-            custom = NLNumberParseCustomEn(from_string).parse()
-            if custom:
-                self.value = round(custom[0], 2)
-                self.is_ordinal = custom[1]
-                return from_string
-            
-            duckling = NLNumberParserDucklingTranslatedEn(from_string).parse()
-            if duckling:
-                self.value = duckling[0]
-                self.is_ordinal = duckling[1]
-                return from_string
-            
-            word2num = NLNumberParserWord2NumEn(from_string).parse()
-            if word2num:
-                self.value = word2num[0]
-                self.is_ordinal = word2num[1]
-                return from_string
-        
+                self.value = parser.value
+                self.is_ordinal = parser.is_ordinal
 
-        raise ParseError("not found number")
+                return substring
+
+            except (ParseError, ValueError, TypeError) as error:
+                last_error = error
+
+        raise ParseError(
+            f"Number not found: {from_string!r}"
+        ) from last_error
+    
+pattern_parser.register_parameter_type(NLNumber)
