@@ -12,7 +12,8 @@ class NLMultiNumber(Object):
 
     value: float
     is_ordinal: bool
-
+    locale = "en_US"
+    
     @classproperty
     def pattern(cls) -> Pattern:
         return Pattern("**")
@@ -87,7 +88,7 @@ class NLMultiNumber(Object):
         if not words:
             return None
 
-        print(from_string)
+
         value = float(parse(" ".join(words)))
         if "minus" in from_string:
             value = -value

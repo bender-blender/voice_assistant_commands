@@ -10,6 +10,7 @@ class NLNumberRU(Object):
     value: float
     is_ordinal: bool
     ru = Rus2Num()
+    locale = "ru_RU" #! For duckling
 
     @classproperty
     def pattern(cls):
