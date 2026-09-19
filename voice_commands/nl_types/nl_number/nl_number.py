@@ -12,8 +12,8 @@ class NLNumber(Object):
     is_ordinal: bool
 
     parsers = (
-        NLMultiNumber,
         NLNumberRU,
+        NLMultiNumber,
     )
 
     @classproperty
@@ -24,7 +24,6 @@ class NLNumber(Object):
     def parse_duck(self,locale:str,from_string:str):
         duck = Duckling(locale=locale)
         parse = duck(from_string)
-        print(parse)
         if parse:
             return parse[0]["value"]["value"],parse[0]["body"]
 
