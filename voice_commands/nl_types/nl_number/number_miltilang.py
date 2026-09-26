@@ -1,128 +1,231 @@
-from number_parser import parse, parse_ordinal, parse_number
+from number_parser import parse_number, parse_ordinal
 
-
-from voice_commands.nl_types.parsing_context import pattern_parser
-from stark.general.localisation import LocaleString
-from stark.general.classproperty import classproperty
 from stark.core.parsing import Pattern, ParseError
 from stark.core.types import Object
+from stark.general.classproperty import classproperty
+
+from voice_commands.nl_types.parsing_context import pattern_parser
 
 
 class NLMultiNumber(Object):
-
     value: float
     is_ordinal: bool
+
     locale = "en_US"
-    
+
+    fractions = {
+        "half": 2,
+        "halves": 2,
+        "quarter": 4,
+        "quarters": 4,
+        "third": 3,
+        "thirds": 3,
+    }
+
     @classproperty
-    def pattern(cls) -> Pattern:
+    def pattern(cls):
         return Pattern("**")
 
-    @classmethod
-    def check_type(cls, words: list[str] | tuple[str] | str, from_string: str):
-        if type(words) in (list, tuple):
-            check_words = any([i for i in from_string.split() if i in words])
-        if type(words) == str:
-            check_words = any([i for i in from_string.split() if i == words])
+    def get_number(self, words):
+        for start in range(len(words)):
+            for end in range(len(words), start, -1):
+                part = words[start:end]
+                text = " ".join(part)
 
-        return check_words if check_words else None
+                last = part[-1]
 
-    def get_fraction(self, words: list[str] | tuple[str] | str, from_string: str):
+                is_ordinal = (
+                    parse_number(last) is None
+                    and parse_ordinal(last) is not None
+                )
 
-        check_words = self.check_type(words, from_string)
+                value = (
+                    parse_ordinal(text)
+                    if is_ordinal
+                    else parse_number(text)
+                )
 
-        if check_words:
-            part = [i if i in words else parse_number(
-                i) for i in from_string.split() if i in words or parse_number(i)]
-            sub = [str(i) for i in from_string.split()
-                   if i in words or parse_number(i)]
-            for index, value in enumerate(part):
-                if type(value) == LocaleString:
-                    part[index] = "."
-
-            if "minus" in from_string:
-                sub.insert(0, "minus")
-
-            fraction = float("".join([str(i) for i in part]))
-            return fraction, " ".join(sub) if "minus" not in from_string else -fraction, " ".join(sub)
+                if value is not None:
+                    return value, is_ordinal, part, start
 
         return None
 
-    def get_parts(self, settings: dict[tuple[str], float], from_string: str):
-        words = from_string.split()
-        num_sub = [word for word in words if parse_number(word)]
-        sub_part = [word for group in settings.keys()
-                    for word in group if word in words]
-        check_words = self.check_type(sub_part, from_string)
+    async def did_parse(self, from_string):
+        words = (
+            str(from_string)
+            .lower()
+            .replace("-", " ")
+            .split()
+        )
 
-        if not check_words:
-            return None
+        # Decimal numbers
+        if "point" in words:
+            i = words.index("point")
 
-        part = [value for names, value in settings.items() if any(word in names for word in words)]
+            left = self.get_number(words[:i])
 
-        if len(num_sub) == 0 and len(sub_part) == 1:
-            return part[0] , " ".join(sub_part)
+            if left:
+                value, _, left_words, start = left
 
-        final_sub = words[words.index(num_sub[0]):words.index(sub_part[0])+1]
-        
-        value = float(parse_number("".join(num_sub)))
-        if "minus" in from_string:
-            value = -value
-            final_sub.insert(0, "minus")
-        
-        if "and" in final_sub:
-            return value + part[0], " ".join(final_sub)
+                right = []
+                sub = []
 
-        return value * part[0], " ".join(final_sub)
-        
+                for word in words[i + 1:]:
+                    number = parse_number(word)
 
-    def get_ordinary_number(self, from_string: str):
-        words = []
-        
+                    if number is None:
+                        break
 
-        for word in from_string.split():
-            parsed = parse_number(word) or parse_ordinal(word)
-            if parsed is not None:
-                words.append(word)
+                    right.append(str(int(number)))
+                    sub.append(word)
 
-        if not words:
-            return None
+                if right:
+                    negative = (
+                        start > 0
+                        and words[start - 1] == "minus"
+                    )
 
+                    self.value = float(
+                        f"{value}.{''.join(right)}"
+                    )
 
-        value = float(parse(" ".join(words)))
-        if "minus" in from_string:
-            value = -value
-            words.insert(0, "minus")
+                    if negative:
+                        self.value *= -1
 
-        return value, " ".join(words)
+                    self.is_ordinal = False
 
+                    result = (
+                        left_words
+                        + ["point"]
+                        + sub
+                    )
 
-    async def did_parse(self, from_string: LocaleString) -> str:
-        part = self.get_parts({
-            ("half","halfs"):0.5,
-            ("quarter","quarters"):1/4,
-            ("third"):1/3},
-            from_string)
+                    if negative:
+                        result.insert(0, "minus")
 
-        if part:
-            self.value = part[0]
-            self.is_ordinal = False
-            return part[1]
+                    return " ".join(result)
 
+        # Fractions
+        for i, word in enumerate(words):
+            if word not in self.fractions:
+                continue
 
-        fraction = self.get_fraction(["point", "points", "and"], from_string)
-        if fraction:
-            self.value = fraction[0]
-            self.is_ordinal = False
-            return fraction[1]
+            denominator = self.fractions[word]
 
+            # half / quarter
+            if (
+                i == 0
+                and word in ("half", "quarter")
+            ):
+                self.value = 1 / denominator
+                self.is_ordinal = False
 
-        ordinary_number = self.get_ordinary_number(from_string)
-        if ordinary_number:
-            self.value = ordinary_number[0]
-            self.is_ordinal = False if not ordinary_number[1].endswith(("st","th","nd","rd")) else True
-            return ordinary_number[1]
+                return word
+
+            # two and a half
+            if "and" in words[:i]:
+                j = max(
+                    index
+                    for index, value in enumerate(words[:i])
+                    if value == "and"
+                )
+
+                whole = self.get_number(
+                    words[:j]
+                )
+
+                if whole:
+                    numerator = self.get_number(
+                        words[j + 1:i]
+                    )
+
+                    fraction = (
+                        numerator[0]
+                        if numerator
+                        else 1
+                    )
+
+                    self.value = (
+                        whole[0]
+                        + fraction / denominator
+                    )
+
+                    self.is_ordinal = False
+
+                    return " ".join(
+                        words[whole[3]:i + 1]
+                    )
+
+            # a half / a quarter
+            if (
+                i
+                and words[i - 1] == "a"
+            ):
+                self.value = 1 / denominator
+                self.is_ordinal = False
+
+                return f"a {word}"
+
+            numerator = self.get_number(
+                words[:i]
+            )
+
+            if numerator:
+                value, _, part, start = numerator
+
+                # twenty third -> ordinal
+                # one third -> fraction
+                if (
+                    not word.endswith("s")
+                    and word not in ("half", "quarter")
+                    and value != 1
+                ):
+                    continue
+
+                self.value = (
+                    value / denominator
+                )
+
+                self.is_ordinal = False
+
+                if (
+                    start > 0
+                    and words[start - 1] == "minus"
+                ):
+                    self.value *= -1
+                    part = ["minus"] + part
+
+                return " ".join(
+                    part + [word]
+                )
+
+        # Normal / ordinal numbers
+        result = self.get_number(words)
+
+        if result:
+            value, ordinal, part, start = result
+
+            negative = (
+                start > 0
+                and words[start - 1] == "minus"
+            )
+
+            self.value = (
+                -value
+                if negative
+                else value
+            )
+
+            self.is_ordinal = ordinal
+
+            if negative:
+                part = ["minus"] + part
+
+            return " ".join(part)
 
         raise ParseError("number not found")
 
-pattern_parser.register_parameter_type(NLMultiNumber)
+
+pattern_parser.register_parameter_type(
+    NLMultiNumber
+)
