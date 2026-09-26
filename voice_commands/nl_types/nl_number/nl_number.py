@@ -1,11 +1,15 @@
+from requests.exceptions import RequestException
+
 from stark.core.parsing import Pattern, ParseError
 from stark.general.classproperty import classproperty
 from stark.core.types import Object
 
+from fb_duckling import Duckling
+
 from .number_miltilang import NLMultiNumber
 from .number_ru import NLNumberRU
 from voice_commands.nl_types.parsing_context import pattern_parser
-from fb_duckling import Duckling
+
 
 class NLNumber(Object):
     value: float
@@ -20,13 +24,21 @@ class NLNumber(Object):
     def pattern(cls) -> Pattern:
         return Pattern("**")
 
+    def parse_duck(self,locale: str,from_string: str,):
+        try:
+            duck = Duckling(locale=locale)
+            result = duck(from_string)
 
-    def parse_duck(self,locale:str,from_string:str):
-        duck = Duckling(locale=locale)
-        parse = duck(from_string)
-        if parse:
-            return parse[0]["value"]["value"],parse[0]["body"]
+        except RequestException:
+            return None
 
+        if result:
+            return (
+                result[0]["value"]["value"],
+                result[0]["body"],
+            )
+
+        return None
 
     async def did_parse(self, from_string):
         last_error = None
@@ -43,21 +55,28 @@ class NLNumber(Object):
 
                 return parsed.substring
 
-            except (ParseError, ValueError, TypeError) as error:
+            except (
+                ParseError,
+                ValueError,
+                TypeError,
+            ) as error:
                 last_error = error
-                continue
-
 
         for locale in ("ru_RU", "en_US"):
-            duck_result = self.parse_duck(locale, from_string)
+            duck_result = self.parse_duck(
+                locale,
+                from_string,
+            )
 
             if duck_result:
                 self.value = duck_result[0]
                 self.is_ordinal = False
+
                 return duck_result[1]
 
         raise ParseError(
             f"Number not found: {from_string!r}"
         ) from last_error
-    
+
+
 pattern_parser.register_parameter_type(NLNumber)
