@@ -65,6 +65,12 @@ class NLNumberRU(Object):
 
         parsed_words = []
 
+        # Words belonging to the first completed number.
+        # Example:
+        # "тринадцать тридцать шесть"
+        # -> ["тринадцать"]
+        first_number_words = None
+
         self.is_ordinal = False
 
         def apply_sign(value):
@@ -129,6 +135,7 @@ class NLNumberRU(Object):
                 buffer = None
                 parts = []
                 leading_zeros = 0
+                first_number_words = None
 
                 self.is_ordinal = False
 
@@ -152,6 +159,7 @@ class NLNumberRU(Object):
                 numerator = None
                 buffer = None
                 parts = []
+                first_number_words = None
 
                 self.is_ordinal = False
 
@@ -197,6 +205,14 @@ class NLNumberRU(Object):
                     self.value = apply_sign(
                         total + current
                     )
+
+                    if (
+                        numerator is not None
+                        and first_number_words
+                    ):
+                        return " ".join(
+                            first_number_words
+                        )
 
                     return " ".join(parsed_words)
 
@@ -315,6 +331,12 @@ class NLNumberRU(Object):
                 if numerator is None:
                     numerator = buffer
 
+                    # Current word already belongs to
+                    # the next number, so exclude it.
+                    first_number_words = (
+                        parsed_words[:-1].copy()
+                    )
+
                 buffer = number
                 parts = [number]
 
@@ -373,6 +395,14 @@ class NLNumberRU(Object):
         self.value = apply_sign(
             total + current
         )
+
+        if (
+            numerator is not None
+            and first_number_words
+        ):
+            return " ".join(
+                first_number_words
+            )
 
         return " ".join(parsed_words)
 
