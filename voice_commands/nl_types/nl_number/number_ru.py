@@ -64,11 +64,6 @@ class NLNumberRU(Object):
         total = 0
 
         parsed_words = []
-
-        # Words belonging to the first completed number.
-        # Example:
-        # "тринадцать тридцать шесть"
-        # -> ["тринадцать"]
         first_number_words = None
 
         self.is_ordinal = False
@@ -96,7 +91,7 @@ class NLNumberRU(Object):
 
         for word in str(from_string).lower().split():
 
-            # Handle negative numbers
+            # Negative number
             if (
                 word == "минус"
                 and buffer is None
@@ -107,7 +102,7 @@ class NLNumberRU(Object):
                 parsed_words.append(word)
                 continue
 
-            # Handle decimal separators
+            # Decimal separators
             if word in (
                 "целых",
                 "целая",
@@ -142,8 +137,7 @@ class NLNumberRU(Object):
                 parsed_words.append(word)
                 continue
 
-            # Handle scale words:
-            # thousand, million, billion
+            # Thousand / million / billion
             if word in self.SCALES:
                 scale = self.SCALES[word]
 
@@ -169,7 +163,6 @@ class NLNumberRU(Object):
             is_fraction = word in self.parser.fractions
 
             try:
-                # Handle "полтора" / "полторы"
                 if word in ("полтора", "полторы"):
                     number = 1.5
 
@@ -182,7 +175,6 @@ class NLNumberRU(Object):
 
             except (ValueError, TypeError):
 
-                # Stop parsing after the first completed number
                 if buffer is not None:
                     if (
                         integer_part is not None
@@ -232,7 +224,7 @@ class NLNumberRU(Object):
 
             parsed_words.append(word)
 
-            # Check ordinal
+            # Ordinal
             if not is_fraction:
                 self.is_ordinal = (
                     self.is_ordinal_word(word)
@@ -240,7 +232,7 @@ class NLNumberRU(Object):
             else:
                 self.is_ordinal = False
 
-            # Count leading zeros after decimal point
+            # Leading zeros after decimal point
             if (
                 decimal_point
                 and number == 0
@@ -248,11 +240,7 @@ class NLNumberRU(Object):
             ):
                 leading_zeros += 1
 
-            # Handle standalone fractions:
-            # половина
-            # четверть
-            # вторых
-            # третьих
+            # Standalone fraction
             if is_fraction and buffer is None:
                 value = 1 / number
 
@@ -266,17 +254,13 @@ class NLNumberRU(Object):
 
                 return " ".join(parsed_words)
 
-            # Store the first number
+            # First number
             if buffer is None:
                 buffer = number
                 parts = [number]
                 continue
 
-            # Handle fractions:
-            #
-            # две трети
-            # пять десятых
-            # пять двадцать пятых
+            # Fraction
             if is_fraction and numerator is None:
 
                 if number >= 10 or len(parts) == 1:
@@ -317,22 +301,29 @@ class NLNumberRU(Object):
 
                 return " ".join(parsed_words)
 
-            # Build a normal number
-            if self.is_free_digit(
-                buffer,
-                number,
+            # Normal number
+            #
+            # twenty five:
+            # 20 -> 5 = 25
+            #
+            # five twenty:
+            # 5 -> 20 = two different numbers
+            if (
+                number < buffer
+                and self.is_free_digit(
+                    buffer,
+                    number,
+                )
             ):
                 buffer += number
                 parts.append(number)
 
             else:
-                # Keep the first number when
-                # another incompatible number starts
                 if numerator is None:
                     numerator = buffer
 
-                    # Current word already belongs to
-                    # the next number, so exclude it.
+                    # Current word belongs to
+                    # the next number
                     first_number_words = (
                         parsed_words[:-1].copy()
                     )
@@ -340,8 +331,7 @@ class NLNumberRU(Object):
                 buffer = number
                 parts = [number]
 
-            # Handle compound denominator:
-            #
+            # Compound denominator:
             # тринадцать тридцать пятых
             if is_fraction:
                 value = numerator / buffer
@@ -356,7 +346,6 @@ class NLNumberRU(Object):
 
                 return " ".join(parsed_words)
 
-        # No number found
         if (
             buffer is None
             and integer_part is None
@@ -366,7 +355,7 @@ class NLNumberRU(Object):
                 f"Number not found: {from_string!r}"
             )
 
-        # Handle decimal number
+        # Decimal
         if (
             integer_part is not None
             and decimal_point
@@ -379,13 +368,13 @@ class NLNumberRU(Object):
 
             return " ".join(parsed_words)
 
-        # Return accumulated scale value
+        # Scale result
         if buffer is None:
             self.value = apply_sign(total)
 
             return " ".join(parsed_words)
 
-        # Return normal number
+        # Normal number
         current = (
             buffer
             if numerator is None
@@ -407,4 +396,6 @@ class NLNumberRU(Object):
         return " ".join(parsed_words)
 
 
-pattern_parser.register_parameter_type(NLNumberRU)
+pattern_parser.register_parameter_type(
+    NLNumberRU
+)
