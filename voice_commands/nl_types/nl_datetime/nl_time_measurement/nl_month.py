@@ -58,7 +58,7 @@ class NLMonth(Object):
 
     @classproperty
     def pattern(cls):
-        return Pattern(f"({"|".join(cls.prepositions)})? ({"|".join(cls.data_dict.keys())})")
+        return Pattern(f"({"|".join(cls.prepositions)})?( {"|".join(cls.data_dict.keys())})")
     
     async def did_parse(self, from_string):
         for key in self.data_dict:
