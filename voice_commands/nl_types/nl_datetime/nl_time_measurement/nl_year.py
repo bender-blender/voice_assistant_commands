@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from stark.core.parsing import Pattern
-from stark.core.types import Object
 from stark.general.classproperty import classproperty
 from stark.general.localisation import LocaleString
+from stark.core.parsing import Pattern,ParseError
+from stark.core.types import Object
+
 
 from voice_commands.nl_types.parsing_context import pattern_parser
 from voice_commands.nl_types.nl_number.nl_number import NLNumber
@@ -43,6 +44,10 @@ class NLYear(Object):
         return (year - 1) // 100 + 1
 
     async def did_parse(self,from_string: LocaleString) -> str:
+        
+        if self.year is None:
+            raise ParseError("year not found")
+        
         year = int(self.year.value)
 
         if self.year_part is not None:
