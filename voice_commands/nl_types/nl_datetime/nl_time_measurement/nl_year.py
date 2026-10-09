@@ -35,8 +35,8 @@ class NLYear(Object):
 
         full_year = current_century + year
 
-        if full_year > current_year:
-            full_year -= 100
+        # if full_year > current_year:
+        #     full_year -= 100
 
         return full_year
 
