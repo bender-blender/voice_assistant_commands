@@ -1,6 +1,6 @@
 import pytest
 
-from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_clock import (
+from voice_commands.nl_types.nl_datetime.reusable_types.nl_clock import (
     NLClokTime,
 )
 from voice_commands.nl_types.parsing_context import pattern_parser
