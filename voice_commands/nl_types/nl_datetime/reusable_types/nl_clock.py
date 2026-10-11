@@ -66,7 +66,7 @@ class NLClokTime(Object):
                 minute = self.minute_number.value
 
         if not self.check_clock(hour,minute):
-            raise ValueError("Invalid data")
+            raise ParseError("Invalid data")
         
         self.value = self.format_time(
             hour,
