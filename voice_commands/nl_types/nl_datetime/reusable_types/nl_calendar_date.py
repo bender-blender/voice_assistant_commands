@@ -33,7 +33,7 @@ class NLCalendarDate(Object):
         if self.year is None:
             self.year = self.now.year
 
-        self.value = f"{self.day:02d}.{self.month:02d}.{self.year}"
+        self.value = f"{int(self.day.value):02d}.{self.month:02d}.{self.year}"
         return from_string
 
     def resolve(self):
