@@ -22,7 +22,7 @@ class NLCalendarDate(Object):
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern("$day:NLNumber( $month:NLMonth)?( $year:NLYear)?")
+        return Pattern("$day:NLNumber( $month:NLMonth( $year:NLYear))?")
 
     async def did_parse(self, from_string: LocaleString) -> str:
         
