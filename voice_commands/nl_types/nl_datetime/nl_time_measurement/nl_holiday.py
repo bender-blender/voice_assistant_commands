@@ -90,9 +90,9 @@ class NLHolidayParser(ObjectParser):
         raise ParseError("event not found!")
 
 link_list = Link([
-    "/home/bender/voice_assistant_commands/voice_commands/math.ics",
-    "/home/bender/voice_assistant_commands/voice_commands/morning_routine.ics",
-    "/home/bender/voice_assistant_commands/voice_commands/weekly_reset.ics"
+    "/home/bender/voice_assistant_commands/math.ics",
+    "/home/bender/voice_assistant_commands/morning_routine.ics",
+    "/home/bender/voice_assistant_commands/weekly_reset.ics"
 ])
     
 events = Event(link_list)
