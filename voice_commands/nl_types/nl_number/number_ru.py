@@ -46,7 +46,7 @@ class NLNumberRU(Object):
 
     def is_ordinal_word(self, word: str) -> bool:
         return (
-            word.endswith(("ый", "ий", "ой"))
+            word.endswith(("ый", "ий", "ой", "ого", "его", "ое"))
             and word not in self.parser.fractions
         )
 
