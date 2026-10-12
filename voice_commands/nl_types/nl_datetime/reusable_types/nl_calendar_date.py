@@ -23,9 +23,12 @@ class NLCalendarDate(Object):
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern("$day:NLDay( $month:NLMonth( $year:NLYear))?")
+        return Pattern("$day:NLDay( $month:NLMonth( $year:NLYear)?)?")
 
     async def did_parse(self, from_string: LocaleString) -> str:
+
+        if self.day is None:
+            raise ParseError
         
         if self.month is None:
             self.month = self.now.month
