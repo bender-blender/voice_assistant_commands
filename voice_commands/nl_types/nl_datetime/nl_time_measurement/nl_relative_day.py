@@ -80,7 +80,7 @@ class NLTwoAfter(Object):
 
 
 class NLRelativeDay(Object):
-    value: datetime
+    value: str
 
     today: NLToday
     yesterday: NLYesterday
@@ -120,13 +120,13 @@ class NLRelativeDay(Object):
         now = datetime.now()
 
         return {
-            RelativeDay.today: now,
-            RelativeDay.yesterday: now - timedelta(days=1),
-            RelativeDay.day_before_yesterday: now - timedelta(days=2),
-            RelativeDay.tomorrow: now + timedelta(days=1),
-            RelativeDay.day_after_tomorrow: now + timedelta(days=2),
-            RelativeDay.two_after: now + timedelta(days=3),
-            RelativeDay.two_before: now - timedelta(days=3),
+            RelativeDay.today: now.strftime("%Y-%d-%m"),
+            RelativeDay.yesterday: (now - timedelta(days=1)).strftime("%Y-%d-%m"),
+            RelativeDay.day_before_yesterday: (now - timedelta(days=2)).strftime("%Y-%d-%m"),
+            RelativeDay.tomorrow: (now + timedelta(days=1)).strftime("%Y-%d-%m"),
+            RelativeDay.day_after_tomorrow: (now + timedelta(days=2)).strftime("%Y-%d-%m"),
+            RelativeDay.two_after: (now + timedelta(days=3)).strftime("%Y-%d-%m"),
+            RelativeDay.two_before: (now - timedelta(days=3)).strftime("%Y-%d-%m"),
         }
     
 
