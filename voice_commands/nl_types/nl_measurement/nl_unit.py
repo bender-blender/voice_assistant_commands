@@ -1,11 +1,11 @@
 from stark.general.classproperty import classproperty
 from stark.core.parsing import Pattern
-from stark.core.types import Object
+from stark.core.types import NLObject
 from pint import Unit
 
 
 
-class NLAbstractUnit(Object):
+class NLAbstractUnit(NLObject):
     value: Unit    
     _unit_keywords: str
     key: Unit
