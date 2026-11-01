@@ -3,27 +3,23 @@ from datetime import datetime
 from stark.general.classproperty import classproperty
 from stark.general.localisation import LocaleString
 from stark.core.parsing import Pattern,ParseError
-from stark.core.types import Object
+from stark.core.types import NLObject
 
 
 from voice_commands.nl_types.parsing_context import pattern_parser
 from voice_commands.nl_types.nl_number.nl_number import NLNumber
 
 
-class NLYear(Object):
+class NLYear(NLObject):
     value: int
     century: int
 
     year: NLNumber
     year_part: NLNumber | None = None
-
+    substring:str = ""
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern(
-            "$year:NLNumber"
-            "( $year_part:NLNumber)?"
-            "( (год*|year*))?"
-        )
+        return Pattern("$year:NLNumber( $year_part:NLNumber)?") # ( год*|year*)
 
     def normal_year(self, year: int) -> int:
         current_year = datetime.now().year
@@ -44,7 +40,9 @@ class NLYear(Object):
         return (year - 1) // 100 + 1
 
     async def did_parse(self,from_string: LocaleString) -> str:
-        
+        #print(pattern_parser._parse_single_parameter(self.p,"year",""))
+
+        #print(f"NLYear.year:{self.year}\nNLYear.year_part:{self.year_part}")
         if self.year is None:
             raise ParseError("year not found")
         
@@ -59,10 +57,8 @@ class NLYear(Object):
         self.value = self.normal_year(year)
 
         self.century = self.calculate_century(self.value)
-
+        self.substring = from_string
+        #print(f"Year.from_string:{from_string}")
         return from_string
 
-
-pattern_parser.register_parameter_type(
-    NLYear
-)
+pattern_parser.register_parameter_type(NLYear)

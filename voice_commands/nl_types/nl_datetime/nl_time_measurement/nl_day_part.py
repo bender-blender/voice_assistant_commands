@@ -1,5 +1,5 @@
 from stark.general.classproperty import classproperty
-from stark.core.parsing import Object,Pattern
+from stark.core.parsing import NLObject,Pattern
 from stark.core.types import Union
 
 from voice_commands.nl_types.parsing_context import pattern_parser
@@ -17,7 +17,7 @@ class DayPart(IntEnum):
     night = 5
 
 
-class ClassParent(Object):
+class ClassParent(NLObject):
 
 
     def resolve(self):

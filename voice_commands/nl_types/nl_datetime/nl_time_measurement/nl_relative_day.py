@@ -1,6 +1,6 @@
 from stark.general.classproperty import classproperty
 from stark.core.parsing import Pattern
-from stark.core.parsing import Object
+from stark.core.parsing import NLObject
 
 
 from voice_commands.nl_types.parsing_context import pattern_parser
@@ -20,7 +20,7 @@ class RelativeDay(IntEnum):
 
 
 
-class NLToday(Object):
+class NLToday(NLObject):
     value:bool = True
 
     @classproperty
@@ -28,7 +28,7 @@ class NLToday(Object):
         return Pattern("сегодня")
 
 
-class NLTomorrow(Object):
+class NLTomorrow(NLObject):
     value:bool = True
 
     @classproperty
@@ -36,7 +36,7 @@ class NLTomorrow(Object):
         return Pattern("завтра")
     
 
-class NLYesterday(Object):
+class NLYesterday(NLObject):
     value:bool = True
 
     @classproperty
@@ -45,7 +45,7 @@ class NLYesterday(Object):
     
 
 
-class NLDayBeforeYesterday(Object):
+class NLDayBeforeYesterday(NLObject):
     value:bool = True
 
     @classproperty
@@ -53,7 +53,7 @@ class NLDayBeforeYesterday(Object):
         return Pattern("позавчера")
 
 
-class NLTwoBefore(Object):
+class NLTwoBefore(NLObject):
     value:bool = True
 
     @classproperty
@@ -61,7 +61,7 @@ class NLTwoBefore(Object):
         return Pattern("позапозавчера")
      
 
-class NLDayAfterTomorrow(Object):
+class NLDayAfterTomorrow(NLObject):
     value:bool = True
 
     @classproperty
@@ -69,7 +69,7 @@ class NLDayAfterTomorrow(Object):
         return Pattern("послезавтра")
 
 
-class NLTwoAfter(Object):
+class NLTwoAfter(NLObject):
     value:bool = True
 
     @classproperty
@@ -79,7 +79,7 @@ class NLTwoAfter(Object):
 
 
 
-class NLRelativeDay(Object):
+class NLRelativeDay(NLObject):
     value: str
 
     today: NLToday

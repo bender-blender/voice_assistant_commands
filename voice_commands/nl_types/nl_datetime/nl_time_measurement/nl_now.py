@@ -1,11 +1,11 @@
 from voice_commands.nl_types.parsing_context import pattern_parser
 from stark.general.classproperty import classproperty
 from stark.core.parsing import Pattern
-from stark.core.types import Object
+from stark.core.types import NLObject
 from datetime import datetime
 
 
-class NLNow(Object):
+class NLNow(NLObject):
     value: datetime
 
     @classproperty

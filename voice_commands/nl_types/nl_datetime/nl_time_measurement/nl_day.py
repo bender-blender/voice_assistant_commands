@@ -3,17 +3,16 @@ from datetime import datetime
 from stark.general.classproperty import classproperty
 from stark.general.localisation import LocaleString
 from stark.core.parsing import Pattern,ParseError
-from stark.core.types import Object
+from stark.core.types import NLObject
 
 
 from voice_commands.nl_types.parsing_context import pattern_parser
 from voice_commands.nl_types.nl_number.nl_number import NLNumber
 
-class NLDay(Object):
+class NLDay(NLObject):
     
     value: float
     day: NLNumber | None = None
-    
     @classproperty
     def pattern(cls) -> Pattern:
         return Pattern("(on the )?$day:NLNumber( числ*)?")

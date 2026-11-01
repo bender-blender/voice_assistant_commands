@@ -1,6 +1,6 @@
 from stark.general.classproperty import classproperty
 from stark.core.parsing import Pattern
-from stark.core.parsing import Object
+from stark.core.parsing import NLObject
 
 
 from voice_commands.nl_types.parsing_context import pattern_parser
@@ -20,7 +20,7 @@ class Weekday(IntEnum):
 
 
 
-class NLMonday(Object):
+class NLMonday(NLObject):
     value:bool = True
 
     @classproperty
@@ -28,7 +28,7 @@ class NLMonday(Object):
         return Pattern("понедельник*")
     
 
-class NLTuesday(Object):
+class NLTuesday(NLObject):
     value:bool = True
 
     @classproperty
@@ -36,7 +36,7 @@ class NLTuesday(Object):
         return Pattern("вторник*")
     
 
-class NLWednesday(Object):
+class NLWednesday(NLObject):
     value:bool = True
 
     @classproperty
@@ -45,7 +45,7 @@ class NLWednesday(Object):
     
 
 
-class NLThursday(Object):
+class NLThursday(NLObject):
     value:bool = True
 
     @classproperty
@@ -54,7 +54,7 @@ class NLThursday(Object):
     
 
 
-class NLFriday(Object):
+class NLFriday(NLObject):
     value:bool = True
 
     @classproperty
@@ -62,14 +62,14 @@ class NLFriday(Object):
         return Pattern("пятниц*")
     
 
-class NLSaturday(Object):
+class NLSaturday(NLObject):
     value:bool = True
 
     @classproperty
     def pattern(cls):
         return Pattern("суббот*")
 
-class NLSunday(Object):
+class NLSunday(NLObject):
     value:bool = True
 
     @classproperty
@@ -78,7 +78,7 @@ class NLSunday(Object):
 
 
 
-class NLWorkdays(Object):
+class NLWorkdays(NLObject):
     value:bool = True
     schedule = (Weekday.MONDAY,Weekday.TUESDAY,Weekday.WEDNESDAY,Weekday.THURSDAY,Weekday.FRIDAY)
     
@@ -91,7 +91,7 @@ class NLWorkdays(Object):
 
 
 
-class NLWeekend(Object):
+class NLWeekend(NLObject):
     value:bool = True
     schedule = (Weekday.SATURDAY,Weekday.SUNDAY)
 
@@ -103,7 +103,7 @@ class NLWeekend(Object):
         self.schedule = value
 
 
-class NLWeekDay(Object):
+class NLWeekDay(NLObject):
     value: Weekday | tuple | None = None
 
     monday:NLMonday | None = None

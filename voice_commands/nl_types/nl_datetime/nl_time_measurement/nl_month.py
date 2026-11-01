@@ -1,7 +1,7 @@
 from voice_commands.nl_types.parsing_context import pattern_parser
 from stark.general.classproperty import classproperty
 from stark.core.parsing import Pattern, ParseError
-from stark.core.types import Object
+from stark.core.types import NLObject
 from enum import IntEnum
 
 
@@ -22,7 +22,7 @@ class Month(IntEnum):
 
 
 
-class NLMonth(Object):
+class NLMonth(NLObject):
     value: Month
     data_dict = {
         # Russian

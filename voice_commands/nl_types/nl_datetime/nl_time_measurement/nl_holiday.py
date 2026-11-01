@@ -1,7 +1,7 @@
 from stark.core.parsing import Pattern, ParseError, ObjectParser, PatternParser
 from stark.general.classproperty import classproperty
 from stark.general.localisation import LocaleString
-from stark.core.types import Object
+from stark.core.types import NLObject
 from icalendar import Calendar
 
 from voice_commands.nl_types.parsing_context import pattern_parser
@@ -52,7 +52,7 @@ class Event:
 
 
 
-class NLHoliday(Object):
+class NLHoliday(NLObject):
     value: int
     event: Event | None = None
 
