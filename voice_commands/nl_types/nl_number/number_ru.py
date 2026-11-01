@@ -2,12 +2,12 @@ from rus2num.main import Rus2Num
 
 from stark.core.parsing import Pattern, ParseError
 from stark.general.classproperty import classproperty
-from stark.core.types import Object
+from stark.core.types import NLObject
 
 from voice_commands.nl_types.parsing_context import pattern_parser
 
 
-class NLNumberRU(Object):
+class NLNumberRU(NLObject):
     value: float
     is_ordinal: bool
 

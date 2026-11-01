@@ -1,13 +1,13 @@
 from number_parser import parse_number, parse_ordinal
 
 from stark.core.parsing import Pattern, ParseError
-from stark.core.types import Object
+from stark.core.types import NLObject
 from stark.general.classproperty import classproperty
 
 from voice_commands.nl_types.parsing_context import pattern_parser
 
 
-class NLMultiNumber(Object):
+class NLMultiNumber(NLObject):
     value: float
     is_ordinal: bool
 

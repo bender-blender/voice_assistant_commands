@@ -2,7 +2,7 @@ from requests.exceptions import RequestException
 
 from stark.core.parsing import Pattern, ParseError
 from stark.general.classproperty import classproperty
-from stark.core.types import Object
+from stark.core.types import NLObject
 
 from fb_duckling import Duckling
 
@@ -11,7 +11,7 @@ from .number_ru import NLNumberRU
 from voice_commands.nl_types.parsing_context import pattern_parser
 
 
-class NLNumber(Object):
+class NLNumber(NLObject):
     value: float
     is_ordinal: bool
 
