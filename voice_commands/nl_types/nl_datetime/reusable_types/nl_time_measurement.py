@@ -1,6 +1,6 @@
-from stark.core.parsing import PatternParser, ObjectParser,Pattern, ParseError
+from stark.core.parsing import PatternParser, NLObjectParser,Pattern, ParseError
 from stark.general.classproperty import classproperty
-from stark.core.types import Object
+from stark.core.types import NLObject
 
 
 from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_type_time import (
@@ -15,7 +15,7 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_type_time import
 from voice_commands.nl_types.parsing_context import pattern_parser
 
 
-class NLTimeMeasurement(Object):
+class NLTimeMeasurement(NLObject):
  
     value:float
     primitives = [

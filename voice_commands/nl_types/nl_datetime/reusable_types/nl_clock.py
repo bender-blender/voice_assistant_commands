@@ -1,7 +1,7 @@
 from dateparser import parse
 
 from stark.core.parsing import Pattern,ParseError
-from stark.core.types import Object
+from stark.core.types import NLObject
 from stark.general.classproperty import classproperty
 from stark.general.localisation import LocaleString
 
@@ -13,7 +13,7 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_type_time import
 )
 
 
-class NLClokTime(Object):
+class NLClockTime(NLObject):
     value: str
 
     hour_measurement: NLMeasurementHour | None = None
@@ -79,4 +79,4 @@ class NLClokTime(Object):
         return parse(self.value)
 
 
-pattern_parser.register_parameter_type(NLClokTime)
+pattern_parser.register_parameter_type(NLClockTime)
