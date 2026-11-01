@@ -1,7 +1,7 @@
-from stark.core.parsing import Pattern,ParseError
-from stark.core.types import Object
 from stark.general.classproperty import classproperty
 from stark.general.localisation import LocaleString
+from stark.core.parsing import Pattern,ParseError
+from stark.core.types import NLObject
 
 
 
@@ -9,11 +9,10 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_month import NLM
 from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_year import NLYear
 from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_day import NLDay
 from voice_commands.nl_types.parsing_context import pattern_parser
-from voice_commands.nl_types.nl_number.nl_number import NLNumber
 
 from datetime import datetime
 
-class NLCalendarDate(Object):
+class NLCalendarDate(NLObject):
     value: str
     day: NLDay | None = None
     month: NLMonth | None = None
@@ -35,8 +34,9 @@ class NLCalendarDate(Object):
 
         if self.year is None:
             self.year = self.now.year
-
-        self.value = f"{int(self.day.value):02d}.{self.month:02d}.{self.year}"
+    
+        self.value = f"{self.day:02d}.{self.month:02d}.{self.year}"
+    
         return from_string
 
     def resolve(self):
