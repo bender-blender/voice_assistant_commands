@@ -11,6 +11,8 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_day import NLDay
 from voice_commands.nl_types.parsing_context import pattern_parser
 
 from datetime import datetime
+from typing import Literal
+
 
 class NLCalendarDate(NLObject):
     value: str
@@ -39,7 +41,17 @@ class NLCalendarDate(NLObject):
     
         return from_string
 
-    def resolve(self):
+    def resolve(self,mode: Literal["Last", "This", "Next"] = "This"):
+
+        if mode == "Last":
+            self.year -= 1
+        
+        elif mode == "Next":
+            self.year += 1
+        
+        self.value = f"{self.day:02d}.{self.month:02d}.{self.year}"
         return datetime.strptime(self.value,"%d.%m.%Y")
+
+       
 
 pattern_parser.register_parameter_type(NLCalendarDate)
