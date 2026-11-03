@@ -8,6 +8,7 @@ from voice_commands.nl_types.parsing_context import pattern_parser
 from datetime import datetime, timedelta
 from enum import IntEnum
 
+from typing import Literal
 
 class Weekday(IntEnum):
     MONDAY = 0
@@ -145,23 +146,24 @@ class NLWeekDay(NLObject):
         return from_string
     
 
-    def resolve_calendar_date(self, value: int | tuple):
+    def resolve(self,value: Weekday | tuple[Weekday],mode: Literal["Last", "This", "Next"] = "This"):
         today = datetime.today()
 
-        if not isinstance(value,tuple):
-            date = (value - today.weekday()) % 7
-            return (today + timedelta(date)).date()
+        if isinstance(value, Weekday):
+            value = (value,)
+
+
+        if mode == "Last":
+            dates = [(today + timedelta(days=((day - today.weekday()) - 7))).date() for day in value]
+
+        if mode == "Next":
+            dates = [(today + timedelta(days=((day - today.weekday()) + 7))).date() for day in value]
+
+        if mode == "This":
+            dates = [(today + timedelta(days=((day - today.weekday()) % 7))).date() for day in value]
         
-
-        dates = []
-        for day in value:
-            date = (day - today.weekday()) % 7
-            dates.append((today + timedelta(date)).date())
-
         return dates
 
-
-    
 
 pattern_parser.register_parameter_type(NLWeekend)
 pattern_parser.register_parameter_type(NLWorkdays)
