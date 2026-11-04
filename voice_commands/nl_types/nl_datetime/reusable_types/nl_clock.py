@@ -27,7 +27,7 @@ class NLClockTime(NLObject):
     @classproperty
     def pattern(cls) -> Pattern:
         return Pattern(
-            "("
+            "(в |in )?("
             "$hour_measurement:NLMeasurementHour"
             "( $minute_measurement:NLMeasurementMinute)?"
             "|"
@@ -42,7 +42,7 @@ class NLClockTime(NLObject):
         return f"{int(hour):02d}:{int(minute):02d}"
 
     def check_clock(self,hour:int,minute:int):
-        if 0 < hour < 23 and 0 < minute <= 59:
+        if 0 < hour < 23 and 0 <= minute <= 59:
             return True
         return False
     
