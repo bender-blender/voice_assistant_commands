@@ -121,7 +121,7 @@ class NLWeekDay(NLObject):
 
     @classproperty
     def pattern(cls):
-        return Pattern("($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
+        return Pattern("(в |in )?($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
     
 
     async def did_parse(self, from_string):
