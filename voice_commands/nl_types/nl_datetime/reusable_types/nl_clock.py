@@ -14,7 +14,7 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_type_time import
 
 
 class NLClockTime(NLObject):
-    value: str
+    value: tuple
 
     hour_measurement: NLMeasurementHour | None = None
     minute_measurement: NLMeasurementMinute | None = None
@@ -41,6 +41,13 @@ class NLClockTime(NLObject):
     def format_time(self, hour, minute) -> str:
         return f"{int(hour):02d}:{int(minute):02d}"
 
+    def get_daytime_and_nighttime(self,hour:int):
+        time = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+        try:
+            return time[time.index(hour)] , time[time.index(hour) + 12]
+        except IndexError:
+            return time[time.index(hour) - 12], time[time.index(hour)]
+    
     def check_clock(self,hour:int,minute:int):
         if 0 < hour < 23 and 0 <= minute <= 59:
             return True
@@ -67,11 +74,9 @@ class NLClockTime(NLObject):
 
         if not self.check_clock(hour,minute):
             raise ParseError("Invalid data")
-        
-        self.value = self.format_time(
-            hour,
-            minute,
-        )
+
+        hours = self.get_daytime_and_nighttime(hour)
+        self.value = (self.format_time(hours[0],minute),self.format_time(hours[1],minute))
 
         return from_string
 
