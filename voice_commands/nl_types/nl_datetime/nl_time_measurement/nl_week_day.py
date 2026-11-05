@@ -146,11 +146,11 @@ class NLWeekDay(NLObject):
         return from_string
     
 
-    def resolve(self,value: Weekday | tuple[Weekday],mode: Literal["Last", "This", "Next"] = "This"):
+    def resolve(self,mode: Literal["Last", "This", "Next"] = "This"):
         today = datetime.today()
 
-        if isinstance(value, Weekday):
-            value = (value,)
+        if isinstance(self.value, Weekday):
+            value = (self.value,)
 
 
         if mode == "Last":
