@@ -48,7 +48,7 @@ class NLClockTime(NLObject):
         return hour - 12, hour
     
     def check_clock(self,hour:int,minute:int):
-        if 0 < hour < 23 and 0 <= minute <= 59:
+        if 0 < hour <= 24 and 0 <= minute <= 59:
             return True
         return False
     
