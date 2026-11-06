@@ -14,10 +14,12 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_type_time import
 
 
 class NLClockTime(NLObject):
-    value: tuple
+    value: str | tuple[str, str]
 
     hour_measurement: NLMeasurementHour | None = None
+
     minute_measurement: NLMeasurementMinute | None = None
+    minute_number_after_measurement: NLNumber | None = None
 
     minute_only: NLMeasurementMinute | None = None
 
@@ -29,7 +31,11 @@ class NLClockTime(NLObject):
         return Pattern(
             "(в |in )?("
             "$hour_measurement:NLMeasurementHour"
-            "( $minute_measurement:NLMeasurementMinute)?"
+            "("
+            " $minute_measurement:NLMeasurementMinute"
+            "|"
+            " $minute_number_after_measurement:NLNumber"
+            ")?"
             "|"
             "$minute_only:NLMeasurementMinute"
             "|"
@@ -61,6 +67,9 @@ class NLClockTime(NLObject):
 
             if self.minute_measurement is not None:
                 minute = self.minute_measurement.number.value
+            
+            elif self.minute_number_after_measurement is not None:
+                minute = self.minute_number_after_measurement.value
 
         elif self.minute_only is not None:
             minute = self.minute_only.number.value
