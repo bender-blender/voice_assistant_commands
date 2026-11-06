@@ -18,12 +18,21 @@ class NLMeasurement(NLObject):
 
     @classproperty
     def pattern(cls) -> Pattern:
-        return Pattern(f"$number:NLNumber $unit:{cls._unit_type.__name__}")
+        return Pattern(f"($number:NLNumber )?$unit:{cls._unit_type.__name__}")
     
-    async def did_parse(self,  from_string: str) -> str:
-        if self.number is None or self.unit is None:
+    async def did_parse(self, from_string: str) -> str:
+        if self.unit is None:
             raise ParseError("Measurement not found")
-    
-        self.value = Quantity(self.number.value, self.unit.value)
+
+        if self.number is None:
+            self.number = NLNumber(value = 1)
+            self.value = Quantity(self.number.value,self.unit.value)
+            return from_string
+
+        self.value = Quantity(
+            self.number.value,
+            self.unit.value,
+        )
+
         return from_string
 
