@@ -121,7 +121,7 @@ class NLWeekDay(NLObject):
 
     @classproperty
     def pattern(cls):
-        return Pattern("(в |in )?($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
+        return Pattern("(в |in |во )?($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
     
 
     async def did_parse(self, from_string):
@@ -144,25 +144,42 @@ class NLWeekDay(NLObject):
         elif self.weekend:
             self.value = self.weekend.schedule
         return from_string
-    
+
+
+    def _to_date(self,value:int,mode: Literal["Last", "This", "Next"] = "This"):
+        today = datetime.today()
+        
+        if mode == "Last":
+            date = today + timedelta(days=((value - today.weekday()) - 7))
+        
+        if mode == "Next":
+            date = today + timedelta(days=((value - today.weekday()) + 7))
+        
+        if mode == "This":
+            date = today + timedelta(days=((value - today.weekday()) % 7))
+
+        return date.date().strftime("%d.%m.%Y")
+        
+
+    def _resolve_for_tuple(self,mode: Literal["Last", "This", "Next"] = "This"):
+        
+        if isinstance(self.value, Weekday):
+            return None
+
+        dates = [self._to_date(date,mode) for date in self.value]
+        return dates
+        
 
     def resolve(self,mode: Literal["Last", "This", "Next"] = "This"):
-        today = datetime.today()
 
         if isinstance(self.value, Weekday):
-            value = (self.value,)
+            return self._to_date(self.value,mode)
+
+        if isinstance(self.value,tuple):
+            return self._resolve_for_tuple(mode)
 
 
-        if mode == "Last":
-            dates = [(today + timedelta(days=((day - today.weekday()) - 7))).date() for day in value]
-
-        if mode == "Next":
-            dates = [(today + timedelta(days=((day - today.weekday()) + 7))).date() for day in value]
-
-        if mode == "This":
-            dates = [(today + timedelta(days=((day - today.weekday()) % 7))).date() for day in value]
-        
-        return dates
+        return None
 
 
 pattern_parser.register_parameter_type(NLWeekend)
