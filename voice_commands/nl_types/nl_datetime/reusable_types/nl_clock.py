@@ -41,11 +41,11 @@ class NLClockTime(NLObject):
     def format_time(self, hour, minute) -> str:
         return f"{int(hour):02d}:{int(minute):02d}"
 
-    def get_daytime_and_nighttime(self, hour: int):
+    def get_daytime_and_nighttime(self, hour: int) -> tuple[int,int] | int:
         if hour <= 12:
             return hour, hour + 12
 
-        return hour - 12, hour
+        return hour
     
     def check_clock(self,hour:int,minute:int):
         if 0 < hour <= 24 and 0 <= minute <= 59:
@@ -75,8 +75,12 @@ class NLClockTime(NLObject):
             raise ParseError("Invalid data")
 
         hours = self.get_daytime_and_nighttime(hour)
-        self.value = (self.format_time(hours[0],minute),self.format_time(hours[1],minute))
+        
+        if isinstance(hours,int):
+            self.value = (self.format_time(hours,minute))
+            return from_string
 
+        self.value = (self.format_time(hours[0],minute),self.format_time(hours[1],minute))
         return from_string
 
     def resolve(self):
