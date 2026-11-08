@@ -110,6 +110,11 @@ class NLDateComponents(NLObject):
             if "resolve" in component.__dir__() and "mode" in signature_resolve:
                 
                 return component.resolve(mode)
+            
+            if "resolve" in component.__dir__() and "mode" not in signature_resolve:                
+                
+                return component.resolve()
+            
         
         return None
 
