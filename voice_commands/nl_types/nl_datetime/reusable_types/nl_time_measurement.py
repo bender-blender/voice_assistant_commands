@@ -1,4 +1,4 @@
-from stark.core.parsing import PatternParser, NLObjectParser,Pattern, ParseError
+from stark.core.parsing import PatternParser,Pattern, ParseError
 from stark.general.classproperty import classproperty
 from stark.core.types import NLObject
 
