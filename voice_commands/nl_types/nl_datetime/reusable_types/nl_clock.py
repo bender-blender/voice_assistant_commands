@@ -93,7 +93,13 @@ class NLClockTime(NLObject):
         return from_string
 
     def resolve(self):
-        return parse(self.value)
+        if isinstance(self.value,str):
+            return parse(self.value)
 
+        if isinstance(self.value,tuple):
+            dates = [parse(date).strftime("%d.%m.%Y %H:%M:%S") for date in self.value]
+            return dates
+        
+        return None
 
 pattern_parser.register_parameter_type(NLClockTime)
