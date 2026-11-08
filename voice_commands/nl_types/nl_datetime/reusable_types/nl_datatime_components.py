@@ -101,7 +101,6 @@ class NLDateComponents(NLObject):
             self.clock,
             self.part]
 
-        full_date = []
         for component in necessary_components:
             if component == None:
                 continue
