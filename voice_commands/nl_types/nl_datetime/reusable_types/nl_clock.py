@@ -97,7 +97,7 @@ class NLClockTime(NLObject):
             return parse(self.value)
 
         if isinstance(self.value,tuple):
-            dates = [parse(date).strftime("%d.%m.%Y %H:%M:%S") for date in self.value]
+            dates = (parse(date).strftime("%d.%m.%Y %H:%M:%S") for date in self.value)
             return dates
         
         return None
