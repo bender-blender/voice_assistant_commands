@@ -45,7 +45,7 @@ class NLDayPart_Noon(ClassParent):
     value = 2
     @classproperty
     def pattern(cls):
-        return Pattern("полд*")
+        return Pattern("(полд*|дн*|день)")
     
 class NLDayPart_Afternoon(ClassParent):
     
