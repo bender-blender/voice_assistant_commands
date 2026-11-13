@@ -12,9 +12,21 @@ from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_type_time import
     NLMeasurementMinute,
 )
 
+from voice_commands.nl_types.nl_datetime.nl_time_measurement.nl_day_part import NLDayPartUnion
+
+from dataclasses import dataclass
+
+
+
+@dataclass(frozen=True)
+class Clock:
+    hour : int
+    minute : int
+    pm: bool | None
+
 
 class NLClockTime(NLObject):
-    value: str | tuple[str, str]
+    value: Clock
 
     hour_measurement: NLMeasurementHour | None = None
 
@@ -25,6 +37,11 @@ class NLClockTime(NLObject):
 
     hour_number: NLNumber | None = None
     minute_number: NLNumber | None = None
+
+    hour: int
+    minute: int
+    pm: bool | None = None
+    part: NLDayPartUnion
 
     @classproperty
     def pattern(cls) -> Pattern:
@@ -42,16 +59,9 @@ class NLClockTime(NLObject):
             "$hour_number:NLNumber"
             "( $minute_number:NLNumber)?"
             ")"
+            "(( )?$part:NLDayPartUnion)?"
         )
 
-    def format_time(self, hour, minute) -> str:
-        return f"{int(hour):02d}:{int(minute):02d}"
-
-    def get_daytime_and_nighttime(self, hour: int) -> tuple[int,int] | int:
-        if hour <= 12:
-            return hour, hour + 12
-
-        return hour
     
     def check_clock(self,hour:int,minute:int):
         if 0 < hour <= 24 and 0 <= minute <= 59:
@@ -59,47 +69,51 @@ class NLClockTime(NLObject):
         return False
     
     async def did_parse(self,from_string: LocaleString) -> str:
-        hour = 0
-        minute = 0
+        self.hour = 0
+        self.minute = 0
 
+        
         if self.hour_measurement is not None:
-            hour = self.hour_measurement.number.value
-
+            self.hour = self.hour_measurement.number.value
+        
             if self.minute_measurement is not None:
-                minute = self.minute_measurement.number.value
-            
+                self.minute = self.minute_measurement.number.value
+                    
             elif self.minute_number_after_measurement is not None:
-                minute = self.minute_number_after_measurement.value
-
+                self.minute = self.minute_number_after_measurement.value
+        
         elif self.minute_only is not None:
-            minute = self.minute_only.number.value
-
+                self.minute = self.minute_only.number.value
+        
         elif self.hour_number is not None:
-            hour = self.hour_number.value
-
+            self.hour = self.hour_number.value
+        
             if self.minute_number is not None:
-                minute = self.minute_number.value
-
-        if not self.check_clock(hour,minute):
+                self.minute = self.minute_number.value
+        
+        if not self.check_clock(self.hour,self.minute):
             raise ParseError("Invalid data")
 
-        hours = self.get_daytime_and_nighttime(hour)
-        
-        if isinstance(hours,int):
-            self.value = (self.format_time(hours,minute))
-            return from_string
 
-        self.value = (self.format_time(hours[0],minute),self.format_time(hours[1],minute))
+        if isinstance(self.part,NLDayPartUnion):
+            if self.part.value.value < 2:
+                self.pm = True
+            else:
+                self.pm = False
+
+
+        self.value = Clock(self.hour,self.minute,self.pm)
         return from_string
 
+    
     def resolve(self):
-        if isinstance(self.value,str):
-            return parse(self.value)
 
-        if isinstance(self.value,tuple):
-            dates = tuple(parse(date).strftime("%d.%m.%Y %H:%M:%S") for date in self.value)
-            return dates
-        
+        if self.pm == True:
+            return f"{self.hour:02d}:{self.minute:02d}"
+
+        if self.pm == False:
+            return f"{self.hour + 12:02d}:{self.minute:02d}"
+
         return None
 
 pattern_parser.register_parameter_type(NLClockTime)
