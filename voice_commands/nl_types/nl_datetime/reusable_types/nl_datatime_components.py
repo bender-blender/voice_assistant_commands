@@ -58,10 +58,7 @@ class NLDateComponents(NLObject):
     
     
     async def did_parse(self, from_string: LocaleString) -> str:
-                
-        if self.clock is None:
-            self.clock = NLClockTime("09:00")
-                    
+                            
         components = [
             self.calendar_date,
             self.day,
@@ -74,7 +71,18 @@ class NLDateComponents(NLObject):
         if not any(component is not None for component in components):
             raise ParseError("No datetime components found")
         
-        
+        if self.clock is None:
+            self.clock = NLClockTime("09:00")
+
+        components = [
+            self.calendar_date,
+            self.day,
+            self.event,
+            self.weekday,
+            self.clock,
+            self.part,
+            ]
+
         logging.debug("calendar_date:", self.calendar_date)
         logging.debug("day:", self.day)
         logging.debug("event:", self.event)
