@@ -11,7 +11,7 @@ class TimeType(NLObject):
 
     present = "(эт*|текущ*)"
     past = "(прошл*|предыдущ*)"
-    future = "(следующ*|будущ*)"
+    future = "(следующ*|будущ*|до)"
 
     async def did_parse(self, from_string: LocaleString) -> str:
         return from_string
