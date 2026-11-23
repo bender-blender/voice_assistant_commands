@@ -4,6 +4,7 @@ from stark.core.parsing import NLObject
 
 
 from voice_commands.nl_types.parsing_context import pattern_parser
+from voice_commands.nl_types.nl_datetime.additional.time_type import NLTimeType
 
 from datetime import datetime, timedelta
 from enum import IntEnum
@@ -117,11 +118,12 @@ class NLWeekDay(NLObject):
     
     weekend: NLWeekend | None = None
     workdays: NLWorkdays | None = None
-
+    
+    time: NLTimeType | None = None
 
     @classproperty
     def pattern(cls):
-        return Pattern("(в |in |во )?($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
+        return Pattern("(в |in |во )?($time:NLTimeType )?($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
     
 
     async def did_parse(self, from_string):
@@ -168,16 +170,34 @@ class NLWeekDay(NLObject):
 
         dates = [self._to_date(date,mode) for date in self.value]
         return dates
-        
+
+    def _get_mode(self, mode="This"):
+        if self.time is None:
+            return mode
+
+        time_value = self.time.value.value
+
+        modes = {
+            -1: "Last",
+            0: "This",
+            1: "Next",
+        }
+
+        return modes.get(time_value, mode)
 
     def resolve(self,mode: Literal["Last", "This", "Next"] = "This"):
+        mode = self._get_mode(mode)
 
         if isinstance(self.value, Weekday):
-            return self._to_date(self.value,mode)
+            return self._to_date(
+                self.value,
+                mode,
+            )
 
-        if isinstance(self.value,tuple):
-            return self._resolve_for_tuple(mode)
-
+        if isinstance(self.value, tuple):
+            return self._resolve_for_tuple(
+                mode,
+            )
 
         return None
 
