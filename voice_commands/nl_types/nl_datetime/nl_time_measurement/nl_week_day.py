@@ -104,6 +104,23 @@ class NLWeekend(NLObject):
     def reset_days(self,value:tuple):
         self.schedule = value
 
+class NLWeek(NLObject):
+    value: bool = True
+
+    schedule = (
+        Weekday.MONDAY,
+        Weekday.TUESDAY,
+        Weekday.WEDNESDAY,
+        Weekday.THURSDAY,
+        Weekday.FRIDAY,
+        Weekday.SATURDAY,
+        Weekday.SUNDAY,
+    )
+
+    @classproperty
+    def pattern(cls):
+        return Pattern("недел*")
+
 
 class NLWeekDay(NLObject):
     value: Weekday | tuple | None = None
@@ -118,12 +135,27 @@ class NLWeekDay(NLObject):
     
     weekend: NLWeekend | None = None
     workdays: NLWorkdays | None = None
-    
+    week: NLWeek | None = None
     time: NLTimeType | None = None
 
     @classproperty
     def pattern(cls):
-        return Pattern("(в |in |во )?($time:NLTimeType )?($weekend:NLWeekend|$workdays:NLWorkdays|$monday:NLMonday|$tuesday:NLTuesday|$wednesday:NLWednesday|$thursday:NLThursday|$friday:NLFriday|$saturday:NLSaturday|$sunday:NLSunday)")
+        return Pattern(
+        "(в |in |во )?"
+        "($time:NLTimeType )?"
+        "("
+        "$week:NLWeek|"
+        "$weekend:NLWeekend|"
+        "$workdays:NLWorkdays|"
+        "$monday:NLMonday|"
+        "$tuesday:NLTuesday|"
+        "$wednesday:NLWednesday|"
+        "$thursday:NLThursday|"
+        "$friday:NLFriday|"
+        "$saturday:NLSaturday|"
+        "$sunday:NLSunday"
+        ")"
+        )
     
 
     async def did_parse(self, from_string):
@@ -145,6 +177,8 @@ class NLWeekDay(NLObject):
             self.value = self.workdays.schedule
         elif self.weekend:
             self.value = self.weekend.schedule
+        elif self.week:
+            self.value = self.week.schedule
         return from_string
 
 
@@ -211,4 +245,5 @@ pattern_parser.register_parameter_type(NLThursday)
 pattern_parser.register_parameter_type(NLFriday)
 pattern_parser.register_parameter_type(NLSaturday)
 pattern_parser.register_parameter_type(NLSunday)
+pattern_parser.register_parameter_type(NLWeek)
 pattern_parser.register_parameter_type(NLWeekDay)
